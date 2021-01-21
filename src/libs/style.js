@@ -126,6 +126,30 @@ function stripAccessTokens(mapStyle) {
   };
 }
 
+/**
+ * 将mapabc的地图url转换成http直接指向的url
+ */
+function transMapAbcSpriteAndFontUrl(mapStyle) {
+  const glyphsUrl = mapStyle.glyphs;
+  const spriteUrl = mapStyle.sprite;
+  let spriteUrl_Http = "";
+  if( spriteUrl.startsWith("http://") ){
+    spriteUrl_Http = spriteUrl;
+  }else if( spriteUrl.startsWith("mapabc://")){
+    const spriteName = spriteUrl.replace("mapabc://sprites/","");
+    spriteUrl_Http = api_config.url + "/api/mapSprite/"+spriteName;
+  }else{
+    spriteUrl_Http = spriteUrl;
+  }
+
+
+  return {
+    ...mapStyle,
+    glyphs: api_config.url + "/api/mapFont/glyphs/{fontstack}/{range}.pbf",
+    sprite: spriteUrl_Http
+  };
+}
+
 export default {
   ensureStyleValidity,
   emptyStyle,
@@ -134,4 +158,5 @@ export default {
   getAccessToken,
   replaceAccessTokens,
   stripAccessTokens,
+  transMapAbcSpriteAndFontUrl,
 }

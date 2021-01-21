@@ -9,10 +9,12 @@ import FieldString from './FieldString'
 import FieldCheckbox from './FieldCheckbox'
 import InputButton from './InputButton'
 import Modal from './Modal'
-import {MdFileDownload} from 'react-icons/md'
+import { MdFileDownload, MdSave, MdThumbDown} from 'react-icons/md'
 import style from '../libs/style'
 import fieldSpecAdditional from '../libs/field-spec-additional'
-
+import { getToken } from '../util/auth.js'
+import canvas2image from '../libs/canvas2image'
+import FileSaver from 'file-saver'
 
 const MAPBOX_GL_VERSION = pkgLockJson.dependencies["mapbox-gl"].version;
 
@@ -24,6 +26,8 @@ export default class ModalExport extends React.Component {
     isOpen: PropTypes.bool.isRequired,
     onOpenToggle: PropTypes.func.isRequired,
   }
+
+  saveToMspTitle = "";
 
   constructor(props) {
     super(props);
@@ -91,6 +95,102 @@ export default class ModalExport extends React.Component {
     saveAs(blob, exportName + ".json");
   }
 
+  base64ToBlob(code) {
+    let parts = code.split(";base64,");
+    let contentType = parts[0].split(":")[1];
+    let raw = window.atob(parts[1]);
+    let rawLength = raw.length;
+    let uInt8Array = new Uint8Array(rawLength);
+    for (let i = 0; i < rawLength; i++) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+    return new Blob([uInt8Array], {type: contentType});
+  }
+  // Converts canvas to an image
+  convertCanvasToImage(canvas) {
+    var image = new Image();
+    image.src = canvas.toDataURL("image/png");
+    return image;
+  }
+
+  //  保存缩略图
+  saveThumbnail() {
+
+    const actualPixelRatio = window.devicePixelRatio;
+    Object.defineProperty(window, 'devicePixelRatio', {
+      get: () => this.options.dpi / 96
+    });
+    window.map.getCanvas().toBlob((blob) => {
+      FileSaver.saveAs(blob, `${window.map.getCenter().toArray().join('-')}.png`)
+      Object.defineProperty(window, 'devicePixelRatio', {
+        get: () => actualPixelRatio
+      });
+    })
+
+  }
+
+  saveThumbnail1() {
+
+    const c = document.getElementsByClassName("mapboxgl-canvas")[0];
+    const w = 300;
+    const h = 200;
+    const img_data = canvas2image.Canvas2Image.saveAsPNG(c, true , w, h).getAttribute('src');
+    console.log(c);
+    console.log(canvas2image);
+    console.log(img_data);
+    console.log(this);
+
+    const base64Img = document.getElementsByClassName("mapboxgl-canvas")[0].toDataURL("image/png");
+    console.log(base64Img);
+
+    const image = this.convertCanvasToImage(c);
+    console.log(image)
+
+
+
+    const blob = this.base64ToBlob(base64Img);
+
+    saveAs(blob, "stylePreview.png");
+    document.getElementsByClassName("mapboxgl-canvas")[0].toBlob(function(blobObj) {
+      //saveAs(blob, "stylePreview.png");
+    });
+  }
+
+  // 保存到在线服务
+
+  saveToMsp() {
+    const tokenStyle = this.tokenizedStyle();
+    const blob = new Blob([tokenStyle], {type: "application/json;charset=utf-8"});
+    const exportName = this.exportName();
+    console.log(tokenStyle)
+    console.log(exportName)
+    console.log(this.props.mapStyle)
+    console.log(blob)
+
+    const metadata = this.props.mapStyle.metadata;
+    const mspInfo = metadata.mspInfo
+    fetch(api_config.url + '/api/mapStyle/updateStyleContent/' + mspInfo.id, {
+      method: "PUT",
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'Authorization': getToken(),
+      },
+      body: tokenStyle
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then((body) => {
+        console.log(body)
+        alert(body.msg)
+      })
+      .catch(function(error) {
+        if(error) console.error(error)
+      })
+    // saveAs(blob, exportName + ".json");
+  }
+
   changeMetadataProperty(property, value) {
     const changedStyle = {
       ...this.props.mapStyle,
@@ -108,17 +208,48 @@ export default class ModalExport extends React.Component {
       data-wd-key="modal:export"
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={'Export Style'}
+      title={'保存样式'}
       className="maputnik-export-modal"
     >
+      <section className="maputnik-modal-section">
+        <h1>样式缩略图</h1>
+        <p>
+
+        </p>
+        <div className="maputnik-modal-export-buttons">
+          <InputButton
+            onClick={this.saveThumbnail.bind(this)}
+          >
+            <MdThumbDown />
+            获取缩略图
+          </InputButton>
+        </div>
+      </section>
+
 
       <section className="maputnik-modal-section">
-        <h1>Download Style</h1>
+        <h1>保存样式</h1>
         <p>
-          Download a JSON style to your computer.
+          保存到在线服务
+        </p>
+        <div className="maputnik-modal-export-buttons">
+          <InputButton
+            onClick={this.saveToMsp.bind(this)}
+            title={this.saveToMspTitle}
+          >
+            <MdSave />
+            保存到服务
+          </InputButton>
+        </div>
+      </section>
+
+      <section className="maputnik-modal-section">
+        <h1>下载样式文件</h1>
+        <p>
+          下载一个.json样式描述文件到本地
         </p>
 
-        <div>
+        {/*<div>
           <FieldString
             label={fieldSpecAdditional.maputnik.mapbox_access_token.label}
             fieldSpec={fieldSpecAdditional.maputnik.mapbox_access_token}
@@ -137,21 +268,22 @@ export default class ModalExport extends React.Component {
             value={(this.props.mapStyle.metadata || {})['maputnik:thunderforest_access_token']}
             onChange={this.changeMetadataProperty.bind(this, "maputnik:thunderforest_access_token")}
           />
-        </div>
+        </div>*/}
 
         <div className="maputnik-modal-export-buttons">
+
           <InputButton
             onClick={this.downloadStyle.bind(this)}
           >
             <MdFileDownload />
-            Download Style
+            下载JSON文件
           </InputButton>
 
           <InputButton
             onClick={this.downloadHtml.bind(this)}
           >
             <MdFileDownload />
-            Download HTML
+            下载Html文件
           </InputButton>
         </div>
       </section>

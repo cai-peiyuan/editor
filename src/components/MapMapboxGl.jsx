@@ -14,6 +14,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import '../mapboxgl.css'
 import '../libs/mapbox-rtl'
 
+import ExportControl from '../libs/exportcontrol/index'
 
 const IS_SUPPORTED = MapboxGl.supported();
 
@@ -151,6 +152,12 @@ export default class MapMapboxGl extends React.Component {
 
     const map = new MapboxGl.Map(mapOpts);
 
+    window.mapboxgl = MapboxGl;
+    document.mapboxgl = MapboxGl;
+    mapboxgl = MapboxGl;
+    window.map = map;
+    document.map = map;
+
     const mapViewChange = () => {
       const center = map.getCenter();
       const zoom = map.getZoom();
@@ -167,6 +174,13 @@ export default class MapMapboxGl extends React.Component {
 
     const nav = new MapboxGl.NavigationControl({visualizePitch:true});
     map.addControl(nav, 'top-right');
+
+    // 导出地图截图控件
+    map.addControl(new ExportControl({
+      dpi: 300,
+      attribution: "© MapAbc ",
+      textFont: []
+    }));
 
     const tmpNode = document.createElement('div');
 

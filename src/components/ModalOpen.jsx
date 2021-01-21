@@ -9,6 +9,7 @@ import InputUrl from './InputUrl'
 import {MdFileUpload} from 'react-icons/md'
 import {MdAddCircleOutline} from 'react-icons/md'
 
+import { getToken } from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
 
@@ -77,6 +78,60 @@ export default class ModalOpen extends React.Component {
   }
 
   onStyleSelect = (styleUrl) => {
+    this.clearError();
+
+    let canceled;
+
+    const activeRequest = fetch(styleUrl, {
+      mode: 'cors',
+      credentials: "same-origin",
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getToken(),
+      },
+      cache: "no-cache"
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then((body) => {
+      if(canceled) {
+        return;
+      }
+
+      this.setState({
+        activeRequest: null,
+        activeRequestUrl: null
+      });
+
+      const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body))
+      console.log('Loaded style ', mapStyle.id)
+      console.log('Loaded style ', mapStyle)
+      this.props.onStyleOpen(mapStyle)
+      this.onOpenToggle()
+    })
+    .catch((err) => {
+      this.setState({
+        error: `Failed to load: '${styleUrl}'`,
+        activeRequest: null,
+        activeRequestUrl: null
+      });
+      console.error(err);
+      console.warn('Could not open the style URL', styleUrl)
+    })
+
+    this.setState({
+      activeRequest: {
+        abort: function() {
+          canceled = true;
+        }
+      },
+      activeRequestUrl: styleUrl
+    })
+  }
+
+  onStyleSelect_MapBox = (styleUrl) => {
     this.clearError();
 
     let canceled;
@@ -167,17 +222,59 @@ export default class ModalOpen extends React.Component {
     });
   }
 
+  getPublicStyles = () => {
+    let url = api_config.url + "/api/mapStyle?timestamp=" + Date.now();
+    fetch(url, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getToken(),
+      },
+      cache: "no-cache"
+    }).then((response) => {
+      return response.json();
+    }).then((json) => {
+      this.setState({
+        publicStyles: json.content
+      });
+    });
+  }
+
+
   render() {
-    const styleOptions = publicStyles.map(style => {
+
+    if (this.props.isOpen && !this.state.isOpen) {
+      this.getPublicStyles();
+    }
+    let isOpen = this.props.isOpen
+    // eslint-disable-next-line react/no-direct-mutation-state
+    this.state.isOpen = isOpen;
+    if (!this.state.publicStyles) {
+      return <div />
+    }
+
+    const styleOptions_MapBox = publicStyles.map(style => {
       return <PublicStyle
         key={style.id}
         url={style.url}
         title={style.title}
         thumbnailUrl={style.thumbnail}
-        onSelect={this.onStyleSelect}
+        onSelect={this.onStyleSelect_MapBox}
       />
     })
+    const styleOptions = this.state.publicStyles.map(style => {
+      return <PublicStyle
+        key={style.id}
+        name={style.styleRemark}
+        url={ api_config.url + "/api/mapStyle/content/"+ style.styleId}
+        title={style.styleName}
+        thumbnailUrl={style.styleTemplateImgBase64}
+        onSelect={this.onStyleSelect}
+      />
+    });
 
+    console.log(getToken())
     let errorElement;
     if(this.state.error) {
       errorElement = (
@@ -238,6 +335,7 @@ export default class ModalOpen extends React.Component {
               Open one of the publicly available styles to start from.
             </p>
             <div className="maputnik-style-gallery-container">
+            {styleOptions_MapBox}
             {styleOptions}
             </div>
           </section>
