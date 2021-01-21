@@ -36,6 +36,25 @@
     }
 
   </style>
+  <script>
+    /**
+     *   地图服务api地址
+     */
+    var api_config = {
+      "traffic_source": {
+        "raster": {
+          "tiles": ["http://114.215.68.185:8883/img/?t={z}-{x}-{y}"],
+          "tileSize": "256",
+          "type": "raster"
+        },
+        "vector": {
+          "tiles": ["http://114.215.68.185:8883/amptraffic?t={z}-{x}-{y}"],
+          "type": "vector"
+        }
+      },
+      "url": "http://localhost:8000"
+    };
+  </script>
 </head>
 <body>
   <!-- TODO: Import dynamically -->
