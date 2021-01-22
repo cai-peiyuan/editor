@@ -227,24 +227,24 @@ export default class AppToolbar extends React.Component {
         <div className="maputnik-toolbar__actions" role="navigation" aria-label="Toolbar">
           <ToolbarAction wdKey="nav:open" onClick={this.props.onToggleModal.bind(this, 'open')}>
             <MdOpenInBrowser />
-            <IconText>Open</IconText>
+            <IconText>打开</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:export" onClick={this.props.onToggleModal.bind(this, 'export')}>
             <MdFileDownload />
-            <IconText>Export</IconText>
+            <IconText>导出</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:sources" onClick={this.props.onToggleModal.bind(this, 'sources')}>
             <MdLayers />
-            <IconText>Data Sources</IconText>
+            <IconText>数据源设置</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:settings" onClick={this.props.onToggleModal.bind(this, 'settings')}>
             <MdSettings />
-            <IconText>Style Settings</IconText>
+            <IconText>样式设置</IconText>
           </ToolbarAction>
 
           <ToolbarSelect wdKey="nav:inspect">
             <MdFindInPage />
-            <label>View
+            <label>查看模式
               <select
                 className="maputnik-select"
                 onChange={(e) => this.handleSelection(e.target.value)}
@@ -270,14 +270,14 @@ export default class AppToolbar extends React.Component {
             </label>
           </ToolbarSelect>
 
-          <ToolbarLink href={"https://github.com/maputnik/editor/wiki"}>
+          <ToolbarLink href={"https://www.mapabc.com/mapabc-gl-js/editor/wiki"}>
             <MdHelpOutline />
-            <IconText>Help</IconText>
+            <IconText>使用帮助</IconText>
           </ToolbarLink>
-          <ToolbarLinkHighlighted href={"https://gregorywolanski.typeform.com/to/cPgaSY"}>
+          {/*<ToolbarLinkHighlighted href={"https://gregorywolanski.typeform.com/to/cPgaSY"}>
             <MdAssignmentTurnedIn />
             <IconText>Take the Maputnik Survey</IconText>
-          </ToolbarLinkHighlighted>
+          </ToolbarLinkHighlighted>*/}
         </div>
       </div>
     </nav>

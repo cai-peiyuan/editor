@@ -1,6 +1,6 @@
 {
-  "name": "Maputnik",
-  "short_name": "Maputnik",
+  "name": "MapAbc矢量地图样式设计器",
+  "short_name": "地图样式设计器",
   "description": "Visual Map Designer",
   "start_url": ".",
   "display": "browser",

@@ -36,7 +36,7 @@ function layoutGroups(layerType) {
     type: 'filter'
   }
   const editorGroup = {
-    title: 'JSON Editor',
+    title: '样式代码',
     type: 'jsoneditor'
   }
   return [layerGroup, filterGroup]

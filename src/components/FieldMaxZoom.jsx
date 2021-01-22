@@ -13,7 +13,7 @@ export default class FieldMaxZoom extends React.Component {
   }
 
   render() {
-    return <Block label={"Max Zoom"} fieldSpec={latest.layer.maxzoom}
+    return <Block label={"最大级别"} fieldSpec={latest.layer.maxzoom}
       error={this.props.error}
       data-wd-key="max-zoom"
     >

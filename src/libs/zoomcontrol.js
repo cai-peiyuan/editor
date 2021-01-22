@@ -4,19 +4,19 @@ export default class ZoomControl {
     this._container = document.createElement('div');
     this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group mapboxgl-ctrl-zoom';
     this._container.innerHTML = `
-      Zoom: <span></span>
+      级别: <span></span>
     `;
     this._textEl = this._container.querySelector("span");
-    
+
     this.addEventListeners();
-    
+
     return this._container;
   }
-  
+
   updateZoomLevel() {
     this._textEl.innerHTML = this._map.getZoom().toFixed(2);
   }
-  
+
   addEventListeners (){
     this._map.on('render', this.updateZoomLevel.bind(this) );
     this._map.on('zoomIn', this.updateZoomLevel.bind(this) );

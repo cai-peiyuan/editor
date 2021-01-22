@@ -9,15 +9,27 @@ import FieldString from './FieldString'
 import FieldCheckbox from './FieldCheckbox'
 import InputButton from './InputButton'
 import Modal from './Modal'
-import { MdFileDownload, MdSave, MdThumbDown} from 'react-icons/md'
+import { MdFileDownload, MdSave, MdThumbDown, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
 import style from '../libs/style'
 import fieldSpecAdditional from '../libs/field-spec-additional'
 import { getToken } from '../util/auth.js'
-import canvas2image from '../libs/canvas2image'
+import 'canvas-toBlob'
 import FileSaver from 'file-saver'
+import icons from "../libs/exportcontrol/icons";
+import FieldUrl from "./FieldUrl";
+import FieldArray from "./FieldArray";
 
 const MAPBOX_GL_VERSION = pkgLockJson.dependencies["mapbox-gl"].version;
 
+
+class Image extends React.Component {
+  static propTypes = {
+    srcImg: PropTypes.string.isRequired
+  }
+  render() {
+    return <img src={this.props.srcImg} width="200" />
+  }
+}
 
 export default class ModalExport extends React.Component {
   static propTypes = {
@@ -31,6 +43,10 @@ export default class ModalExport extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      thumbnailSrc: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCACWAPIBAREA/8QAGwABAAMBAQEBAAAAAAAAAAAAAAIDBQQGAQf/xAA0EAACAgIBAgMGAwcFAAAAAAAAAQIDBBEFEiETMUEUMlFhcZEGM6EjQkNScoGxFRbh8PH/2gAIAQEAAD8A/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZWbyVmPlOuCg1FLeyEebkvfpT+ki6PNUP3oTj+pdHk8SX8VL6povjk0z922D+kkWgAAAAAAAAAAAA8vmT8Xk7F8bOnt9jblxWJJfluP8AS2UT4Sl+5bZH66ZTLg7F7l8X9Y6ODLw7cNx8Rxal5OLNfhU/YXJtvc3o0gAAAAAAAAAAARckt7a7LZ5TCftHK1+vVY5P/J63yBC22umDnZOMYr1bPPc7fGeRT0vcfD6vubHFw6ONoWtNx39zsAAAAAAAAAABCyTjXKSW2k2jInl32ec2l8I9hVNwxsq5+can3Zk8NZGvMlfPfTTVKb1/35kc/mL82XTt11b7QT/yzsq/Ec68KMJV9d67dTfZ/NmXfmX5tyd1jk29Jei+h08zLXJTrX8OEYL7HrMeHh49cP5YpfoWgAAAAAAAAAAGFdX4d04fB9ivMmquBypes2oox+NyMaEMqvItdXjQUFJR3ruT/wBPxpvVPK40vlPcT4+GzH+VKi5fGFqJ4XF5sORx/FxbIwVibk120Uzn7XzrS7qzI0vv/wAHugAAAAAAAAAAAZfI19N8Z+kl+pl89J18HRH0nbtv7nl+r5jq+YUtPaen8i+vPyqteHk3R18Js7OAi7+co296bm3/AGPegAAAAAAAAAAA5OQh1Y/V6xezihlzjUq5QhOC9JIrlVg3v9px1Um/Nxj3H+3eNyFv2W2n6TaOaz8H4734eVbH4dSTOSz8H5K/Ky6pf1RaOvgeCyuOz535Hh9Kg4x6Zb3v/wAPSgAAAAAAAAAAAjOKnBxfk1pnNDj6Y92nJ/NnTGuMFqEUl8kSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKq8iq6yyFdkZSrfTNL91n2q2u6tTrkpRba2iwrpuryKo21S6oS8nrzLAAAAAAAAAAAAADBpjKnIzM2tNyryZRsiv3oaW/7rzK8K1zxsGrx5V0Wytk5wfT1NS7Lfp5tmlxls7IXwdjtrrucK7G9uUdL19dPaM3j7b8x4VdmVd0zx5yl0z05NT15k8e29Y2DkyyrZznkeDJSl2cdtd18ey7kJ5dmoZNd1upXpJ2W62urTSguyX1PmRkzWHk3yzbYZSucFUp60urSSX09SV+RkzszZuyVc6bHGH7dQjFJdm4+u/M3q25VQctdTSb0TAAAAAAAAAABBQjHeopdT29LzZGWPTKrwnVW6/wCTpWvsThCNcVGEVGK8klpIjGquGnGuMWlpaSWkFVWkkoR1F7S15P4kVi0KUpKmtSl7z6FtnLdxjvsl4mRY6pS6nDpW/PeurW9dvI6549NlisnTXKa8pSim0WgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//2Q==",
+      thumbnailBlob: null
+    }
   }
 
   tokenizedStyle () {
@@ -95,70 +111,71 @@ export default class ModalExport extends React.Component {
     saveAs(blob, exportName + ".json");
   }
 
-  base64ToBlob(code) {
-    let parts = code.split(";base64,");
-    let contentType = parts[0].split(":")[1];
-    let raw = window.atob(parts[1]);
-    let rawLength = raw.length;
-    let uInt8Array = new Uint8Array(rawLength);
-    for (let i = 0; i < rawLength; i++) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-    return new Blob([uInt8Array], {type: contentType});
-  }
-  // Converts canvas to an image
-  convertCanvasToImage(canvas) {
-    var image = new Image();
-    image.src = canvas.toDataURL("image/png");
-    return image;
+  /**
+   * 生成缩略图相关的方法
+   */
+
+  onRemove() {
+    this.container.parentNode.removeChild(this.container)
   }
 
-  //  保存缩略图
-  saveThumbnail() {
+  loading() {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
 
-    const actualPixelRatio = window.devicePixelRatio;
-    Object.defineProperty(window, 'devicePixelRatio', {
-      get: () => this.options.dpi / 96
-    });
-    window.map.getCanvas().toBlob((blob) => {
-      FileSaver.saveAs(blob, `${window.map.getCenter().toArray().join('-')}.png`)
-      Object.defineProperty(window, 'devicePixelRatio', {
-        get: () => actualPixelRatio
-      });
+    this.setStyles(container, {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      width: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      zIndex: 9999,
     })
 
+    const icon = document.createElement('div')
+    icon.innerHTML = icons.loading
+
+    this.setStyles(icon, {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 9999,
+      margin: "auto",
+      width: "120px",
+      height: "120px",
+    })
+
+    container.appendChild(icon)
+
+    return container;
+  }
+
+  setStyles(element, styles) {
+    for (const style in styles) {
+      element.style[style] = styles[style]
+    }
+  }
+  //  保存缩略图
+  saveThumbnail() {
+    window.exportControl.downloadMap(false, (blob)=>{
+      this.setState({
+        thumbnailSrc: window.URL.createObjectURL(blob),
+        thumbnailBlob: blob
+      })
+    })
   }
 
   saveThumbnail1() {
 
-    const c = document.getElementsByClassName("mapboxgl-canvas")[0];
-    const w = 300;
-    const h = 200;
-    const img_data = canvas2image.Canvas2Image.saveAsPNG(c, true , w, h).getAttribute('src');
-    console.log(c);
-    console.log(canvas2image);
-    console.log(img_data);
-    console.log(this);
-
-    const base64Img = document.getElementsByClassName("mapboxgl-canvas")[0].toDataURL("image/png");
-    console.log(base64Img);
-
-    const image = this.convertCanvasToImage(c);
-    console.log(image)
-
-
-
-    const blob = this.base64ToBlob(base64Img);
-
-    saveAs(blob, "stylePreview.png");
-    document.getElementsByClassName("mapboxgl-canvas")[0].toBlob(function(blobObj) {
-      //saveAs(blob, "stylePreview.png");
-    });
   }
 
   // 保存到在线服务
 
   saveToMsp() {
+
+    // 保存样式json
     const tokenStyle = this.tokenizedStyle();
     const blob = new Blob([tokenStyle], {type: "application/json;charset=utf-8"});
     const exportName = this.exportName();
@@ -186,9 +203,41 @@ export default class ModalExport extends React.Component {
         alert(body.msg)
       })
       .catch(function(error) {
+        alert(error)
         if(error) console.error(error)
       })
+    if(this.state.thumbnailBlob){
+      this.blobToDataURL(this.state.thumbnailBlob, (result)=>{
+        fetch(api_config.url + '/api/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
+          method: "PUT",
+          mode: 'cors',
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            'Authorization': getToken(),
+          },
+          body: JSON.stringify({ base64: result })
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then((body) => {
+            console.log(body)
+            alert(body.msg)
+          })
+          .catch(function(error) {
+            alert(error)
+            if(error) console.error(error)
+          })
+      })
+    }
     // saveAs(blob, exportName + ".json");
+  }
+
+  //**blob to dataURL**
+  blobToDataURL(blob, callback) {
+    var a = new FileReader();
+    a.onload = function (e) { callback(e.target.result); }
+    a.readAsDataURL(blob);
   }
 
   changeMetadataProperty(property, value) {
@@ -213,14 +262,15 @@ export default class ModalExport extends React.Component {
     >
       <section className="maputnik-modal-section">
         <h1>样式缩略图</h1>
-        <p>
-
-        </p>
-        <div className="maputnik-modal-export-buttons">
+        <div >
+          <Image srcImg={this.state.thumbnailSrc} />
+          {/*<img src={this.state.thumbnailSrc} alt="" width="200" height="200"/>*/}
+        </div>
+        <div >
           <InputButton
             onClick={this.saveThumbnail.bind(this)}
           >
-            <MdThumbDown />
+            <MdPhotoLibrary />
             获取缩略图
           </InputButton>
         </div>
@@ -237,7 +287,7 @@ export default class ModalExport extends React.Component {
             onClick={this.saveToMsp.bind(this)}
             title={this.saveToMspTitle}
           >
-            <MdSave />
+            <MdCloudUpload />
             保存到服务
           </InputButton>
         </div>

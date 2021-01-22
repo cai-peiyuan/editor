@@ -12,11 +12,11 @@ export default class FieldComment extends React.Component {
 
   render() {
     const fieldSpec = {
-      doc: "Comments for the current layer. This is non-standard and not in the spec."
+      doc: "当前图层的注释。仅用于注释和备注内容，非样式标准，不在规范中。"
     };
 
     return <Block
-      label={"Comments"}
+      label={"备注信息"}
       fieldSpec={fieldSpec}
       data-wd-key="layer-comment"
     >

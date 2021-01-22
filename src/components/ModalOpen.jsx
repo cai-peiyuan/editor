@@ -54,7 +54,8 @@ export default class ModalOpen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      styleUrl: ""
+      styleUrl: "",
+      isOpen: false
     };
   }
 
@@ -223,7 +224,7 @@ export default class ModalOpen extends React.Component {
   }
 
   getPublicStyles = () => {
-    let url = api_config.url + "/api/mapStyle?timestamp=" + Date.now();
+    let url = api_config.url + "/api/mapStyle?page=0&size=100&sort=id%2Cdesc";
     fetch(url, {
       method: "GET",
       mode: "cors",
@@ -235,8 +236,10 @@ export default class ModalOpen extends React.Component {
     }).then((response) => {
       return response.json();
     }).then((json) => {
+      let isOpen = this.props.isOpen
       this.setState({
-        publicStyles: json.content
+        publicStyles: json.content,
+        isOpen: this.props.isOpen
       });
     });
   }
@@ -247,9 +250,7 @@ export default class ModalOpen extends React.Component {
     if (this.props.isOpen && !this.state.isOpen) {
       this.getPublicStyles();
     }
-    let isOpen = this.props.isOpen
-    // eslint-disable-next-line react/no-direct-mutation-state
-    this.state.isOpen = isOpen;
+
     if (!this.state.publicStyles) {
       return <div />
     }

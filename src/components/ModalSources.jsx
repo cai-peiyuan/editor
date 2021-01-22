@@ -9,10 +9,12 @@ import FieldSelect from './FieldSelect'
 import ModalSourcesTypeEditor from './ModalSourcesTypeEditor'
 
 import style from '../libs/style'
-import { deleteSource, addSource, changeSource } from '../libs/source'
+import { deleteSource, addSource, changeSource, deleteSourceMsp, addSourceMsp, changeSourceMsp } from '../libs/source'
 import publicSources from '../config/tilesets.json'
+import publicSourcesMsp from '../config/tilesets.json'
 
 import {MdAddCircleOutline, MdDelete} from 'react-icons/md'
+import {getToken} from "../util/auth";
 
 class PublicSource extends React.Component {
   static propTypes = {
@@ -29,8 +31,9 @@ class PublicSource extends React.Component {
 				onClick={() => this.props.onSelect(this.props.id)}
 			>
 				<div className="maputnik-public-source-info">
+					<p className="maputnik-public-source-id">{this.props.id}</p>
 					<p className="maputnik-public-source-name">{this.props.title}</p>
-					<p className="maputnik-public-source-id">#{this.props.id}</p>
+					<p className="maputnik-public-source-name">数据源类型 {this.props.type}</p>
 				</div>
 				<span className="maputnik-space" />
 				<MdAddCircleOutline />
@@ -81,10 +84,10 @@ class ActiveModalSourcesTypeEditor extends React.Component {
     const inputProps = { }
     return <div className="maputnik-active-source-type-editor">
       <div className="maputnik-active-source-type-editor-header">
-        <span className="maputnik-active-source-type-editor-header-id">#{this.props.sourceId}</span>
+        <span className="maputnik-active-source-type-editor-header-id">数据源 {this.props.sourceId}</span>
         <span className="maputnik-space" />
         <InputButton
-          aria-label={`Remove '${this.props.sourceId}' source`}
+          aria-label={`从本样式中删除Id为 '${this.props.sourceId}' 的数据源`}
           className="maputnik-active-source-type-editor-header-delete"
           onClick={()=> this.props.onDelete(this.props.sourceId)}
           style={{backgroundColor: 'transparent'}}
@@ -197,7 +200,7 @@ class AddSource extends React.Component {
 
   render() {
     // Kind of a hack because the type changes, however maputnik has 1..n
-    // options per type, for example 
+    // options per type, for example
     //
     //  - 'geojson' - 'GeoJSON (URL)' and 'GeoJSON (JSON)'
     //  - 'raster' - 'Raster (TileJSON URL)' and 'Raster (XYZ URL)'
@@ -209,13 +212,14 @@ class AddSource extends React.Component {
 
     return <div className="maputnik-add-source">
       <FieldString
-        label={"Source ID"}
-        fieldSpec={{doc: "Unique ID that identifies the source and is used in the layer to reference the source."}}
+        label={"地图数据源ID"}
+        fieldSpec={{doc: "标识源的唯一ID，在图层渲染中用于引用此数据源。" +
+            "Unique ID that identifies the source and is used in the layer to reference the source."}}
         value={this.state.sourceId}
         onChange={v => this.setState({ sourceId: v})}
       />
       <FieldSelect
-        label={"Source Type"}
+        label={"地图数据源类型"}
         fieldSpec={sourceTypeFieldSpec}
         options={[
           ['geojson_json', 'GeoJSON (JSON)'],
@@ -241,7 +245,7 @@ class AddSource extends React.Component {
         className="maputnik-add-source-button"
 				onClick={this.onAdd}
       >
-        Add Source
+        添加数据源
       </InputButton>
     </div>
   }
@@ -255,13 +259,87 @@ export default class ModalSources extends React.Component {
     onStyleChanged: PropTypes.func.isRequired,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      styleUrl: "",
+      isOpen: false,
+      publicSourcesMsp: {}
+    };
+  }
+
+  /**
+   * 获取msp公共数据源
+   */
+  publicSourcesMsp() {
+    console.log("publicSourcesMsp")
+    let url = api_config.url + "/api/mapSource/getPublicSources?page=0&size=100&sort=id%2Cdesc";
+    fetch(url, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getToken(),
+      },
+      cache: "no-cache"
+    }).then((response) => {
+      return response.json();
+    }).then((json) => {
+      let isOpen_ = this.props.isOpen
+      this.setState({
+        isOpen: this.props.isOpen,
+        publicSourcesMsp: json
+      });
+    });
+  }
+
+  /**
+   * 转换msp得数据源type和mapbox数据源type
+   * @param dictValue
+   * @returns {*}
+   */
+  getSourceType(dictValue) {
+      let dataSourceTypeMap = {
+        'geojson_json': 'geojson',
+        'geojson_url': 'geojson',
+        'tilejson_vector': 'vector',
+        'tilexyz_vector': 'vector',
+        'tilejson_raster': 'raster',
+        'tilexyz_raster': 'raster',
+        'tilejson_raster-dem': 'raster-dem',
+        'tilexyz_raster-dem': 'raster-dem',
+        'image': 'image',
+        'video': 'video'
+        }
+      console.log("")
+    return dataSourceTypeMap[dictValue] ? dataSourceTypeMap[dictValue] : '';
+  }
+
   stripTitle(source) {
     const strippedSource = {...source}
     delete strippedSource['title']
     return strippedSource
   }
 
+  stripTitleMsp(source) {
+    const strippedSource = {
+      type: this.getSourceType(source.sourceType),
+      url : source.sourceUrl
+    }
+    return strippedSource
+  }
+
   render() {
+
+    if (this.props.isOpen && !this.state.isOpen) {
+      this.publicSourcesMsp();
+
+    }
+
+    if (!this.state.publicSourcesMsp) {
+      return <div />
+    }
+
     const mapStyle = this.props.mapStyle
     const activeSources = Object.keys(mapStyle.sources).map(sourceId => {
       const source = mapStyle.sources[sourceId]
@@ -285,6 +363,19 @@ export default class ModalSources extends React.Component {
       />
     })
 
+    console.log(this.state.publicSourcesMsp)
+    const tilesetOptionsMsp = Object.keys(this.state.publicSourcesMsp).filter(sourceId => !(sourceId in mapStyle.sources)).map(sourceId => {
+      const source = this.state.publicSourcesMsp[sourceId]
+      console.log(sourceId)
+      return <PublicSource
+        key={sourceId}
+        id={sourceId}
+        type={ this.getSourceType(source.sourceType)}
+        title={source.sourceRemark}
+        onSelect={() => this.props.onStyleChanged(addSourceMsp(mapStyle, sourceId, this.stripTitleMsp(source)))}
+      />
+    })
+
     const inputProps = { }
     return <Modal
       data-wd-key="modal:sources"
@@ -293,23 +384,33 @@ export default class ModalSources extends React.Component {
       title={'Sources'}
     >
       <section className="maputnik-modal-section">
-        <h1>Active Sources</h1>
-        {activeSources}
-      </section>
-
-      <section className="maputnik-modal-section">
-        <h1>Choose Public Source</h1>
+        <h1>MSP公共数据源</h1>
         <p>
-          Add one of the publicly available sources to your style.
+          点击添加一个公共的数据源到此样式中
         </p>
         <div className="maputnik-public-sources" style={{maxwidth: 500}}>
-        {tilesetOptions}
+          {tilesetOptionsMsp}
         </div>
       </section>
 
       <section className="maputnik-modal-section">
-				<h1>Add New Source</h1>
-				<p>Add a new source to your style. You can only choose the source type and id at creation time!</p>
+        <h1>互联网公共数据源</h1>
+        <p>
+          点击添加一个公共的数据源到此样式中
+        </p>
+        <div className="maputnik-public-sources" style={{maxwidth: 500}}>
+          {tilesetOptions}
+        </div>
+      </section>
+
+      <section className="maputnik-modal-section">
+        <h1>已选数据源</h1>
+        {activeSources}
+      </section>
+
+      <section className="maputnik-modal-section" style={{display: "block"}}>
+				<h1>添加新数据源</h1>
+				<p>添加一个新的地图数据源用于样式渲染</p>
 				<AddSource
 					onAdd={(sourceId, source) => this.props.onStyleChanged(addSource(mapStyle, sourceId, source))}
 				/>

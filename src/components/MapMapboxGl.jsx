@@ -13,6 +13,7 @@ import { colorHighlightedLayer } from '../libs/highlight'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '../mapboxgl.css'
 import '../libs/mapbox-rtl'
+import FileSaver from 'file-saver'
 
 import ExportControl from '../libs/exportcontrol/index'
 
@@ -139,6 +140,14 @@ export default class MapMapboxGl extends React.Component {
     }
   }
 
+  /**
+   * 下载地图截图回调函数
+   * @param blobData
+   */
+  downLoadMapSnapCallBackFunc(blobData) {
+    console.log("custom call back function " + blobData)
+  }
+
   componentDidMount() {
     if(!IS_SUPPORTED) return;
 
@@ -175,12 +184,14 @@ export default class MapMapboxGl extends React.Component {
     const nav = new MapboxGl.NavigationControl({visualizePitch:true});
     map.addControl(nav, 'top-right');
 
-    // 导出地图截图控件
-    map.addControl(new ExportControl({
+    window.exportControl = new ExportControl({
       dpi: 300,
       attribution: "© MapAbc ",
-      textFont: []
-    }));
+      textFont: [],
+      callBackFunc: this.downLoadMapSnapCallBackFunc
+    });
+    // 导出地图截图控件
+    map.addControl(window.exportControl);
 
     const tmpNode = document.createElement('div');
 
@@ -213,6 +224,7 @@ export default class MapMapboxGl extends React.Component {
         inspect,
         zoom: map.getZoom()
       });
+      console.log("style.load")
     })
 
     map.on("data", e => {

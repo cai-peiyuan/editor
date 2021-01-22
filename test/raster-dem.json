@@ -1,0 +1,34 @@
+{
+  "attribution": "<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\">&copy; Mapbox</a>",
+  "autoscale": true,
+  "bounds": [
+    -180,
+    -85,
+    180,
+    85
+  ],
+  "cacheControl": "max-age=43200,s-maxage=604800",
+  "center": [
+    0,
+    0,
+    3
+  ],
+  "created": 1402603200000,
+  "description": "pngraw file extension must be used. height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)",
+  "filesize": 0,
+  "fillzoom": 14,
+  "id": "mapbox.terrain-rgb",
+  "mapbox_logo": true,
+  "maxzoom": 15,
+  "minzoom": 0,
+  "modified": 1483579530000,
+  "name": "Terrain (RGB-encoded dem)",
+  "private": false,
+  "scheme": "xyz",
+  "tilejson": "2.2.0",
+  "tiles": [
+    "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}@2x.webp?sku=101nQVPGevng0&access_token=pk.eyJ1IjoiY2FpcGVpeXVhbiIsImEiOiJjamZ0aDY4YjIwOG5zMzBsNmdwbnFjbHg3In0.p9Mnm9HmZvc8zSFzE4peQw",
+    "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}@2x.webp?sku=101nQVPGevng0&access_token=pk.eyJ1IjoiY2FpcGVpeXVhbiIsImEiOiJjamZ0aDY4YjIwOG5zMzBsNmdwbnFjbHg3In0.p9Mnm9HmZvc8zSFzE4peQw"
+  ],
+  "webpage": "https://a.tiles.mapbox.com/v4/mapbox.terrain-rgb/page.html?access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg"
+}

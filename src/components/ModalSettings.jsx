@@ -84,65 +84,65 @@ export default class ModalSettings extends React.Component {
       data-wd-key="modal:settings"
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={'Style Settings'}
+      title={'样式设置'}
     >
       <div className="modal:settings">
         <FieldString {...inputProps}
-          label={"Name"}
+          label={"样式名称"}
           fieldSpec={latest.$root.name}
-          data-wd-key="modal:settings.name" 
+          data-wd-key="modal:settings.name"
           value={this.props.mapStyle.name}
           onChange={this.changeStyleProperty.bind(this, "name")}
         />
         <FieldString {...inputProps}
-          label={"Owner"}
+          label={"所属用户"}
           fieldSpec={{doc: "Owner ID of the style. Used by Mapbox or future style APIs."}}
-          data-wd-key="modal:settings.owner" 
+          data-wd-key="modal:settings.owner"
           value={this.props.mapStyle.owner}
           onChange={this.changeStyleProperty.bind(this, "owner")}
         />
         <FieldUrl {...inputProps}
           fieldSpec={latest.$root.sprite}
-          label="Sprite URL"
-          data-wd-key="modal:settings.sprite" 
+          label="图标资源地址URL"
+          data-wd-key="modal:settings.sprite"
           value={this.props.mapStyle.sprite}
           onChange={this.changeStyleProperty.bind(this, "sprite")}
         />
 
         <FieldUrl {...inputProps}
-          label="Glyphs URL"
+          label="字体资源地址URL"
           fieldSpec={latest.$root.glyphs}
-          data-wd-key="modal:settings.glyphs" 
+          data-wd-key="modal:settings.glyphs"
           value={this.props.mapStyle.glyphs}
           onChange={this.changeStyleProperty.bind(this, "glyphs")}
         />
 
-        <FieldString {...inputProps}
-          label={fieldSpecAdditional.maputnik.mapbox_access_token.label} 
+        {/*<FieldString {...inputProps}
+          label={fieldSpecAdditional.maputnik.mapbox_access_token.label}
           fieldSpec={fieldSpecAdditional.maputnik.mapbox_access_token}
-          data-wd-key="modal:settings.maputnik:mapbox_access_token" 
+          data-wd-key="modal:settings.maputnik:mapbox_access_token"
           value={metadata['maputnik:mapbox_access_token']}
           onChange={onChangeMetadataProperty.bind(this, "maputnik:mapbox_access_token")}
         />
 
         <FieldString {...inputProps}
-          label={fieldSpecAdditional.maputnik.maptiler_access_token.label} 
+          label={fieldSpecAdditional.maputnik.maptiler_access_token.label}
           fieldSpec={fieldSpecAdditional.maputnik.maptiler_access_token}
-          data-wd-key="modal:settings.maputnik:openmaptiles_access_token" 
+          data-wd-key="modal:settings.maputnik:openmaptiles_access_token"
           value={metadata['maputnik:openmaptiles_access_token']}
           onChange={onChangeMetadataProperty.bind(this, "maputnik:openmaptiles_access_token")}
         />
 
         <FieldString {...inputProps}
-          label={fieldSpecAdditional.maputnik.thunderforest_access_token.label} 
+          label={fieldSpecAdditional.maputnik.thunderforest_access_token.label}
           fieldSpec={fieldSpecAdditional.maputnik.thunderforest_access_token}
-          data-wd-key="modal:settings.maputnik:thunderforest_access_token" 
+          data-wd-key="modal:settings.maputnik:thunderforest_access_token"
           value={metadata['maputnik:thunderforest_access_token']}
           onChange={onChangeMetadataProperty.bind(this, "maputnik:thunderforest_access_token")}
-        />
+        />*/}
 
         <FieldArray
-          label={"Center"}
+          label={"中心点Center"}
           fieldSpec={latest.$root.center}
           length={2}
           type="number"
@@ -153,7 +153,7 @@ export default class ModalSettings extends React.Component {
 
         <FieldNumber
           {...inputProps}
-          label={"Zoom"}
+          label={"级别Zoom"}
           fieldSpec={latest.$root.zoom}
           value={mapStyle.zoom}
           default={latest.$root.zoom.default || 0}
@@ -162,7 +162,7 @@ export default class ModalSettings extends React.Component {
 
         <FieldNumber
           {...inputProps}
-          label={"Bearing"}
+          label={"水平角度Bearing"}
           fieldSpec={latest.$root.bearing}
           value={mapStyle.bearing}
           default={latest.$root.bearing.default}
@@ -171,14 +171,14 @@ export default class ModalSettings extends React.Component {
 
         <FieldNumber
           {...inputProps}
-          label={"Pitch"}
+          label={"俯视角度Pitch"}
           fieldSpec={latest.$root.pitch}
           value={mapStyle.pitch}
           default={latest.$root.pitch.default}
           onChange={this.changeStyleProperty.bind(this, "pitch")}
         />
 
-        <FieldEnum
+        {/*<FieldEnum
           {...inputProps}
           label={"Light anchor"}
           fieldSpec={latest.light.anchor}
@@ -234,19 +234,19 @@ export default class ModalSettings extends React.Component {
           value={transition.duration}
           default={latest.transition.duration.default}
           onChange={this.changeTransitionProperty.bind(this, "duration")}
-        />
+        />*/}
 
-        <FieldSelect {...inputProps}
+        {/*<FieldSelect {...inputProps}
           label={fieldSpecAdditional.maputnik.style_renderer.label}
           fieldSpec={fieldSpecAdditional.maputnik.style_renderer}
-          data-wd-key="modal:settings.maputnik:renderer" 
+          data-wd-key="modal:settings.maputnik:renderer"
           options={[
             ['mbgljs', 'MapboxGL JS'],
             ['ol', 'Open Layers (experimental)'],
           ]}
           value={metadata['maputnik:renderer'] || 'mbgljs'}
           onChange={onChangeMetadataProperty.bind(this, 'maputnik:renderer')}
-        />
+        />*/}
       </div>
     </Modal>
   }

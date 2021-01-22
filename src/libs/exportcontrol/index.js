@@ -7,10 +7,143 @@ class ExportControl {
   constructor(options = {}) {
     this.options = Object.assign({
         dpi: 300,
-        attribution: "© OpenStreetMap Contributors",
+        attribution: "© MapAbc",
         textFont: [],
+        callBackFunc: (imageData)=>{
+          console.log("default download shot snap call back " + imageData)
+        }
       }, options
     )
+  }
+
+  downloadMap(download, callback) {
+
+    const actualPixelRatio = window.devicePixelRatio;
+    Object.defineProperty(window, 'devicePixelRatio', {
+      get: () => this.options.dpi / 96
+    });
+
+    const _loading = this.loading()
+
+    const _container = document.createElement('div')
+    document.body.appendChild(_container)
+
+    const width = map.getContainer().offsetWidth
+    const height = map.getContainer().offsetHeight
+    const bottomRight = map.unproject([width, height]).toArray()
+
+    this.setStyles(_container, {
+      visibility: "hidden",
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      width: `${width}px`,
+      height: `${height}px`,
+    })
+
+    let fontFamily = []
+    if (map.style.glyphManager && map.style.glyphManager.localIdeographFontFamily) {
+      fontFamily = map.style.glyphManager.localIdeographFontFamily
+    }
+
+    let mbgl;
+    if ('undefined' !== typeof window.geolonia) {
+      /* eslint no-undef: "error" */
+      mbgl = window.geolonia.Map
+    } else {
+      mbgl = mapboxgl.Map
+    }
+
+    const _map = new mbgl({
+      container: _container,
+      center: map.getCenter(),
+      zoom: map.getZoom(),
+      bearing: map.getBearing(),
+      pitch: map.getPitch(),
+      style: map.getStyle(),
+      localIdeographFontFamily: fontFamily,
+      hash: false,
+      preserveDrawingBuffer: true,
+      interactive: false,
+      attributionControl: false,
+    })
+
+    _map.once('load', () => {
+      const geojson = {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: bottomRight
+          },
+          properties: {
+            text: this.options.attribution
+          }
+        }]
+      };
+
+      _map.addSource("attribution-for-image", {
+        type: "geojson",
+        data: geojson
+      })
+
+      let textFont = []
+      if (this.options.textFont.length) {
+        textFont = this.options.textFont
+      } else {
+        const layers = map.getStyle().layers
+        for (let i = 0; i < layers.length; i++) {
+          try {
+            const fonts = map.getLayoutProperty(layers[i].id, 'text-font')
+            if (fonts && fonts.length) {
+              textFont = fonts
+              break;
+            }
+          } catch (e) {
+            // Nothing to do.
+          }
+        }
+      }
+
+      _map.addLayer({
+        "id": "markers",
+        "type": "symbol",
+        "source": "attribution-for-image",
+        "paint": {
+          "text-color": "#000000",
+          "text-halo-color": "rgba(255, 255, 255, 1)",
+          "text-halo-width": 2,
+        },
+        "layout": {
+          "text-field": "{text}",
+          "text-font": textFont,
+          "text-size": 20,
+          "text-anchor": "bottom-right",
+          "text-max-width": 50,
+          "text-offset": [-0.5, -0.5],
+          "text-allow-overlap": true,
+        }
+      });
+
+      setTimeout(() => {
+        _map.getCanvas().toBlob((blob) => {
+          if(download == undefined || download == true){
+            FileSaver.saveAs(blob, `${_map.getCenter().toArray().join('-')}.png`)
+          }
+          if( callback ){
+            callback(blob)
+          }
+          this.options.callBackFunc(blob)
+          _map.remove()
+          _container.parentNode.removeChild(_container)
+          _loading.parentNode.removeChild(_loading)
+          Object.defineProperty(window, 'devicePixelRatio', {
+            get: () => actualPixelRatio
+          });
+        })
+      }, 3000)
+    })
   }
 
   onAdd(map) {
@@ -26,126 +159,7 @@ class ExportControl {
     this.container.appendChild(btn)
 
     btn.addEventListener('click', () => {
-      const actualPixelRatio = window.devicePixelRatio;
-      Object.defineProperty(window, 'devicePixelRatio', {
-        get: () => this.options.dpi / 96
-      });
-
-      const _loading = this.loading()
-
-      const _container = document.createElement('div')
-      document.body.appendChild(_container)
-
-      const width = map.getContainer().offsetWidth
-      const height = map.getContainer().offsetHeight
-      const bottomRight = map.unproject([width, height]).toArray()
-
-      this.setStyles(_container, {
-        visibility: "hidden",
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        width: `${width}px`,
-        height: `${height}px`,
-      })
-
-      let fontFamily = []
-      if (map.style.glyphManager && map.style.glyphManager.localIdeographFontFamily) {
-        fontFamily = map.style.glyphManager.localIdeographFontFamily
-      }
-
-      let mbgl;
-      if ('undefined' !== typeof window.geolonia) {
-        /* eslint no-undef: "error" */
-        mbgl = window.geolonia.Map
-      } else {
-        mbgl = mapboxgl.Map
-      }
-
-      const _map = new mbgl({
-        container: _container,
-        center: map.getCenter(),
-        zoom: map.getZoom(),
-        bearing: map.getBearing(),
-        pitch: map.getPitch(),
-        style: map.getStyle(),
-        localIdeographFontFamily: fontFamily,
-        hash: false,
-        preserveDrawingBuffer: true,
-        interactive: false,
-        attributionControl: false,
-      })
-
-      _map.once('load', () => {
-        const geojson = {
-          type: 'FeatureCollection',
-          features: [{
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: bottomRight
-            },
-            properties: {
-              text: this.options.attribution
-            }
-          }]
-        };
-
-        _map.addSource("attribution-for-image", {
-          type: "geojson",
-          data: geojson
-        })
-
-        let textFont = []
-        if (this.options.textFont.length) {
-          textFont = this.options.textFont
-        } else {
-          const layers = map.getStyle().layers
-          for (let i = 0; i < layers.length; i++) {
-            try {
-              const fonts = map.getLayoutProperty(layers[i].id, 'text-font')
-              if (fonts && fonts.length) {
-                textFont = fonts
-                break;
-              }
-            } catch (e) {
-              // Nothing to do.
-            }
-          }
-        }
-
-        _map.addLayer({
-          "id": "markers",
-          "type": "symbol",
-          "source": "attribution-for-image",
-          "paint": {
-            "text-color": "#000000",
-            "text-halo-color": "rgba(255, 255, 255, 1)",
-            "text-halo-width": 2,
-          },
-          "layout": {
-            "text-field": "{text}",
-            "text-font": textFont,
-            "text-size": 18,
-            "text-anchor": "bottom-right",
-            "text-max-width": 28,
-            "text-offset": [-0.5, -0.5],
-            "text-allow-overlap": true,
-          }
-        });
-
-        setTimeout(() => {
-          _map.getCanvas().toBlob((blob) => {
-            FileSaver.saveAs(blob, `${_map.getCenter().toArray().join('-')}.png`)
-            _map.remove()
-            _container.parentNode.removeChild(_container)
-            _loading.parentNode.removeChild(_loading)
-            Object.defineProperty(window, 'devicePixelRatio', {
-              get: () => actualPixelRatio
-            });
-          })
-        }, 3000)
-      })
+      this.downloadMap()
     })
 
     return this.container;

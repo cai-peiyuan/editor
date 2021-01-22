@@ -43,7 +43,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './src/template.html',
-      title: 'Maputnik'
+      title: 'MapAbc 矢量地图设计器'
     }),
     new HtmlWebpackInlineSVGPlugin({
       runPreEmit: true,

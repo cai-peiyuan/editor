@@ -441,7 +441,7 @@ export default class App extends React.Component {
     if (opts.save) {
       this.saveStyle(newStyle);
     }
-       
+
     this.setState({
       mapStyle: newStyle,
       dirtyMapStyle: dirtyMapStyle,
@@ -774,7 +774,7 @@ export default class App extends React.Component {
         if (!invalid) {
           this.setState({
             selectedLayerIndex,
-            selectedLayerOriginalId: this.state.mapStyle.layers[selectedLayerIndex].id,
+            selectedLayerOriginalId: this.state.mapStyle.layers[selectedLayerIndex]? this.state.mapStyle.layers[selectedLayerIndex].id : "",
           });
         }
       }

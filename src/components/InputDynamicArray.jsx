@@ -113,7 +113,7 @@ export default class FieldDynamicArray extends React.Component {
           className="maputnik-array-add-value"
           onClick={this.addValue}
         >
-          Add value
+          添加新值
         </InputButton>
       </div>
     );

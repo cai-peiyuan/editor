@@ -50,7 +50,7 @@ class TileURLSourceEditor extends React.Component {
   renderTileUrls() {
     const tiles = this.props.source.tiles || [];
     return <FieldDynamicArray
-      label={"Tile URL"}
+      label={"切图 URL"}
       fieldSpec={latest.source_vector.tiles}
       type="url"
       value={tiles}
@@ -62,7 +62,7 @@ class TileURLSourceEditor extends React.Component {
     return <div>
       {this.renderTileUrls()}
       <FieldNumber
-        label={"Min Zoom"}
+        label={"最小级别"}
         fieldSpec={latest.source_vector.minzoom}
         value={this.props.source.minzoom || 0}
         onChange={minzoom => this.props.onChange({
@@ -71,7 +71,7 @@ class TileURLSourceEditor extends React.Component {
         })}
       />
       <FieldNumber
-        label={"Max Zoom"}
+        label={"最大级别"}
         fieldSpec={latest.source_vector.maxzoom}
         value={this.props.source.maxzoom || 22}
         onChange={maxzoom => this.props.onChange({
@@ -104,7 +104,7 @@ class ImageSourceEditor extends React.Component {
 
     return <div>
       <FieldUrl
-        label={"Image URL"}
+        label={"图片 URL"}
         fieldSpec={latest.source_image.url}
         value={this.props.source.url}
         onChange={url => this.props.onChange({

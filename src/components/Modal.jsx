@@ -4,7 +4,6 @@ import {MdClose} from 'react-icons/md'
 import AriaModal from 'react-aria-modal'
 import classnames from 'classnames';
 
-
 export default class Modal extends React.Component {
   static propTypes = {
     "data-wd-key": PropTypes.string,
