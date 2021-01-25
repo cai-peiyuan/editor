@@ -215,7 +215,7 @@ export default class AppToolbar extends React.Component {
             className="maputnik-toolbar-logo"
             target="blank"
             rel="noreferrer noopener"
-            href="https://github.com/maputnik/editor"
+            href="https://www.mapabc.com"
           >
             <span dangerouslySetInnerHTML={{__html: logoImage}} />
             <h1>
@@ -241,7 +241,7 @@ export default class AppToolbar extends React.Component {
             <MdSettings />
             <IconText>样式设置</IconText>
           </ToolbarAction>
-
+          {/*
           <ToolbarSelect wdKey="nav:inspect">
             <MdFindInPage />
             <label>查看模式
@@ -274,7 +274,7 @@ export default class AppToolbar extends React.Component {
             <MdHelpOutline />
             <IconText>使用帮助</IconText>
           </ToolbarLink>
-          {/*<ToolbarLinkHighlighted href={"https://gregorywolanski.typeform.com/to/cPgaSY"}>
+          <ToolbarLinkHighlighted href={"https://gregorywolanski.typeform.com/to/cPgaSY"}>
             <MdAssignmentTurnedIn />
             <IconText>Take the Maputnik Survey</IconText>
           </ToolbarLinkHighlighted>*/}

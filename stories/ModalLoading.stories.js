@@ -6,7 +6,7 @@ import {withA11y} from '@storybook/addon-a11y';
 
 
 export default {
-  title: 'ModalLoading',
+  title: '加载窗口',
   component: ModalLoading,
   decorators: [withA11y],
 };
@@ -16,7 +16,7 @@ export const Basic = () => (
     <div style={{maxHeight: "200px"}}>
       <ModalLoading
         isOpen={true}
-        title="Loading"
+        title="正在加载"
         message="Loading 'something.geojson'"
       />
     </div>

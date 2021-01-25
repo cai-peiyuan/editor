@@ -292,29 +292,42 @@ export default class ModalOpen extends React.Component {
           data-wd-key="modal:open"
           isOpen={this.props.isOpen}
           onOpenToggle={() => this.onOpenToggle()}
-          title={'Open Style'}
+          title={'打开一个样式'}
         >
           {errorElement}
+
+          <section className="maputnik-modal-section maputnik-modal-section--shrink">
+            <h1>我的所有可用样式</h1>
+            <p>
+              打开一个样式来设计
+            </p>
+            <div className="maputnik-style-gallery-container">
+            {/*{styleOptions_MapBox}*/}
+
+            {styleOptions}
+            </div>
+          </section>
+
           <section className="maputnik-modal-section">
-            <h1>Upload Style</h1>
-            <p>Upload a JSON style from your computer.</p>
+            <h1>上传样式</h1>
+            <p>从本地上传一个json格式的样式文件.</p>
             <FileReaderInput onChange={this.onUpload} tabIndex="-1" aria-label="Style file">
-              <InputButton className="maputnik-upload-button"><MdFileUpload /> Upload</InputButton>
+              <InputButton className="maputnik-upload-button"><MdFileUpload /> 上传</InputButton>
             </FileReaderInput>
           </section>
 
           <section className="maputnik-modal-section">
             <form onSubmit={this.onSubmitUrl}>
-              <h1>Load from URL</h1>
+              <h1>网络资源</h1>
               <p>
-                Load from a URL. Note that the URL must have <a href="https://enable-cors.org" target="_blank" rel="noopener noreferrer">CORS enabled</a>.
+                从一个URL加载网络样式资源，资源需要支持<a href="https://enable-cors.org" target="_blank" rel="noopener noreferrer">CORS</a>请求。
               </p>
               <InputUrl
-                aria-label="Style URL"
+                aria-label="样式 URL"
                 data-wd-key="modal:open.url.input"
                 type="text"
                 className="maputnik-input"
-                default="Enter URL..."
+                default="输入资源 URL..."
                 value={this.state.styleUrl}
                 onInput={this.onChangeUrl}
                 onChange={this.onChangeUrl}
@@ -325,28 +338,18 @@ export default class ModalOpen extends React.Component {
                   type="submit"
                   className="maputnik-big-button"
                   disabled={this.state.styleUrl.length < 1}
-                >Load from URL</InputButton>
+                >加载资源</InputButton>
               </div>
             </form>
           </section>
 
-          <section className="maputnik-modal-section maputnik-modal-section--shrink">
-            <h1>Gallery Styles</h1>
-            <p>
-              Open one of the publicly available styles to start from.
-            </p>
-            <div className="maputnik-style-gallery-container">
-            {styleOptions_MapBox}
-            {styleOptions}
-            </div>
-          </section>
         </Modal>
 
         <ModalLoading
           isOpen={!!this.state.activeRequest}
-          title={'Loading style'}
+          title={'正在加载样式'}
           onCancel={(e) => this.onCancelActiveRequest(e)}
-          message={"Loading: "+this.state.activeRequestUrl}
+          message={"正在加载: "+this.state.activeRequestUrl}
         />
       </div>
     )

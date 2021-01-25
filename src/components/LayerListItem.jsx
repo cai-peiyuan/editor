@@ -38,6 +38,15 @@ class IconAction extends React.Component {
     }
   }
 
+  getActionCnName(actionEn) {
+    switch(actionEn) {
+      case 'duplicate': return '复制图层'
+      case 'show': return '显示图层'
+      case 'hide': return '隐藏图层'
+      case 'delete': return '删除图层'
+    }
+  }
+
   render() {
     const {classBlockName, classBlockModifier} = this.props;
 
@@ -52,7 +61,7 @@ class IconAction extends React.Component {
 
     return <button
       tabIndex="-1"
-      title={this.props.action}
+      title={ this.getActionCnName(this.props.action) }
       className={`maputnik-layer-list-icon-action ${classAdditions}`}
       data-wd-key={this.props.wdKey}
       onClick={this.props.onClick}
@@ -98,7 +107,9 @@ class LayerListItem extends React.Component {
 
   render() {
     const visibilityAction = this.props.visibility === 'visible' ? 'show' : 'hide';
-
+    if(this.props.layerId == 'background'){
+      console.log(this.props)
+    }
     return <li
       id={this.props.id}
       key={this.props.layerId}
