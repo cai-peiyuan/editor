@@ -17,7 +17,7 @@ export const Basic = () => (
       <ModalLoading
         isOpen={true}
         title="正在加载"
-        message="Loading 'something.geojson'"
+        message="正在加载 'something.geojson'"
       />
     </div>
   </Wrapper>
