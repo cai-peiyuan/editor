@@ -16,6 +16,7 @@ import {findDefaultFromSpec} from '../util/spec-helper';
 
 import labelFromFieldName from './_labelFromFieldName'
 import DeleteStopButton from './_DeleteStopButton'
+import {getLableName} from '../libs/lang'
 
 
 

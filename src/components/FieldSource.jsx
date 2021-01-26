@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {latest} from '@mapbox/mapbox-gl-style-spec'
 import Block from './Block'
 import InputAutocomplete from './InputAutocomplete'
+import {getLableName} from '../libs/lang'
 
 export default class FieldSource extends React.Component {
   static propTypes = {
@@ -21,7 +22,7 @@ export default class FieldSource extends React.Component {
 
   render() {
     return <Block
-      label={"Source"}
+      label={getLableName("Source")}
       fieldSpec={latest.layer.source}
       error={this.props.error}
       data-wd-key={this.props.wdKey}

@@ -275,7 +275,7 @@ export default class ModalOpen extends React.Component {
       />
     });
 
-    console.log(getToken())
+    // console.log(getToken())
     let errorElement;
     if(this.state.error) {
       errorElement = (

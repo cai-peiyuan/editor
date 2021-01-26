@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {latest} from '@mapbox/mapbox-gl-style-spec'
 import Block from './Block'
 import InputAutocomplete from './InputAutocomplete'
+import {getLableName} from '../libs/lang'
 
 export default class FieldSourceLayer extends React.Component {
   static propTypes = {
@@ -20,7 +21,7 @@ export default class FieldSourceLayer extends React.Component {
   }
 
   render() {
-    return <Block label={"Source Layer"} fieldSpec={latest.layer['source-layer']}
+    return <Block label={ getLableName("Source Layer") } fieldSpec={latest.layer['source-layer']}
       data-wd-key="layer-source-layer"
     >
       <InputAutocomplete

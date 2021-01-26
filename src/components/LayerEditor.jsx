@@ -17,9 +17,10 @@ import {Accordion} from 'react-accessible-accordion';
 
 import {MdMoreVert} from 'react-icons/md'
 
-import { changeType, changeProperty } from '../libs/layer'
+import {changeType, changeProperty, getLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
 import {formatLayerId} from '../util/format';
+import {getLableName} from '../libs/lang'
 
 
 function getLayoutForType (type) {
@@ -28,11 +29,11 @@ function getLayoutForType (type) {
 
 function layoutGroups(layerType) {
   const layerGroup = {
-    title: 'Layer',
+    title: '图层基本信息',
     type: 'layer'
   }
   const filterGroup = {
-    title: 'Filter',
+    title: '数据源过滤配置',
     type: 'filter'
   }
   const editorGroup = {
@@ -260,25 +261,25 @@ export default class LayerEditor extends React.Component {
 
     const items = {
       delete: {
-        text: "Delete",
+        text: "删除",
         handler: () => this.props.onLayerDestroy(this.props.layerIndex)
       },
       duplicate: {
-        text: "Duplicate",
+        text: "复制",
         handler: () => this.props.onLayerCopy(this.props.layerIndex)
       },
       hide: {
-        text: (layout.visibility === "none") ? "Show" : "Hide",
+        text: (layout.visibility === "none") ? "显示" : "隐藏",
         handler: () => this.props.onLayerVisibilityToggle(this.props.layerIndex)
       },
       moveLayerUp: {
-        text: "Move layer up",
+        text: "移动图层到顶层",
         // Not actually used...
         disabled: this.props.isFirstLayer,
         handler: () => this.moveLayer(-1)
       },
       moveLayerDown: {
-        text: "Move layer down",
+        text: "移动图层到底层",
         // Not actually used...
         disabled: this.props.isLastLayer,
         handler: () => this.moveLayer(+1)
@@ -292,12 +293,12 @@ export default class LayerEditor extends React.Component {
 
     return <section className="maputnik-layer-editor"
       role="main"
-      aria-label="Layer editor"
+      aria-label="图层编辑"
     >
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
-            Layer: {formatLayerId(this.props.layer.id)}
+            { getLableName("Layer") } : { getLayerChnNameById(this.props.layer.id) }  ({formatLayerId(this.props.layer.id)})
           </h2>
           <div className="layer-header__info">
             <Wrapper

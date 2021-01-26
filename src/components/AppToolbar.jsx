@@ -8,6 +8,7 @@ import {MdFileDownload, MdOpenInBrowser, MdSettings, MdLayers, MdHelpOutline, Md
 
 import logoImage from 'maputnik-design/logos/logo-color.svg'
 import pkgJson from '../../package.json'
+import {getLableName} from '../libs/lang'
 
 
 // This is required because of <https://stackoverflow.com/a/49846426>, there isn't another way to detect support that I'm aware of.
@@ -227,19 +228,19 @@ export default class AppToolbar extends React.Component {
         <div className="maputnik-toolbar__actions" role="navigation" aria-label="Toolbar">
           <ToolbarAction wdKey="nav:open" onClick={this.props.onToggleModal.bind(this, 'open')}>
             <MdOpenInBrowser />
-            <IconText>打开</IconText>
+            <IconText>{getLableName("Open")}</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:export" onClick={this.props.onToggleModal.bind(this, 'export')}>
             <MdFileDownload />
-            <IconText>导出</IconText>
+            <IconText>{getLableName("Export")}</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:sources" onClick={this.props.onToggleModal.bind(this, 'sources')}>
             <MdLayers />
-            <IconText>数据源设置</IconText>
+            <IconText>{getLableName("Data Sources")}</IconText>
           </ToolbarAction>
           <ToolbarAction wdKey="nav:settings" onClick={this.props.onToggleModal.bind(this, 'settings')}>
             <MdSettings />
-            <IconText>样式设置</IconText>
+            <IconText>{getLableName("Style Setting")}</IconText>
           </ToolbarAction>
           {/*
           <ToolbarSelect wdKey="nav:inspect">

@@ -13,6 +13,7 @@ import InputButton from './InputButton'
 import Doc from './Doc'
 import ExpressionProperty from './_ExpressionProperty';
 import {mdiFunctionVariant} from '@mdi/js';
+import {getLableName} from "../libs/lang";
 
 
 function combiningFilter (props) {
@@ -242,7 +243,7 @@ export default class FilterEditor extends React.Component {
           <Block
             key="top"
             fieldSpec={fieldSpec}
-            label={"Filter"}
+            label={getLableName("Data Filter")}
             action={actions}
           >
             <InputSelect

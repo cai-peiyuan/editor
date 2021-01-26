@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import Block from './Block'
 import InputString from './InputString'
+import {getLableName} from "../libs/lang";
 
 export default class FieldComment extends React.Component {
   static propTypes = {
@@ -16,7 +17,7 @@ export default class FieldComment extends React.Component {
     };
 
     return <Block
-      label={"备注信息"}
+      label={getLableName("Comments")}
       fieldSpec={fieldSpec}
       data-wd-key="layer-comment"
     >
@@ -24,7 +25,7 @@ export default class FieldComment extends React.Component {
         multi={true}
         value={this.props.value}
         onChange={this.props.onChange}
-        default="Comment..."
+        default={getLableName("Comments")+"..."}
       />
     </Block>
   }

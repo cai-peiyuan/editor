@@ -9,6 +9,7 @@ import FieldString from './FieldString'
 import labelFromFieldName from './_labelFromFieldName'
 import stringifyPretty from 'json-stringify-pretty-compact'
 import FieldJson from './FieldJson'
+import {getLableName} from '../libs/lang'
 
 
 export default class ExpressionProperty extends React.Component {
@@ -89,7 +90,7 @@ export default class ExpressionProperty extends React.Component {
     function getValue (data) {
       return stringifyPretty(data, {indent: 2, maxLength: 38})
     }
-    
+
     if (jsonError) {
       foundErrors.push({message: "Invalid JSON"});
     }

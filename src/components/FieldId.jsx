@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {latest} from '@mapbox/mapbox-gl-style-spec'
 import Block from './Block'
 import InputString from './InputString'
+import {getLableName} from "../libs/lang";
 
 export default class FieldId extends React.Component {
   static propTypes = {
@@ -14,7 +15,7 @@ export default class FieldId extends React.Component {
   }
 
   render() {
-    return <Block label={"ID"} fieldSpec={latest.layer.id}
+    return <Block label={getLableName("Layer ID")} fieldSpec={latest.layer.id}
       data-wd-key={this.props.wdKey}
       error={this.props.error}
     >

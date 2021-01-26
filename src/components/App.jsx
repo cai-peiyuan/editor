@@ -38,6 +38,7 @@ import isEqual from 'lodash.isequal'
 import Debug from '../libs/debug'
 import queryUtil from '../libs/query-util'
 import {formatLayerId} from '../util/format';
+import { getLayerChnNameDicByStyleFile } from '../libs/layer'
 
 import MapboxGl from 'mapbox-gl'
 
@@ -568,8 +569,13 @@ export default class App extends React.Component {
     }
   }
 
+  /**
+   * 打开一个style样式文件回调函数
+   * @param styleObj
+   */
   openStyle = (styleObj) => {
     styleObj = this.setDefaultValues(styleObj)
+    getLayerChnNameDicByStyleFile(styleObj)
     this.onStyleChanged(styleObj)
   }
 

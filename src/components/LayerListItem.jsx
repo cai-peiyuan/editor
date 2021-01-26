@@ -7,6 +7,8 @@ import {MdContentCopy, MdVisibility, MdVisibilityOff, MdDelete} from 'react-icon
 import IconLayer from './IconLayer'
 import {SortableElement, SortableHandle} from 'react-sortable-hoc'
 
+import { getLayerChnNameById } from '../libs/layer'
+import {getLableName} from '../libs/lang'
 
 const DraggableLabel = SortableHandle((props) => {
   return <div className="maputnik-layer-list-item-handle">
@@ -15,7 +17,7 @@ const DraggableLabel = SortableHandle((props) => {
       type={props.layerType}
     />
     <button className="maputnik-layer-list-item-id">
-      {props.layerId}
+      { getLayerChnNameById( props.layerId )}
     </button>
   </div>
 });
@@ -80,6 +82,7 @@ class LayerListItem extends React.Component {
     isSelected: PropTypes.bool,
     visibility: PropTypes.string,
     className: PropTypes.string,
+    id: PropTypes.string,
 
     onLayerSelect: PropTypes.func.isRequired,
     onLayerCopy: PropTypes.func,

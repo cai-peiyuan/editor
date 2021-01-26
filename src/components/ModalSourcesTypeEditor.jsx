@@ -71,7 +71,7 @@ class TileURLSourceEditor extends React.Component {
         })}
       />
       <FieldNumber
-        label={"最大级别"}
+        label={getLableName("Max Zoom")}
         fieldSpec={latest.source_vector.maxzoom}
         value={this.props.source.maxzoom || 22}
         onChange={maxzoom => this.props.onChange({

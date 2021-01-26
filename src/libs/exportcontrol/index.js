@@ -153,7 +153,8 @@ class ExportControl {
     const btn = document.createElement('button')
     btn.className = 'mapboxgl-ctrl-icon mapbox-gl-download'
     btn.type = "button"
-    btn.setAttribute("aria-label", "Download")
+    btn.title = "下载当前视野地图"
+    btn.setAttribute("aria-label", "下载当前视野地图")
     btn.innerHTML = icons.download
 
     this.container.appendChild(btn)
