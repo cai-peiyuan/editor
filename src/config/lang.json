@@ -1,0 +1,74 @@
+{
+  "Source Layer": {
+    "en": "Source Layer",
+    "zh": "源图层名称"
+  },
+  "Source": {
+    "en": "Source",
+    "zh": "数据源"
+  },
+  "Min Zoom": {
+    "en": "Min Zoom",
+    "zh": "最小级别"
+  },
+  "Max Zoom": {
+    "en": "Max Zoom",
+    "zh": "最大级别"
+  },
+  "Open": {
+    "en": "Open",
+    "zh": "打开"
+  },
+  "Export": {
+    "en": "Export",
+    "zh": "导出"
+  },
+  "Data Sources": {
+    "en": "Data Sources",
+    "zh": "数据源设置"
+  },
+  "Style Setting": {
+    "en": "Style Setting",
+    "zh": "样式设置"
+  },
+  "Remove zoom level from stop": {
+    "en": "Remove zoom level from stop",
+    "zh": "移除级别"
+  },
+  "Layers": {
+    "en": "Layers",
+    "zh": "图层列表"
+  },
+  "Layer": {
+    "en": "Layer",
+    "zh": "图层"
+  },
+  "Expand": {
+    "en": "Expand",
+    "zh": "展开所有"
+  },
+  "Collapse": {
+    "en": "Collapse",
+    "zh": "收起所有"
+  },
+  "Comments": {
+    "en": "Comments",
+    "zh": "备注信息"
+  },
+  "Add Layer": {
+    "en": "Add Layer",
+    "zh": "添加图层"
+  },
+  "Layer Type": {
+    "en": "Layer Type",
+    "zh": "图层类型"
+  },
+  "Layer ID": {
+    "en": "Layer ID",
+    "zh": "图层ID"
+  },
+  "Data Filter": {
+    "en": "Filter",
+    "zh": "数据过滤表达式"
+  }
+}
