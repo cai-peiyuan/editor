@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {latest} from '@mapbox/mapbox-gl-style-spec'
 import Block from './Block'
 import InputNumber from './InputNumber'
+import {getLableName} from "../libs/lang";
 
 export default class FieldMinZoom extends React.Component {
   static propTypes = {
@@ -13,7 +14,7 @@ export default class FieldMinZoom extends React.Component {
   }
 
   render() {
-    return <Block label={"最小级别"} fieldSpec={latest.layer.minzoom}
+    return <Block label={ getLableName("Min Zoom")} fieldSpec={latest.layer.minzoom}
       error={this.props.error}
       data-wd-key="min-zoom"
     >

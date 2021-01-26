@@ -62,7 +62,7 @@ class TileURLSourceEditor extends React.Component {
     return <div>
       {this.renderTileUrls()}
       <FieldNumber
-        label={"最小级别"}
+        label={getLableName("Min Zoom")}
         fieldSpec={latest.source_vector.minzoom}
         value={this.props.source.minzoom || 0}
         onChange={minzoom => this.props.onChange({

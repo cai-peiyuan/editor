@@ -29,15 +29,15 @@ function getLayoutForType (type) {
 
 function layoutGroups(layerType) {
   const layerGroup = {
-    title: '图层基本信息',
+    title: getLableName("Layer Basic"),
     type: 'layer'
   }
   const filterGroup = {
-    title: '数据源过滤配置',
+    title: getLableName("Data Filter Config"),
     type: 'filter'
   }
   const editorGroup = {
-    title: '样式代码',
+    title: getLableName("JSON Editor"),
     type: 'jsoneditor'
   }
   return [layerGroup, filterGroup]
@@ -249,7 +249,7 @@ export default class LayerEditor extends React.Component {
         data-wd-key={group.title}
         id={groupId}
         key={group.title}
-        title={group.title}
+        title={getLableName(group.title)}
         isActive={this.state.editorGroups[group.title]}
         onActiveToggle={this.onGroupToggle.bind(this, group.title)}
       >

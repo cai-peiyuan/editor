@@ -2,7 +2,7 @@
     "line": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "line-opacity",
@@ -32,7 +32,7 @@
     "background": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "background-color",
@@ -45,7 +45,7 @@
     "fill": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "fill-opacity",
@@ -62,7 +62,7 @@
     "fill-extrusion": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "fill-extrusion-opacity",
@@ -80,7 +80,7 @@
     "circle": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "circle-color",
@@ -111,7 +111,7 @@
           ]
         },
         {
-          "title": "文本布局渲染配置",
+          "title": "Text layout properties",
           "type": "properties",
           "fields": [
             "text-field",
@@ -139,7 +139,7 @@
           ]
         },
         {
-          "title": "图标布局配置",
+          "title": "Icon layout properties",
           "type": "properties",
           "fields": [
             "icon-image",
@@ -159,7 +159,7 @@
           ]
         },
         {
-          "title": "本文渲染配置",
+          "title": "Text paint properties",
           "type": "properties",
           "fields": [
             "text-color",
@@ -172,7 +172,7 @@
           ]
         },
         {
-          "title": "图标渲染配置",
+          "title": "Icon paint properties",
           "type": "properties",
           "fields": [
             "icon-color",
@@ -189,7 +189,7 @@
     "raster": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "raster-opacity",
@@ -207,7 +207,7 @@
     "hillshade": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "hillshade-illumination-direction",
@@ -223,7 +223,7 @@
     "heatmap": {
       "groups": [
         {
-          "title": "图层渲染配置",
+          "title": "Paint properties",
           "type": "properties",
           "fields": [
             "heatmap-radius",

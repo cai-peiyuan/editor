@@ -70,5 +70,37 @@
   "Data Filter": {
     "en": "Filter",
     "zh": "数据过滤表达式"
+  },
+  "Layer Basic": {
+    "en": "Layer",
+    "zh": "图层基本信息"
+  },
+  "Data Filter Config": {
+    "en": "Filter",
+    "zh": "数据源过滤配置"
+  },
+  "JSON Editor": {
+    "en": "JSON Editor",
+    "zh": "样式代码"
+  },
+  "Paint properties": {
+    "en": "Paint properties",
+    "zh": "图层渲染配置"
+  },
+  "Text paint properties": {
+    "en": "Text paint properties",
+    "zh": "本文渲染配置"
+  },
+  "Text layout properties": {
+    "en": "Text layout properties",
+    "zh": "文本布局渲染配置"
+  },
+  "Icon paint properties": {
+    "en": "Icon paint properties",
+    "zh": "图标渲染配置"
+  },
+  "Icon layout properties": {
+    "en": "Icon layout properties",
+    "zh": "图标布局配置"
   }
 }
