@@ -17,7 +17,7 @@ import {Accordion} from 'react-accessible-accordion';
 
 import {MdMoreVert} from 'react-icons/md'
 
-import {changeType, changeProperty, getLayerChnNameById} from '../libs/layer'
+import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
 import {formatLayerId} from '../util/format';
 import {getLableName} from '../libs/lang'
@@ -245,6 +245,14 @@ export default class LayerEditor extends React.Component {
     }).map(group => {
       const groupId = group.title.replace(/ /g, "_");
       groupIds.push(groupId);
+
+      console.log(group.title)
+      if(group.title === 'JSON Editor' && (runConfig.mainLayout.layerEditor.jsonEditor.show === false ) ){
+        return null
+      }
+      if(group.title === 'Filter' && (runConfig.mainLayout.layerEditor.filter.show === false ) ){
+        return null
+      }
       return <LayerEditorGroup
         data-wd-key={group.title}
         id={groupId}
@@ -261,25 +269,25 @@ export default class LayerEditor extends React.Component {
 
     const items = {
       delete: {
-        text: "删除",
+        text: getLableName("Delete"),
         handler: () => this.props.onLayerDestroy(this.props.layerIndex)
       },
       duplicate: {
-        text: "复制",
+        text: getLableName("Duplicate"),
         handler: () => this.props.onLayerCopy(this.props.layerIndex)
       },
       hide: {
-        text: (layout.visibility === "none") ? "显示" : "隐藏",
+        text: (layout.visibility === "none") ?  getLableName("Show"): getLableName("Hide"),
         handler: () => this.props.onLayerVisibilityToggle(this.props.layerIndex)
       },
       moveLayerUp: {
-        text: "移动图层到顶层",
+        text: getLableName("Move layer up"),
         // Not actually used...
         disabled: this.props.isFirstLayer,
         handler: () => this.moveLayer(-1)
       },
       moveLayerDown: {
-        text: "移动图层到底层",
+        text: getLableName("Move layer down"),
         // Not actually used...
         disabled: this.props.isLastLayer,
         handler: () => this.moveLayer(+1)
@@ -298,7 +306,7 @@ export default class LayerEditor extends React.Component {
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
-            { getLableName("Layer") } : { getLayerChnNameById(this.props.layer.id) }  ({formatLayerId(this.props.layer.id)})
+            { getLableName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }  {/*({formatLayerId(this.props.layer.id)})*/}
           </h2>
           <div className="layer-header__info">
             <Wrapper

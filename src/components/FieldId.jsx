@@ -15,6 +15,9 @@ export default class FieldId extends React.Component {
   }
 
   render() {
+    if( runConfig.mainLayout.layerEditor.layer.layerId === false ){
+      return null
+    }
     return <Block label={getLableName("Layer ID")} fieldSpec={latest.layer.id}
       data-wd-key={this.props.wdKey}
       error={this.props.error}

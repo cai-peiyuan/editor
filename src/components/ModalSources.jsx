@@ -15,6 +15,7 @@ import publicSourcesMsp from '../config/tilesets.json'
 
 import {MdAddCircleOutline, MdDelete} from 'react-icons/md'
 import {getToken} from "../util/auth";
+import {getLableName} from "../libs/lang";
 
 class PublicSource extends React.Component {
   static propTypes = {
@@ -33,7 +34,7 @@ class PublicSource extends React.Component {
 				<div className="maputnik-public-source-info">
 					<p className="maputnik-public-source-id">{this.props.id}</p>
 					<p className="maputnik-public-source-name">{this.props.title}</p>
-					<p className="maputnik-public-source-name">数据源类型 {this.props.type}</p>
+					<p className="maputnik-public-source-name">{getLableName("Data Source Type")} {this.props.type}</p>
 				</div>
 				<span className="maputnik-space" />
 				<MdAddCircleOutline />
@@ -84,7 +85,7 @@ class ActiveModalSourcesTypeEditor extends React.Component {
     const inputProps = { }
     return <div className="maputnik-active-source-type-editor">
       <div className="maputnik-active-source-type-editor-header">
-        <span className="maputnik-active-source-type-editor-header-id">数据源 {this.props.sourceId}</span>
+        <span className="maputnik-active-source-type-editor-header-id">{getLableName("Data Source")} #{this.props.sourceId}</span>
         <span className="maputnik-space" />
         <InputButton
           aria-label={`从本样式中删除Id为 '${this.props.sourceId}' 的数据源`}
@@ -212,14 +213,13 @@ class AddSource extends React.Component {
 
     return <div className="maputnik-add-source">
       <FieldString
-        label={"地图数据源ID"}
-        fieldSpec={{doc: "标识源的唯一ID，在图层渲染中用于引用此数据源。" +
-            "Unique ID that identifies the source and is used in the layer to reference the source."}}
+        label={getLableName("Source Id")}
+        fieldSpec={{doc: getLableName("Unique ID that identifies the source and is used in the layer to reference the source.") }}
         value={this.state.sourceId}
         onChange={v => this.setState({ sourceId: v})}
       />
       <FieldSelect
-        label={"地图数据源类型"}
+        label={getLableName("Source Type")}
         fieldSpec={sourceTypeFieldSpec}
         options={[
           ['geojson_json', 'GeoJSON (JSON)'],
@@ -245,7 +245,7 @@ class AddSource extends React.Component {
         className="maputnik-add-source-button"
 				onClick={this.onAdd}
       >
-        添加数据源
+        {getLableName("Add Source")}
       </InputButton>
     </div>
   }
@@ -384,9 +384,9 @@ export default class ModalSources extends React.Component {
       title={'Sources'}
     >
       <section className="maputnik-modal-section">
-        <h1>MSP公共数据源</h1>
+        <h1>{getLableName("Choose Public Source Of MSP")}</h1>
         <p>
-          点击添加一个公共的数据源到此样式中
+          {getLableName("Add one of the publicly available sources to your style.")}
         </p>
         <div className="maputnik-public-sources" style={{maxwidth: 500}}>
           {tilesetOptionsMsp}
@@ -394,9 +394,9 @@ export default class ModalSources extends React.Component {
       </section>
 
       <section className="maputnik-modal-section">
-        <h1>互联网公共数据源</h1>
+        <h1>{getLableName("Choose Public Source")}</h1>
         <p>
-          点击添加一个公共的数据源到此样式中
+          {getLableName("Add one of the publicly available sources to your style.")}
         </p>
         <div className="maputnik-public-sources" style={{maxwidth: 500}}>
           {tilesetOptions}
@@ -404,13 +404,13 @@ export default class ModalSources extends React.Component {
       </section>
 
       <section className="maputnik-modal-section">
-        <h1>已选数据源</h1>
+        <h1>{getLableName("Active Sources")}</h1>
         {activeSources}
       </section>
 
       <section className="maputnik-modal-section" style={{display: "block"}}>
-				<h1>添加新数据源</h1>
-				<p>添加一个新的地图数据源用于样式渲染</p>
+				<h1>{getLableName("Add New Source")}</h1>
+				<p>{getLableName("Add a new source to your style. You can only choose the source type and id at creation time!")}</p>
 				<AddSource
 					onAdd={(sourceId, source) => this.props.onStyleChanged(addSource(mapStyle, sourceId, source))}
 				/>

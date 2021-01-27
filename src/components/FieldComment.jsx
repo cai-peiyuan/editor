@@ -16,6 +16,10 @@ export default class FieldComment extends React.Component {
       doc: "当前图层的注释。仅用于注释和备注内容，非样式标准，不在规范中。"
     };
 
+    if( runConfig.mainLayout.layerEditor.layer.sourceLayer === false ){
+      return null
+    }
+
     return <Block
       label={getLableName("Comments")}
       fieldSpec={fieldSpec}

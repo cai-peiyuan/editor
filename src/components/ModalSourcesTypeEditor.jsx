@@ -8,6 +8,7 @@ import FieldSelect from './FieldSelect'
 import FieldDynamicArray from './FieldDynamicArray'
 import FieldArray from './FieldArray'
 import FieldJson from './FieldJson'
+import {getLableName} from '../libs/lang.js'
 
 
 class TileJSONSourceEditor extends React.Component {
@@ -50,7 +51,7 @@ class TileURLSourceEditor extends React.Component {
   renderTileUrls() {
     const tiles = this.props.source.tiles || [];
     return <FieldDynamicArray
-      label={"切图 URL"}
+      label={getLableName("1st Tile URL")}
       fieldSpec={latest.source_vector.tiles}
       type="url"
       value={tiles}

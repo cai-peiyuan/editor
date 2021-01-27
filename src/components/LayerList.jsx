@@ -298,6 +298,7 @@ class LayerListContainer extends React.Component {
             <button
               onClick={this.toggleModal.bind(this, 'add')}
               data-wd-key="layer-list:add-layer"
+              style={{display:runConfig.mainLayout.layerList.addLayer?"block":"none"}}
               className="maputnik-button maputnik-button-selected">
               {getLableName("Add Layer")}
             </button>

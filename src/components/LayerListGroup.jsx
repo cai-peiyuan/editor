@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Collapser from './Collapser'
-import { getLayerChnNameById } from '../libs/layer'
+import { getStyleLayerChnNameById } from '../libs/layer'
 
 export default class LayerListGroup extends React.Component {
   static propTypes = {
@@ -23,7 +23,7 @@ export default class LayerListGroup extends React.Component {
           aria-controls={this.props['aria-controls']}
           aria-expanded={this.props.isActive}
         >
-          {getLayerChnNameById(this.props.title)}
+          {getStyleLayerChnNameById(this.props.title)}
         </button>
         <span className="maputnik-space" />
         <Collapser

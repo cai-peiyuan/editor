@@ -12,6 +12,7 @@ import {MdAddCircleOutline} from 'react-icons/md'
 import { getToken } from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
+import {getLableName} from "../libs/lang";
 
 class PublicStyle extends React.Component {
   static propTypes = {
@@ -347,9 +348,9 @@ export default class ModalOpen extends React.Component {
 
         <ModalLoading
           isOpen={!!this.state.activeRequest}
-          title={'正在加载样式'}
+          title={getLableName("Loading")}
           onCancel={(e) => this.onCancelActiveRequest(e)}
-          message={"正在加载: "+this.state.activeRequestUrl}
+          message={getLableName("Loading")+ " : " +this.state.activeRequestUrl}
         />
       </div>
     )

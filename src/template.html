@@ -34,7 +34,6 @@
       font-size: 1.2em;
       padding-bottom: 2em;
     }
-
   </style>
   <script>
     /**
@@ -54,7 +53,49 @@
       },
       "url": "http://localhost:8000"
     };
-    window.lang = 'zh'
+    let runConfig = {
+      lang: 'en',
+      styleLayerLang: 'en',
+      sourceLayerLang: 'en'
+    }
+    runConfig = {
+      lang: 'en', // 主界面显示语言
+      styleLayerLang: 'zh', // 样式图层id翻译语言  en为原始id  zh翻译成中文图层名称
+      sourceLayerLang: 'zh', //　数据源切图中的图层id en为显示原始id zh翻译成中文名称
+      rumMode: 'customer', // 系统功能界面控制 customer 为用户部署  developer为开发样式部署 内部使用时部署
+      mainLayout: {
+        toolBar : {
+          show: false,
+          toolBarLogo: false,
+          toolBarOpen : false,
+          toolBarExport : false,
+          toolDataSource : false,
+          toolDataStyleSetting : false
+        },
+        layerList: {
+          addLayer: false,
+          deleteLayer: false,
+          duplicateLayer: false
+        },
+        layerEditor: {
+          layer: {
+            layerId: false,
+            layerSource: false,
+            layerType: false,
+            source:false,
+            sourceLayer:false,
+            comments:false
+          },
+          filter: {
+            show: false, // 是否显示filter面板
+            filter: false
+          },
+          jsonEditor: {
+            show: false // 是否显示json editor面板
+          }
+        }
+      }
+    }
   </script>
 </head>
 <body>

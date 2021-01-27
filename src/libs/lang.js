@@ -7,7 +7,7 @@ import langDict from '../config/lang.json'
  * @returns {*}
  */
 export function getLableName(lableCode) {
-  let lang = window.lang || "zh";
+  let lang = runConfig.lang || "zh";
   if(langDict[lableCode] && langDict[lableCode][lang]){
     return langDict[lableCode][lang];
   }else{

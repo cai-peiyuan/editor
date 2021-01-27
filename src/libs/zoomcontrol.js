@@ -1,10 +1,12 @@
+import {getLableName} from "./lang";
+
 export default class ZoomControl {
   onAdd(map) {
     this._map = map;
     this._container = document.createElement('div');
     this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group mapboxgl-ctrl-zoom';
     this._container.innerHTML = `
-      级别: <span></span>
+       <span></span>
     `;
     this._textEl = this._container.querySelector("span");
 
@@ -14,7 +16,7 @@ export default class ZoomControl {
   }
 
   updateZoomLevel() {
-    this._textEl.innerHTML = this._map.getZoom().toFixed(2);
+    this._textEl.innerHTML = getLableName("Zoom") + ":" + this._map.getZoom().toFixed(2);
   }
 
   addEventListeners (){

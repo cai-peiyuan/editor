@@ -21,6 +21,9 @@ export default class FieldSource extends React.Component {
   }
 
   render() {
+    if( runConfig.mainLayout.layerEditor.layer.source === false ){
+      return null
+    }
     return <Block
       label={getLableName("Source")}
       fieldSpec={latest.layer.source}

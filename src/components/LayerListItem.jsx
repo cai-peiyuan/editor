@@ -7,7 +7,7 @@ import {MdContentCopy, MdVisibility, MdVisibilityOff, MdDelete} from 'react-icon
 import IconLayer from './IconLayer'
 import {SortableElement, SortableHandle} from 'react-sortable-hoc'
 
-import { getLayerChnNameById } from '../libs/layer'
+import { getStyleLayerChnNameById } from '../libs/layer'
 import {getLableName} from '../libs/lang'
 
 const DraggableLabel = SortableHandle((props) => {
@@ -17,7 +17,7 @@ const DraggableLabel = SortableHandle((props) => {
       type={props.layerType}
     />
     <button className="maputnik-layer-list-item-id">
-      { getLayerChnNameById( props.layerId )}
+      { getStyleLayerChnNameById( props.layerId )}
     </button>
   </div>
 });
@@ -42,10 +42,10 @@ class IconAction extends React.Component {
 
   getActionCnName(actionEn) {
     switch(actionEn) {
-      case 'duplicate': return '复制图层'
-      case 'show': return '显示图层'
-      case 'hide': return '隐藏图层'
-      case 'delete': return '删除图层'
+      case 'duplicate': return getLableName("Duplicate This Layer")
+      case 'show': return getLableName("Show This Layer")
+      case 'hide': return getLableName("Hide This Layer")
+      case 'delete': return getLableName("Delete This Layer")
     }
   }
 
@@ -59,6 +59,13 @@ class IconAction extends React.Component {
       if (classBlockModifier) {
         classAdditions += ` maputnik-layer-list-icon-action__${classBlockName}--${classBlockModifier}`;
       }
+    }
+
+    // console.log(this.props.action)
+    if(this.props.action === 'delete' && (runConfig.mainLayout.layerList.deleteLayer === false ) ){
+      return null
+    }else if(this.props.action === 'duplicate' && (runConfig.mainLayout.layerList.duplicateLayer === false ) ){
+      return null
     }
 
     return <button

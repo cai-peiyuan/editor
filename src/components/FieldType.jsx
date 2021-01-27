@@ -21,6 +21,9 @@ export default class FieldType extends React.Component {
   }
 
   render() {
+    if( runConfig.mainLayout.layerEditor.layer.layerType === false ){
+      return null
+    }
     return <Block label={getLableName("Layer Type")} fieldSpec={latest.layer.type}
       data-wd-key={this.props.wdKey}
       error={this.props.error}

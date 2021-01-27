@@ -21,6 +21,9 @@ export default class FieldSourceLayer extends React.Component {
   }
 
   render() {
+    if( runConfig.mainLayout.layerEditor.layer.comments === false ){
+      return null
+    }
     return <Block label={ getLableName("Source Layer") } fieldSpec={latest.layer['source-layer']}
       data-wd-key="layer-source-layer"
     >

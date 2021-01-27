@@ -9,6 +9,7 @@ import FieldType from './FieldType'
 import FieldId from './FieldId'
 import FieldSource from './FieldSource'
 import FieldSourceLayer from './FieldSourceLayer'
+import {getLableName} from "../libs/lang";
 
 export default class ModalAdd extends React.Component {
   static propTypes = {
@@ -125,7 +126,7 @@ export default class ModalAdd extends React.Component {
     return <Modal
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={'添加图层'}
+      title={getLableName("Add Layer")}
       data-wd-key="modal:add-layer"
       className="maputnik-add-modal"
     >
@@ -165,7 +166,7 @@ export default class ModalAdd extends React.Component {
         onClick={this.addLayer}
         data-wd-key="add-layer"
       >
-        添加图层
+        {getLableName("Add Layer")}
       </InputButton>
       </div>
     </Modal>
