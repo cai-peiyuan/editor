@@ -18,7 +18,7 @@
           ]
         },
         {
-          "title": "布局配置",
+          "title": "Layout properties",
           "type": "properties",
           "fields": [
             "line-cap",
@@ -101,7 +101,7 @@
     "symbol": {
       "groups": [
         {
-          "title": "一般渲染配置",
+          "title": "General layout properties",
           "type": "properties",
           "fields": [
             "symbol-placement",

@@ -1,11 +1,82 @@
 {
-  "Source Layer": {
+  "Zoom": {
+    "en": "Zoom",
+    "zh": "级别"
+  },"Source Layer": {
     "en": "Source Layer",
     "zh": "源图层名称"
+  },
+  "Delete": {
+    "en": "Delete",
+    "zh": "删除"
+  },
+  "Duplicate": {
+    "en": "Duplicate",
+    "zh": "复制"
+  },
+  "Show": {
+    "en": "Show",
+    "zh": "显示"
+  },
+  "Hide": {
+    "en": "Hide",
+    "zh": "隐藏"
+  },
+  "Move layer up": {
+    "en": "Move layer up",
+    "zh": "移动到上一层"
+  },
+  "Move layer down": {
+    "en": "Move layer down",
+    "zh": "移动到下一层"
+  },
+  "Duplicate This Layer": {
+    "en": "Duplicate This Layer",
+    "zh": "复制图层"
+  },
+  "Show This Layer": {
+    "en": "Show This Layer",
+    "zh": "显示图层"
+  },
+  "Hide This Layer": {
+    "en": "Hide This Layer",
+    "zh": "隐藏图层"
+  },
+  "Delete This Layer": {
+    "en": "Delete This Layer",
+    "zh": "删除图层"
   },
   "Source": {
     "en": "Source",
     "zh": "数据源"
+  },
+  "Data Source": {
+    "en": "Data Source",
+    "zh": "数据源"
+  },
+  "Add Value": {
+    "en": "Add Value",
+    "zh": "添加新值"
+  },
+  "Data Source Type": {
+    "en": "Data Source Type",
+    "zh": "数据源类型"
+  },
+  "1st Tile URL": {
+    "en": "1st Tile URL",
+    "zh": "切图URL"
+  },
+  "Unique ID that identifies the source and is used in the layer to reference the source.": {
+    "en": "Unique ID that identifies the source and is used in the layer to reference the source.",
+    "zh": "标识源的唯一ID，在图层渲染中用于引用此数据源。"
+  },
+  "Source Type": {
+    "en": "Source Type",
+    "zh": "地图数据源类型"
+  },
+  "Source Id": {
+    "en": "Source Id",
+    "zh": "地图数据源标识"
   },
   "Min Zoom": {
     "en": "Min Zoom",
@@ -95,6 +166,10 @@
     "en": "Text layout properties",
     "zh": "文本布局渲染配置"
   },
+  "Layout properties": {
+    "en": "Layout properties",
+    "zh": "布局配置"
+  },
   "Icon paint properties": {
     "en": "Icon paint properties",
     "zh": "图标渲染配置"
@@ -102,5 +177,45 @@
   "Icon layout properties": {
     "en": "Icon layout properties",
     "zh": "图标布局配置"
+  },
+  "General layout properties": {
+    "en": "General layout properties",
+    "zh": "一般渲染配置"
+  },
+  "Active Sources": {
+    "en": "Active Sources",
+    "zh": "已选数据源"
+  },
+  "Add New Source": {
+    "en": "Add New Source",
+    "zh": "添加新数据源"
+  },
+  "Add Source": {
+    "en": "Add Source",
+    "zh": "添加数据源"
+  },
+  "Add a new source to your style. You can only choose the source type and id at creation time!": {
+    "en": "Add a new source to your style. You can only choose the source type and id at creation time!",
+    "zh": "添加一个新的地图数据源用于样式渲染"
+  },
+  "Choose Public Source": {
+    "en": "Choose Public Source",
+    "zh": "互联网公共数据源"
+  },
+  "Choose Public Source Of MSP": {
+    "en": "Choose Public Source Of MSP",
+    "zh": "MSP公共数据源"
+  },
+  "Add one of the publicly available sources to your style.": {
+    "en": "Add one of the publicly available sources to your style.",
+    "zh": "点击添加一个公共的数据源到此样式中"
+  },
+  "Loading Modal": {
+    "en": "Loading Modal",
+    "zh": "加载窗口"
+  },
+  "Loading": {
+    "en": "Loading",
+    "zh": "正在加载"
   }
 }
