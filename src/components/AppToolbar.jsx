@@ -88,10 +88,14 @@ class ToolbarAction extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     onClick: PropTypes.func,
-    wdKey: PropTypes.string
+    wdKey: PropTypes.string,
+    show: PropTypes.bool
   }
 
   render() {
+    if(this.props.show === false){
+      return null
+    }
     return <button
       className='maputnik-toolbar-action'
       data-wd-key={this.props.wdKey}
@@ -185,7 +189,10 @@ export default class AppToolbar extends React.Component {
       return view.id === this.props.mapState;
     });
 
-    return <nav className='maputnik-toolbar'>
+    return <nav
+      className='maputnik-toolbar'
+      style={{display:runConfig.mainLayout.toolBar.show?"block":"none"}}
+    >
       <div className="maputnik-toolbar__inner">
         <div
           className="maputnik-toolbar-logo-container"
@@ -217,6 +224,7 @@ export default class AppToolbar extends React.Component {
             target="blank"
             rel="noreferrer noopener"
             href="https://www.mapabc.com"
+            style={{display: runConfig.mainLayout.toolBar.toolBarLogo === false? "none" : "block"}}
           >
             <span dangerouslySetInnerHTML={{__html: logoImage}} />
             <h1>
@@ -225,20 +233,37 @@ export default class AppToolbar extends React.Component {
             </h1>
           </a>
         </div>
-        <div className="maputnik-toolbar__actions" role="navigation" aria-label="Toolbar">
-          <ToolbarAction wdKey="nav:open" onClick={this.props.onToggleModal.bind(this, 'open')}>
+        <div
+          className="maputnik-toolbar__actions"
+          role="navigation"
+          aria-label="Toolbar"
+        >
+          <ToolbarAction
+            show={runConfig.mainLayout.toolBar.toolBarOpen}
+            wdKey="nav:open"
+            onClick={this.props.onToggleModal.bind(this, 'open')}
+          >
             <MdOpenInBrowser />
             <IconText>{getLableName("Open")}</IconText>
           </ToolbarAction>
-          <ToolbarAction wdKey="nav:export" onClick={this.props.onToggleModal.bind(this, 'export')}>
+          <ToolbarAction
+            show={runConfig.mainLayout.toolBar.toolBarExport}
+            wdKey="nav:export"
+            onClick={this.props.onToggleModal.bind(this, 'export')}>
             <MdFileDownload />
             <IconText>{getLableName("Export")}</IconText>
           </ToolbarAction>
-          <ToolbarAction wdKey="nav:sources" onClick={this.props.onToggleModal.bind(this, 'sources')}>
+          <ToolbarAction
+            show={runConfig.mainLayout.toolBar.toolDataSource}
+            wdKey="nav:sources"
+            onClick={this.props.onToggleModal.bind(this, 'sources')}>
             <MdLayers />
             <IconText>{getLableName("Data Sources")}</IconText>
           </ToolbarAction>
-          <ToolbarAction wdKey="nav:settings" onClick={this.props.onToggleModal.bind(this, 'settings')}>
+          <ToolbarAction
+            show={runConfig.mainLayout.toolBar.toolDataStyleSetting}
+            wdKey="nav:settings"
+            onClick={this.props.onToggleModal.bind(this, 'settings')}>
             <MdSettings />
             <IconText>{getLableName("Style Setting")}</IconText>
           </ToolbarAction>

@@ -12,7 +12,7 @@ const typeMap = {
   boolean: () => Block,
   array: () => Fieldset,
   resolvedImage: () => Block,
-  number: () => Block,
+  // number: () => Block,
   string: () => Block,
   formatted: () => Block,
 };

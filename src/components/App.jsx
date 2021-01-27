@@ -700,7 +700,9 @@ export default class App extends React.Component {
     if(this.state.mapState.match(/^filter-/)) {
       filterName = this.state.mapState.replace(/^filter-/, "");
     }
-    const elementStyle = {};
+    const elementStyle = runConfig.mainLayout.toolBar.show === false? {
+      top:"0px",height:"calc(100% - 0px)"
+    } : {};
     if (filterName) {
       elementStyle.filter = `url('#${filterName}')`;
     };
@@ -880,6 +882,7 @@ export default class App extends React.Component {
       errors={this.state.errors}
     /> : null
 
+    {/* 主页下部分错误提示信息组件 */}
     const bottomPanel = (this.state.errors.length + this.state.infos.length) > 0 ? <MessagePanel
       currentLayer={selectedLayer}
       selectedLayerIndex={this.state.selectedLayerIndex}
