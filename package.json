@@ -1,5 +1,5 @@
 {
-  "name": "MapAbcMapEditor",
+  "name": "MapEditor",
   "version": "1.7.0",
   "description": "MapABC visual style editor",
   "main": "''",
@@ -142,6 +142,7 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-static-fs": "^3.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "copy-webpack-plugin": "^5.1.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",

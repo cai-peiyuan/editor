@@ -41,6 +41,8 @@ import {formatLayerId} from '../util/format';
 import { getLayerChnNameDicByStyleFile } from '../libs/layer'
 
 import MapboxGl from 'mapbox-gl'
+import {getAppConfig, getAppConfig1} from '../libs/config'
+import {getToken} from '../util/auth'
 
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
@@ -92,6 +94,9 @@ function updateRootSpec(spec, fieldName, newValues) {
 export default class App extends React.Component {
   constructor(props) {
     super(props)
+
+    // this.getEditorConfig();
+
     autoBind(this);
 
     this.revisionStore = new RevisionStore()
@@ -248,6 +253,11 @@ export default class App extends React.Component {
     })
   }
 
+  // 获取菜单信息，并放入state中
+  getEditorConfig() {
+    const data = getAppConfig();
+  }
+
   handleKeyPress = (e) => {
     if(navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
       if(e.metaKey && e.shiftKey && e.keyCode === 90) {
@@ -273,10 +283,57 @@ export default class App extends React.Component {
 
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress);
+    const initialUrl =url.parse(window.location.href, true)
+    const editorConfig = (initialUrl.query.editorConfig) || 'editor1'
+    /**
+     * 获取网络资源配置参数
+     */
+    this.setState({
+      runConfigLoaded: false
+    })
+    fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig, {
+      method: "GET",
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'Authorization': getToken(),
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then((body) => {
+      //设置全局配置参数 合并网络参数到默认参数
+      if(body.configValue){
+        runConfig = Object.assign(runConfig, JSON.parse(body.configValue))
+      }
+      console.log(body)
+      this.setState({
+        runConfigLoaded: true
+      })
+    }).catch(function (error) {
+      if (error){
+        console.error(error)
+      }
+      this.setState({
+        runConfigLoaded: true
+      })
+    })
+  }
+
+  getInitialState(){
+    return {
+      runConfigLoaded: false
+    }
+  }
+
+  UNSAFE_componentWillMount() {
+
+    // runConfig.mainLayout.toolBar.show = true
   }
 
   componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeyPress);
+   /*
+    runConfig.mainLayout.toolBar.show = false*/
   }
 
   saveStyle(snapshotStyle) {
@@ -940,6 +997,10 @@ export default class App extends React.Component {
       />
     </div>
 
+    let {runConfigLoaded} = this.state;
+    if(!runConfigLoaded){
+      return <p>Loading</p>
+    }
     return <AppLayout
       toolbar={toolbar}
       layerList={layerList}
