@@ -139,9 +139,8 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
     const spriteName = spriteUrl.replace("mapabc://sprites/","");
     spriteUrl_Http = api_config.url + "/api/mapSprite/"+spriteName;
   }else{
-    spriteUrl_Http = spriteUrl;
+    spriteUrl_Http = api_config.url + "/api/mapSprite/" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
-
 
   return {
     ...mapStyle,
