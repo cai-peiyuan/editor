@@ -59,7 +59,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Maputnik',
+      title: 'MapAbc矢量地图设计器',
       template: './src/template.html'
     }),
     new HtmlWebpackInlineSVGPlugin({
