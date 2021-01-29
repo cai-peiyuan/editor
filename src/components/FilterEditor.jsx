@@ -264,7 +264,7 @@ export default class FilterEditor extends React.Component {
             >
               <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                 <path fill="currentColor" d={mdiTableRowPlusAfter} />
-              </svg> Add filter
+              </svg> {getLableName("Add filter")}
             </InputButton>
           </div>
           <div

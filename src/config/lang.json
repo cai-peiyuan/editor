@@ -217,5 +217,9 @@
   "Loading": {
     "en": "Loading",
     "zh": "正在加载"
+  },
+  "Add filter": {
+    "en": "Add filter",
+    "zh": "添加过滤"
   }
 }

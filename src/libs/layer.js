@@ -78,14 +78,20 @@ export function changeProperty(layer, group, property, newValue) {
  * @param layerid
  */
 export function getStyleLayerChnNameById(layerid) {
-  return runConfig.styleLayerLang && runConfig.styleLayerLang =='en' ? layerid : (layerDic['style'][layerid] || styleLayerDic[layerid] || layerid);
+  /*if(layerid === 'roadoverlying'){
+    console.log(layerid)
+    console.log(layerDic)
+    console.log(layerDic['styleLayer'])
+    console.log(layerDic['styleLayer'][layerid])
+  }*/
+  return runConfig.styleLayerLang && runConfig.styleLayerLang =='en' ? layerid : (layerDic['styleLayer'][layerid] || styleLayerDic[layerid] || layerid);
 }
 /**
  * 数据源图层的id获取图层别名
  * @param id
  */
 export function getSourceLayerChnNameById(id) {
-  return runConfig.sourceLayerLang && runConfig.sourceLayerLang =='en' ? id : (layerDic['source'][layerid] || sourceLayerDic[id] || id);
+  return runConfig.sourceLayerLang && runConfig.sourceLayerLang =='en' ? id : (layerDic['sourceLayer'][id] || sourceLayerDic[id] || id);
 }
 
 /**
@@ -160,7 +166,7 @@ export function getLayerChnNameDicByStyleFile(mapStyle) {
   mapStyle.layers.forEach((layer, index) => {
     if(layer["source-layer"]){
       // addSourceLayerToMsp(layer["source"], layer["source-layer"])
-      sourceLayerDic[layer["source-layer"]] = layer["source-layer"];
+      // sourceLayerDic[layer["source-layer"]] = layer["source-layer"];
     }
     if(layer.metadata){
       if(layer.metadata.type_level1_chn && layer.metadata.type_level1_eng){
@@ -171,7 +177,7 @@ export function getLayerChnNameDicByStyleFile(mapStyle) {
         layerDic[layer.metadata.type_level2_eng] = layer.metadata.type_level2_chn
         layerDic[layer.id] = layer.metadata.type_level2_chn
         // addStyleLayerToMsp('type_level2_eng', layer.type_level2_eng, layer.metadata.type_level2_chn ,'type_level2_eng' );
-        // addStyleLayerToMsp(layer.metadata.type_level2_chn, layer.id, layer.metadata.type_level2_chn || layer.metadata["maputnik:comment"]  ,layer.metadata["maputnik:comment"] || layer.metadata.type_level2_chn );
+        // addStyleLayerToMsp(          layer.metadata.type_level2_chn,          layer.id,          layer.metadata["maputnik:comment"],          layer.metadata["maputnik:comment"] || layer.metadata.type_level2_chn );
       }
       if(layer.metadata.type_level3_chn && layer.metadata.type_level3_eng){
         layerDic[layer.metadata.type_level3_eng] = layer.metadata.type_level3_chn
@@ -179,7 +185,7 @@ export function getLayerChnNameDicByStyleFile(mapStyle) {
         // addStyleLayerToMsp('type_level3_eng', layer.type_level3_eng, layer.metadata.type_level3_chn ,'type_level3_eng' );
       }
       if(layer.metadata["maputnik:comment"]){
-       // layerDic[layer.id] = layer.metadata["maputnik:comment"]
+        layerDic[layer.id] = layer.metadata["maputnik:comment"]
       }
     }
   })

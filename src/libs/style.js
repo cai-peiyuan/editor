@@ -134,12 +134,16 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
   const spriteUrl = mapStyle.sprite;
   let spriteUrl_Http = "";
   if( spriteUrl.startsWith("http://") ){
-    spriteUrl_Http = spriteUrl;
+    if(spriteUrl.startsWith(api_config.url)){
+      spriteUrl_Http = spriteUrl;
+    }else{
+      spriteUrl_Http = api_config.url + "/api/mapSprite" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+    }
   }else if( spriteUrl.startsWith("mapabc://")){
     const spriteName = spriteUrl.replace("mapabc://sprites/","");
     spriteUrl_Http = api_config.url + "/api/mapSprite/"+spriteName;
   }else{
-    spriteUrl_Http = api_config.url + "/api/mapSprite/" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+    spriteUrl_Http = api_config.url + "/api/mapSprite" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
 
   return {

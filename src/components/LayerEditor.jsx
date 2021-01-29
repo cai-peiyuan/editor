@@ -245,12 +245,12 @@ export default class LayerEditor extends React.Component {
     }).map(group => {
       const groupId = group.title.replace(/ /g, "_");
       groupIds.push(groupId);
-
-      console.log(group.title)
-      if(group.title === 'JSON Editor' && (runConfig.mainLayout.layerEditor.jsonEditor.show === false ) ){
+      // console.log(group.title)
+      if(group.type === 'jsoneditor' && (runConfig.mainLayout.layerEditor.jsonEditor.show === false ) ){
         return null
-      }
-      if(group.title === 'Filter' && (runConfig.mainLayout.layerEditor.filter.show === false ) ){
+      } else if(group.type === 'filter' && (runConfig.mainLayout.layerEditor.filter.show === false ) ){
+        return null
+      } else if(group.type === 'layer' && (runConfig.mainLayout.layerEditor.layer.show === false ) ){
         return null
       }
       return <LayerEditorGroup
@@ -321,6 +321,17 @@ export default class LayerEditor extends React.Component {
                 <ul className="more-menu__menu">
                   {Object.keys(items).map((id, idx) => {
                     const item = items[id];
+                    if (id === 'delete' && (runConfig.mainLayout.layerList.deleteLayer === false ) ) {
+                      return null
+                    } else if (id === 'duplicate' && (runConfig.mainLayout.layerList.duplicateLayer === false ) ) {
+                      return null
+                    } else if (id === 'hide') {
+                      // return null
+                    } else if (id === 'moveLayerUp') {
+                      // return null
+                    } else if (id === 'moveLayerDown') {
+                      // return null
+                    }
                     return <li key={id}>
                       <MenuItem value={id} className='more-menu__menu__item'>
                         {item.text}
