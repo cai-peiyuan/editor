@@ -213,6 +213,7 @@ export default class App extends React.Component {
     const queryObj = url.parse(window.location.href, true).query;
 
     this.state = {
+      runConfigLoaded: false,
       errors: [],
       infos: [],
       mapStyle: style.emptyStyle,
@@ -285,13 +286,17 @@ export default class App extends React.Component {
     window.addEventListener("keydown", this.handleKeyPress);
     const initialUrl =url.parse(window.location.href, true)
     const editorConfig = (initialUrl.query.editorConfig) || 'editor1'
+    const styleId = (initialUrl.query.styleId) || ''
     /**
      * 获取网络资源配置参数
      */
+    // 设置标记在加载参数之前不渲染界面
     this.setState({
       runConfigLoaded: false
     })
-    fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig, {
+    // 加载网络配置参数
+    //fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig + '?styleId=' + styleId, {
+    fetch(api_config.url + '/api/mapStyleEditorConfig/initData?editorKey='+editorConfig+'&styleId='+styleId, {
       method: "GET",
       mode: 'cors',
       headers: {
@@ -302,17 +307,18 @@ export default class App extends React.Component {
       return response.json();
     }).then((body) => {
       //设置全局配置参数 合并网络参数到默认参数
-      if(body.configValue){
-        runConfig = Object.assign(runConfig, JSON.parse(body.configValue))
+      if(body.runConfig){
+        runConfig = Object.assign(runConfig, JSON.parse(body.runConfig.configValue))
       }
-      console.log(body)
+      if(body.mapStyle){
+        this.setState({
+          mapStyle: style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body.mapStyle))
+        })
+      }
       this.setState({
         runConfigLoaded: true
       })
     }).catch(function (error) {
-      if (error){
-        console.error(error)
-      }
       this.setState({
         runConfigLoaded: true
       })
@@ -999,7 +1005,7 @@ export default class App extends React.Component {
 
     let {runConfigLoaded} = this.state;
     if(!runConfigLoaded){
-      return <p>Loading</p>
+      return null
     }
     return <AppLayout
       toolbar={toolbar}
