@@ -13,6 +13,7 @@ import { getToken } from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
 import {getLableName} from "../libs/lang";
+import url from 'url'
 
 class PublicStyle extends React.Component {
   static propTypes = {
@@ -107,7 +108,14 @@ export default class ModalOpen extends React.Component {
         activeRequestUrl: null
       });
 
+      /**
+       * 打开指定的style后 在浏览器url中设置styleId为对应样式的styleId
+       */
       const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body))
+      const url = new URL(location.href);
+      url.searchParams.set("styleId", mapStyle.metadata.mspInfo.styleId);
+      history.replaceState({}, "Maputnik", url.href);
+
       console.log('Loaded style ', mapStyle.id)
       console.log('Loaded style ', mapStyle)
       this.props.onStyleOpen(mapStyle)
