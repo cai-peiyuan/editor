@@ -294,8 +294,14 @@ export default class App extends React.Component {
     this.setState({
       runConfigLoaded: false
     })
-    // 加载网络配置参数
-    //fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig + '?styleId=' + styleId, {
+    /**
+     * 加载网络配置参数
+     * 返回数据为json格式
+     * json包含 runConfig属性为系统界面参数
+     * mapStyle为样式json数据
+     * layerDic为图层字典表
+     */
+    // fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig + '?styleId=' + styleId, {
     fetch(api_config.url + '/api/mapStyleEditorConfig/initData?editorKey='+editorConfig+'&styleId='+styleId, {
       method: "GET",
       mode: 'cors',
@@ -306,22 +312,32 @@ export default class App extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then((body) => {
-      //设置全局配置参数 合并网络参数到默认参数
+      /***
+       * 设置全局配置参数 合并网络参数到默认参数
+       */
       if(body.runConfig){
         runConfig = Object.assign(runConfig, JSON.parse(body.runConfig.configValue))
       }
+
+      /***
+       * 加载url参数中的样式内容
+       */
       if(body.mapStyle){
         this.setState({
           mapStyle: style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body.mapStyle))
         })
       }
+      /***
+       * 加载图层字典
+       */
+      if(body.layerDic){
+          layerDic = Object.assign(layerDic, (body.layerDic));
+      }
       this.setState({
         runConfigLoaded: true
       })
     }).catch(function (error) {
-      this.setState({
-        runConfigLoaded: true
-      })
+
     })
   }
 

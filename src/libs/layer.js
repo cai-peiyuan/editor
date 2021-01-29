@@ -78,14 +78,14 @@ export function changeProperty(layer, group, property, newValue) {
  * @param layerid
  */
 export function getStyleLayerChnNameById(layerid) {
-  return runConfig.styleLayerLang && runConfig.styleLayerLang =='en' ? layerid : (styleLayerDic[layerid] || layerid);
+  return runConfig.styleLayerLang && runConfig.styleLayerLang =='en' ? layerid : (layerDic['style'][layerid] || styleLayerDic[layerid] || layerid);
 }
 /**
  * 数据源图层的id获取图层别名
  * @param id
  */
 export function getSourceLayerChnNameById(id) {
-  return runConfig.sourceLayerLang && runConfig.sourceLayerLang =='en' ? id : (sourceLayerDic[id] || id);
+  return runConfig.sourceLayerLang && runConfig.sourceLayerLang =='en' ? id : (layerDic['source'][layerid] || sourceLayerDic[id] || id);
 }
 
 /**
