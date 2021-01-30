@@ -310,7 +310,16 @@ export default class App extends React.Component {
         'Authorization': getToken(),
       }
     }).then(function (response) {
-      return response.json();
+      if(response.status === 401){
+        if(window.parent){
+          window.parent.alert("会话超时请重新登录系统")
+        } else{
+          alert("请重新登录")
+        }
+      }else if (response.status === 200){
+        return response.json();
+      }
+      console.log(response);
     }).then((body) => {
       /***
        * 设置全局配置参数 合并网络参数到默认参数
@@ -337,7 +346,7 @@ export default class App extends React.Component {
         runConfigLoaded: true
       })
     }).catch(function (error) {
-
+      console.log(error)
     })
   }
 
