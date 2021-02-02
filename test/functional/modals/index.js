@@ -173,6 +173,15 @@ describe("modals", function() {
       var styleObj = helper.getStyleStore(browser);
       assert.equal(styleObj.sprite, "http://example.com");
     })
+    it("sprite name", function() {
+      browser.setValueSafe(wd.$("modal:settings.spriteName"), "mapabcjt")
+      const elem = $(wd.$("modal:settings.name"));
+      elem.click();
+      browser.flushReactUpdates();
+
+      var styleObj = helper.getStyleNameStore(browser);
+      assert.equal(styleObj.sprite, "mapabcjt");
+    })
     it("glyphs url", function() {
       var glyphsUrl = "http://example.com/{fontstack}/{range}.pbf"
       browser.setValueSafe(wd.$("modal:settings.glyphs"), glyphsUrl)

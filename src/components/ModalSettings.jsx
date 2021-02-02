@@ -13,6 +13,7 @@ import FieldColor from './FieldColor'
 import Modal from './Modal'
 import fieldSpecAdditional from '../libs/field-spec-additional'
 import {getLabelName} from "../libs/lang";
+import style from "../libs/style";
 
 export default class ModalSettings extends React.Component {
   static propTypes = {
@@ -20,7 +21,15 @@ export default class ModalSettings extends React.Component {
     onStyleChanged: PropTypes.func.isRequired,
     onChangeMetadataProperty: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    onOpenToggle: PropTypes.func.isRequired,
+    onOpenToggle: PropTypes.func.isRequired
+  }
+  constructor(props) {
+    super(props)
+    const spriteUrl = this.props.mapStyle.sprite;
+    const spriteName = spriteUrl?(spriteUrl.substring(spriteUrl.lastIndexOf("/")+1)):"";
+    this.state = {
+      spriteName: spriteName
+    }
   }
 
   changeTransitionProperty(property, value) {
@@ -62,6 +71,9 @@ export default class ModalSettings extends React.Component {
   changeStyleSpriteName(property, value){
     console.log(property)
     console.log(value)
+    this.setState({
+      spriteName: value
+    })
     const changedStyle = {
       ...this.props.mapStyle,
     };
@@ -87,9 +99,8 @@ export default class ModalSettings extends React.Component {
   render() {
     const metadata = this.props.mapStyle.metadata || {}
     const spriteUrl = this.props.mapStyle.sprite;
-    const styleMetadata = {
-      spriteName: spriteUrl?(spriteUrl.substring(spriteUrl.lastIndexOf("/"))):""
-    }
+    const spriteName = spriteUrl?(spriteUrl.substring(spriteUrl.lastIndexOf("/")+1)):"";
+
     const {onChangeMetadataProperty, mapStyle} = this.props;
     const inputProps = { }
     const inputPropsGlyphs = {
@@ -124,6 +135,7 @@ export default class ModalSettings extends React.Component {
                      label={getLabelName("Sprite Name")}
                      fieldSpec={getLabelName("Sprite Name")}
                      data-wd-key="modal:settings.spriteName"
+                     value={this.state.spriteName}
                      options={spriteDic}
                      onChange={this.changeStyleSpriteName.bind(this, 'spriteName')}
         />

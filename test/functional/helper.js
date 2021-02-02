@@ -27,6 +27,12 @@ module.exports = {
     })
     return result;
   },
+  getStyleNameStore: function(browser) {
+    var result = browser.executeAsync(function(done) {
+      window.debug.get("maputnik", "styleStore").latestStyle(done);
+    })
+    return result;
+  },
   getRevisionStore: function(browser) {
     var result = browser.execute(function(done) {
       var rs = window.debug.get("maputnik", "revisionStore")

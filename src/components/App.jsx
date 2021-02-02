@@ -218,6 +218,7 @@ export default class App extends React.Component {
       errors: [],
       infos: [],
       mapStyle: style.emptyStyle,
+      spriteName: 'mapabcjt',
       selectedLayerIndex: 0,
       sources: {},
       vectorLayers: {},
