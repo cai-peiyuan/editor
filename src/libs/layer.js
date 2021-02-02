@@ -101,7 +101,6 @@ export function getSourceLayerChnNameById(id) {
  */
 export function addSourceLayerToMsp(layerSource, layerId){
 //  {"id":null,"layerType":"source","layerGroup":null,"layerId":"1","layerName":"1","layerComment":"1"}
-
     fetch(api_config.url + '/api/mapStyleEditorLayer', {
       method: "POST",
       mode: 'cors',
@@ -156,7 +155,7 @@ export function addStyleLayerToMsp(layerGroup, layerId, layerName, layerComment)
  * @param mapStyle
  */
 export function getLayerChnNameDicByStyleFile(mapStyle) {
-  let layerDic = {
+  let styleLayerDic = {
     'background': "背景"
   }
   let sourceLayerDic = {
@@ -164,31 +163,40 @@ export function getLayerChnNameDicByStyleFile(mapStyle) {
   }
   console.log("分析字典表。。。。")
   mapStyle.layers.forEach((layer, index) => {
-    if(layer["source-layer"]){
-      // addSourceLayerToMsp(layer["source"], layer["source-layer"])
+    if(layer["source-layer"] && runConfig.addSourceLayerToMsp && runConfig.addSourceLayerToMsp === true){
+      if(layerDic['sourceLayer'][layer["source-layer"]]){
+      }else{
+         addSourceLayerToMsp(layer["source"], layer["source-layer"])
+      }
       // sourceLayerDic[layer["source-layer"]] = layer["source-layer"];
     }
     if(layer.metadata){
       if(layer.metadata.type_level1_chn && layer.metadata.type_level1_eng){
-        layerDic[layer.metadata.type_level1_eng] = layer.metadata.type_level1_chn
+        styleLayerDic[layer.metadata.type_level1_eng] = layer.metadata.type_level1_chn
         // addStyleLayerToMsp('type_level1_eng', layer.metadata.type_level1_eng, layer.metadata.type_level1_chn ,'type_level1_eng' );
       }
       if(layer.metadata.type_level2_chn && layer.metadata.type_level2_eng){
-        layerDic[layer.metadata.type_level2_eng] = layer.metadata.type_level2_chn
-        layerDic[layer.id] = layer.metadata.type_level2_chn
+        styleLayerDic[layer.metadata.type_level2_eng] = layer.metadata.type_level2_chn
+        styleLayerDic[layer.id] = layer.metadata.type_level2_chn
         // addStyleLayerToMsp('type_level2_eng', layer.type_level2_eng, layer.metadata.type_level2_chn ,'type_level2_eng' );
-        // addStyleLayerToMsp(          layer.metadata.type_level2_chn,          layer.id,          layer.metadata["maputnik:comment"],          layer.metadata["maputnik:comment"] || layer.metadata.type_level2_chn );
       }
       if(layer.metadata.type_level3_chn && layer.metadata.type_level3_eng){
-        layerDic[layer.metadata.type_level3_eng] = layer.metadata.type_level3_chn
+        styleLayerDic[layer.metadata.type_level3_eng] = layer.metadata.type_level3_chn
 
         // addStyleLayerToMsp('type_level3_eng', layer.type_level3_eng, layer.metadata.type_level3_chn ,'type_level3_eng' );
       }
       if(layer.metadata["maputnik:comment"]){
-        layerDic[layer.id] = layer.metadata["maputnik:comment"]
+        styleLayerDic[layer.id] = layer.metadata["maputnik:comment"]
+        if(runConfig.addStyleLayerCommentToMsp && runConfig.addStyleLayerCommentToMsp === true){
+          if(layerDic['styleLayer'][layer.id]){
+
+          }else{
+            addStyleLayerToMsp(layer.metadata.type_level2_chn || layer.id, layer.id, layer.metadata["maputnik:comment"], layer.metadata["maputnik:comment"] || layer.metadata.type_level2_chn || layer.id );
+          }
+        }
       }
     }
   })
-  console.log(JSON.stringify(layerDic))
+  console.log(JSON.stringify(styleLayerDic))
   console.log(JSON.stringify(sourceLayerDic))
 }

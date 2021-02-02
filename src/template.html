@@ -61,6 +61,10 @@
 
       }
     };
+
+    let langDic = {
+
+    }
     let runConfig = {
       lang: 'en',
       styleLayerLang: 'en',
@@ -71,10 +75,14 @@
       styleLayerLang: 'zh', // 样式图层id翻译语言  en为原始id  zh翻译成中文图层名称
       sourceLayerLang: 'zh', //　数据源切图中的图层id en为显示原始id zh翻译成中文名称
       rumMode: 'customer', // 系统功能界面控制 customer 为用户部署  developer为开发样式部署 内部使用时部署
+      addStyleLayerCommentToMsp: true,
+      addSourceLayerToMsp: true,
       mainLayout: {
         toolBar : {
           show: true,
-          toolBarLogo: false,
+          toolBarTitle: 'MapEditor',
+          toolBarVersion: 'v2.1.0',
+          toolBarLogo: true,
           toolBarOpen : true,
           toolBarExport : true,
           toolDataSource : false,

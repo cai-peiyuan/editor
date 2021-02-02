@@ -191,7 +191,7 @@ export default class AppToolbar extends React.Component {
 
     return <nav
       className='maputnik-toolbar'
-      style={{display:runConfig.mainLayout.toolBar.show?"block":"none"}}
+      style={{display:runConfig.mainLayout.toolBar.show ? "block" : "none"}}
     >
       <div className="maputnik-toolbar__inner">
         <div
@@ -228,8 +228,8 @@ export default class AppToolbar extends React.Component {
           >
             <span dangerouslySetInnerHTML={{__html: logoImage}} />
             <h1>
-              <span className="maputnik-toolbar-name">{pkgJson.name}</span>
-              <span className="maputnik-toolbar-version">v{pkgJson.version}</span>
+              <span className="maputnik-toolbar-name">{ runConfig.mainLayout.toolBar.toolBarTitle ? runConfig.mainLayout.toolBar.toolBarTitle : pkgJson.name}</span>
+              <span className="maputnik-toolbar-version">{ runConfig.mainLayout.toolBar.toolBarVersion ? runConfig.mainLayout.toolBar.toolBarVersion : pkgJson.version}</span>
             </h1>
           </a>
         </div>

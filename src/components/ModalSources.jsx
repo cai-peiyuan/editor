@@ -381,7 +381,7 @@ export default class ModalSources extends React.Component {
       data-wd-key="modal:sources"
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={'Sources'}
+      title={getLableName('Sources')}
     >
       <section className="maputnik-modal-section">
         <h1>{getLableName("Choose Public Source Of MSP")}</h1>

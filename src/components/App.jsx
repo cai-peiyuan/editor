@@ -43,6 +43,7 @@ import { getLayerChnNameDicByStyleFile } from '../libs/layer'
 import MapboxGl from 'mapbox-gl'
 import {getAppConfig, getAppConfig1} from '../libs/config'
 import {getToken} from '../util/auth'
+import {saveLangToMsp} from "../libs/lang";
 
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
@@ -327,7 +328,6 @@ export default class App extends React.Component {
       if(body.runConfig){
         runConfig = Object.assign(runConfig, JSON.parse(body.runConfig.configValue))
       }
-
       /***
        * 加载url参数中的样式内容
        */
@@ -341,6 +341,14 @@ export default class App extends React.Component {
        */
       if(body.layerDic){
           layerDic = Object.assign(layerDic, (body.layerDic));
+      }
+      /***
+       * 加载翻译字典
+       */
+      if(body.langDic){
+        langDic = Object.assign(langDic, (body.langDic));
+        // 服务中没有的数据 在本地有的 保存到msp服务中
+        saveLangToMsp();
       }
       this.setState({
         runConfigLoaded: true
