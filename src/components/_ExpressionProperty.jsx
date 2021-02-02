@@ -9,7 +9,7 @@ import FieldString from './FieldString'
 import labelFromFieldName from './_labelFromFieldName'
 import stringifyPretty from 'json-stringify-pretty-compact'
 import FieldJson from './FieldJson'
-import {getLableName} from '../libs/lang'
+import {getLabelName} from '../libs/lang'
 
 
 export default class ExpressionProperty extends React.Component {

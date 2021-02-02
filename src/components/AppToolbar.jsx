@@ -8,7 +8,7 @@ import {MdFileDownload, MdOpenInBrowser, MdSettings, MdLayers, MdHelpOutline, Md
 
 import logoImage from 'maputnik-design/logos/logo-color.svg'
 import pkgJson from '../../package.json'
-import {getLableName} from '../libs/lang'
+import {getLabelName} from '../libs/lang'
 
 
 // This is required because of <https://stackoverflow.com/a/49846426>, there isn't another way to detect support that I'm aware of.
@@ -244,28 +244,28 @@ export default class AppToolbar extends React.Component {
             onClick={this.props.onToggleModal.bind(this, 'open')}
           >
             <MdOpenInBrowser />
-            <IconText>{getLableName("Open")}</IconText>
+            <IconText>{getLabelName("Open")}</IconText>
           </ToolbarAction>
           <ToolbarAction
             show={runConfig.mainLayout.toolBar.toolBarExport}
             wdKey="nav:export"
             onClick={this.props.onToggleModal.bind(this, 'export')}>
             <MdFileDownload />
-            <IconText>{getLableName("Export")}</IconText>
+            <IconText>{getLabelName("Export")}</IconText>
           </ToolbarAction>
           <ToolbarAction
             show={runConfig.mainLayout.toolBar.toolDataSource}
             wdKey="nav:sources"
             onClick={this.props.onToggleModal.bind(this, 'sources')}>
             <MdLayers />
-            <IconText>{getLableName("Data Sources")}</IconText>
+            <IconText>{getLabelName("Data Sources")}</IconText>
           </ToolbarAction>
           <ToolbarAction
             show={runConfig.mainLayout.toolBar.toolDataStyleSetting}
             wdKey="nav:settings"
             onClick={this.props.onToggleModal.bind(this, 'settings')}>
             <MdSettings />
-            <IconText>{getLableName("Style Setting")}</IconText>
+            <IconText>{getLabelName("Style Setting")}</IconText>
           </ToolbarAction>
           {/*
           <ToolbarSelect wdKey="nav:inspect">

@@ -12,6 +12,7 @@ import FieldEnum from './FieldEnum'
 import FieldColor from './FieldColor'
 import Modal from './Modal'
 import fieldSpecAdditional from '../libs/field-spec-additional'
+import {getLabelName} from "../libs/lang";
 
 export default class ModalSettings extends React.Component {
   static propTypes = {
@@ -58,6 +59,17 @@ export default class ModalSettings extends React.Component {
     });
   }
 
+  changeStyleSpriteName(property, value){
+    console.log(property)
+    console.log(value)
+    const changedStyle = {
+      ...this.props.mapStyle,
+    };
+    // const oldSprite = changedStyle["sprite"]
+    changedStyle["sprite"] = api_config.url + "/api/mapSprite/" + value;
+    this.props.onStyleChanged(changedStyle);
+  }
+
   changeStyleProperty(property, value) {
     const changedStyle = {
       ...this.props.mapStyle,
@@ -74,8 +86,14 @@ export default class ModalSettings extends React.Component {
 
   render() {
     const metadata = this.props.mapStyle.metadata || {}
+    const spriteUrl = this.props.mapStyle.sprite;
+    const styleMetadata = {
+      spriteName: spriteUrl?(spriteUrl.substring(spriteUrl.lastIndexOf("/"))):""
+    }
     const {onChangeMetadataProperty, mapStyle} = this.props;
     const inputProps = { }
+    const inputPropsGlyphs = {
+    }
 
     const light = this.props.mapStyle.light || {};
     const transition = this.props.mapStyle.transition || {};
@@ -101,16 +119,27 @@ export default class ModalSettings extends React.Component {
           value={this.props.mapStyle.owner}
           onChange={this.changeStyleProperty.bind(this, "owner")}
         />
+
+        <FieldSelect {...inputProps}
+                     label={getLabelName("Sprite Name")}
+                     fieldSpec={getLabelName("Sprite Name")}
+                     data-wd-key="modal:settings.spriteName"
+                     options={spriteDic}
+                     onChange={this.changeStyleSpriteName.bind(this, 'spriteName')}
+        />
+
         <FieldUrl {...inputProps}
           fieldSpec={latest.$root.sprite}
-          label="图标资源地址URL"
+          label={getLabelName("Sprite URL")}
           data-wd-key="modal:settings.sprite"
           value={this.props.mapStyle.sprite}
           onChange={this.changeStyleProperty.bind(this, "sprite")}
         />
 
-        <FieldUrl {...inputProps}
-          label="字体资源地址URL"
+        <FieldUrl {
+          ...inputPropsGlyphs
+          }
+          label={getLabelName("Glyphs URL")}
           fieldSpec={latest.$root.glyphs}
           data-wd-key="modal:settings.glyphs"
           value={this.props.mapStyle.glyphs}

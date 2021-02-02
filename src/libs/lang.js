@@ -6,7 +6,7 @@ import {getToken} from "../util/auth";
  * @param labelCode
  * @returns {*}
  */
-export function getLableName(labelCode) {
+export function getLabelName(labelCode) {
   let lang = runConfig.lang || "zh";
   if (langDic[labelCode] && langDic[labelCode][lang]) {
     return langDic[labelCode][lang];

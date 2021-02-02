@@ -8,7 +8,7 @@ import FieldDocLabel from './FieldDocLabel'
 import InputEnum from './InputEnum'
 import capitalize from 'lodash.capitalize'
 import InputUrl from './InputUrl'
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 
 
 export default class FieldDynamicArray extends React.Component {
@@ -108,13 +108,15 @@ export default class FieldDynamicArray extends React.Component {
     })
 
     return (
-      <div className="maputnik-array">
+      <div className="maputnik-array"
+      style={{display: runConfig.mainLayout.toolBar.toolDataSourceAddValue === false ? "none" : "block"}}
+      >
         {inputs}
         <InputButton
           className="maputnik-array-add-value"
           onClick={this.addValue}
         >
-          {getLableName("Add Value")}
+          {getLabelName("Add Value")}
         </InputButton>
       </div>
     );

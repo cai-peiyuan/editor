@@ -8,7 +8,7 @@ import IconLayer from './IconLayer'
 import {SortableElement, SortableHandle} from 'react-sortable-hoc'
 
 import { getStyleLayerChnNameById } from '../libs/layer'
-import {getLableName} from '../libs/lang'
+import {getLabelName} from '../libs/lang'
 
 const DraggableLabel = SortableHandle((props) => {
   return <div className="maputnik-layer-list-item-handle">
@@ -42,10 +42,10 @@ class IconAction extends React.Component {
 
   getActionCnName(actionEn) {
     switch(actionEn) {
-      case 'duplicate': return getLableName("Duplicate This Layer")
-      case 'show': return getLableName("Show This Layer")
-      case 'hide': return getLableName("Hide This Layer")
-      case 'delete': return getLableName("Delete This Layer")
+      case 'duplicate': return getLabelName("Duplicate This Layer")
+      case 'show': return getLabelName("Show This Layer")
+      case 'hide': return getLabelName("Hide This Layer")
+      case 'delete': return getLabelName("Delete This Layer")
     }
   }
 

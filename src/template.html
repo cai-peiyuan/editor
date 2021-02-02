@@ -65,6 +65,16 @@
     let langDic = {
 
     }
+
+    let spriteDic = [
+      ['mapabcgd', 'mapabcgd-'],
+      ['mapabcgd1', 'mapabcgd1-']
+    ];
+    let fontDic = [
+      ['mapabcgd', 'mapabcgd-'],
+      ['mapabcgd1', 'mapabcgd1-']
+    ];
+
     let runConfig = {
       lang: 'en',
       styleLayerLang: 'en',
@@ -85,8 +95,14 @@
           toolBarLogo: true,
           toolBarOpen : true,
           toolBarExport : true,
-          toolDataSource : false,
-          toolDataStyleSetting : false
+          toolBarExportSaveToFile : false,
+          toolDataSource: false,
+          toolDataSourcePublicSource: false,
+          toolDataSourceAddValue: false,
+          toolDataSourceAddNewSource: false,
+          toolDataStyleSetting: false,
+          toolDataStyleSettingFontUrl: false,
+          toolDataStyleSettingSpriteUrl: false
         },
         layerList: {
           addLayer: false,

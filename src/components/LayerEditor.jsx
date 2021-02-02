@@ -20,7 +20,7 @@ import {MdMoreVert} from 'react-icons/md'
 import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
 import {formatLayerId} from '../util/format';
-import {getLableName} from '../libs/lang'
+import {getLabelName} from '../libs/lang'
 
 
 function getLayoutForType (type) {
@@ -29,15 +29,15 @@ function getLayoutForType (type) {
 
 function layoutGroups(layerType) {
   const layerGroup = {
-    title: getLableName("Layer Basic"),
+    title: getLabelName("Layer Basic"),
     type: 'layer'
   }
   const filterGroup = {
-    title: getLableName("Data Filter Config"),
+    title: getLabelName("Data Filter Config"),
     type: 'filter'
   }
   const editorGroup = {
-    title: getLableName("JSON Editor"),
+    title: getLabelName("JSON Editor"),
     type: 'jsoneditor'
   }
   return [layerGroup, filterGroup]
@@ -257,7 +257,7 @@ export default class LayerEditor extends React.Component {
         data-wd-key={group.title}
         id={groupId}
         key={group.title}
-        title={getLableName(group.title)}
+        title={getLabelName(group.title)}
         isActive={this.state.editorGroups[group.title]}
         onActiveToggle={this.onGroupToggle.bind(this, group.title)}
       >
@@ -269,25 +269,25 @@ export default class LayerEditor extends React.Component {
 
     const items = {
       delete: {
-        text: getLableName("Delete"),
+        text: getLabelName("Delete"),
         handler: () => this.props.onLayerDestroy(this.props.layerIndex)
       },
       duplicate: {
-        text: getLableName("Duplicate"),
+        text: getLabelName("Duplicate"),
         handler: () => this.props.onLayerCopy(this.props.layerIndex)
       },
       hide: {
-        text: (layout.visibility === "none") ?  getLableName("Show"): getLableName("Hide"),
+        text: (layout.visibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
         handler: () => this.props.onLayerVisibilityToggle(this.props.layerIndex)
       },
       moveLayerUp: {
-        text: getLableName("Move layer up"),
+        text: getLabelName("Move layer up"),
         // Not actually used...
         disabled: this.props.isFirstLayer,
         handler: () => this.moveLayer(-1)
       },
       moveLayerDown: {
-        text: getLableName("Move layer down"),
+        text: getLabelName("Move layer down"),
         // Not actually used...
         disabled: this.props.isLastLayer,
         handler: () => this.moveLayer(+1)
@@ -306,7 +306,7 @@ export default class LayerEditor extends React.Component {
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
-            { getLableName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }  {/*({formatLayerId(this.props.layer.id)})*/}
+            { getLabelName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }  {/*({formatLayerId(this.props.layer.id)})*/}
           </h2>
           <div className="layer-header__info">
             <Wrapper

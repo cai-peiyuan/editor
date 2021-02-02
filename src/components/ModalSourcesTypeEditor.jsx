@@ -8,7 +8,7 @@ import FieldSelect from './FieldSelect'
 import FieldDynamicArray from './FieldDynamicArray'
 import FieldArray from './FieldArray'
 import FieldJson from './FieldJson'
-import {getLableName} from '../libs/lang.js'
+import {getLabelName} from '../libs/lang.js'
 
 
 class TileJSONSourceEditor extends React.Component {
@@ -51,7 +51,7 @@ class TileURLSourceEditor extends React.Component {
   renderTileUrls() {
     const tiles = this.props.source.tiles || [];
     return <FieldDynamicArray
-      label={getLableName("1st Tile URL")}
+      label={getLabelName("1st Tile URL")}
       fieldSpec={latest.source_vector.tiles}
       type="url"
       value={tiles}
@@ -63,7 +63,7 @@ class TileURLSourceEditor extends React.Component {
     return <div>
       {this.renderTileUrls()}
       <FieldNumber
-        label={getLableName("Min Zoom")}
+        label={getLabelName("Min Zoom")}
         fieldSpec={latest.source_vector.minzoom}
         value={this.props.source.minzoom || 0}
         onChange={minzoom => this.props.onChange({
@@ -72,7 +72,7 @@ class TileURLSourceEditor extends React.Component {
         })}
       />
       <FieldNumber
-        label={getLableName("Max Zoom")}
+        label={getLabelName("Max Zoom")}
         fieldSpec={latest.source_vector.maxzoom}
         value={this.props.source.maxzoom || 22}
         onChange={maxzoom => this.props.onChange({

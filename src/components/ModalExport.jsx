@@ -293,7 +293,9 @@ export default class ModalExport extends React.Component {
         </div>
       </section>
 
-      <section className="maputnik-modal-section">
+      <section className="maputnik-modal-section"
+               style={{display: runConfig.mainLayout.toolBar.toolBarExportSaveToFile === false ? "none" : "block"}}
+      >
         <h1>下载样式文件</h1>
         <p>
           下载一个.json样式描述文件到本地
@@ -320,7 +322,8 @@ export default class ModalExport extends React.Component {
           />
         </div>*/}
 
-        <div className="maputnik-modal-export-buttons">
+        <div className="maputnik-modal-export-buttons"
+        >
 
           <InputButton
             onClick={this.downloadStyle.bind(this)}

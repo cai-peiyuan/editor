@@ -350,6 +350,18 @@ export default class App extends React.Component {
         // 服务中没有的数据 在本地有的 保存到msp服务中
         saveLangToMsp();
       }
+      /***
+       * 加载图标字典
+       */
+      if(body.spriteDic){
+        spriteDic = Object.assign(spriteDic, (body.spriteDic));
+      }
+      /***
+       * 加载字体字典
+       */
+      if(body.fontDic){
+        fontDic = Object.assign(fontDic, (body.fontDic));
+      }
       this.setState({
         runConfigLoaded: true
       })

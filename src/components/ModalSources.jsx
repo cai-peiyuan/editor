@@ -15,7 +15,7 @@ import publicSourcesMsp from '../config/tilesets.json'
 
 import {MdAddCircleOutline, MdDelete} from 'react-icons/md'
 import {getToken} from "../util/auth";
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 
 class PublicSource extends React.Component {
   static propTypes = {
@@ -34,7 +34,7 @@ class PublicSource extends React.Component {
 				<div className="maputnik-public-source-info">
 					<p className="maputnik-public-source-id">{this.props.id}</p>
 					<p className="maputnik-public-source-name">{this.props.title}</p>
-					<p className="maputnik-public-source-name">{getLableName("Data Source Type")} {this.props.type}</p>
+					<p className="maputnik-public-source-name">{getLabelName("Data Source Type")} {this.props.type}</p>
 				</div>
 				<span className="maputnik-space" />
 				<MdAddCircleOutline />
@@ -85,7 +85,7 @@ class ActiveModalSourcesTypeEditor extends React.Component {
     const inputProps = { }
     return <div className="maputnik-active-source-type-editor">
       <div className="maputnik-active-source-type-editor-header">
-        <span className="maputnik-active-source-type-editor-header-id">{getLableName("Data Source")} #{this.props.sourceId}</span>
+        <span className="maputnik-active-source-type-editor-header-id">{getLabelName("Data Source")} #{this.props.sourceId}</span>
         <span className="maputnik-space" />
         <InputButton
           aria-label={`从本样式中删除Id为 '${this.props.sourceId}' 的数据源`}
@@ -213,13 +213,13 @@ class AddSource extends React.Component {
 
     return <div className="maputnik-add-source">
       <FieldString
-        label={getLableName("Source Id")}
-        fieldSpec={{doc: getLableName("Unique ID that identifies the source and is used in the layer to reference the source.") }}
+        label={getLabelName("Source Id")}
+        fieldSpec={{doc: getLabelName("Unique ID that identifies the source and is used in the layer to reference the source.") }}
         value={this.state.sourceId}
         onChange={v => this.setState({ sourceId: v})}
       />
       <FieldSelect
-        label={getLableName("Source Type")}
+        label={getLabelName("Source Type")}
         fieldSpec={sourceTypeFieldSpec}
         options={[
           ['geojson_json', 'GeoJSON (JSON)'],
@@ -245,7 +245,7 @@ class AddSource extends React.Component {
         className="maputnik-add-source-button"
 				onClick={this.onAdd}
       >
-        {getLableName("Add Source")}
+        {getLabelName("Add Source")}
       </InputButton>
     </div>
   }
@@ -381,22 +381,24 @@ export default class ModalSources extends React.Component {
       data-wd-key="modal:sources"
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={getLableName('Sources')}
+      title={getLabelName('Sources')}
     >
       <section className="maputnik-modal-section">
-        <h1>{getLableName("Choose Public Source Of MSP")}</h1>
+        <h1>{getLabelName("Choose Public Source Of MSP")}</h1>
         <p>
-          {getLableName("Add one of the publicly available sources to your style.")}
+          {getLabelName("Add one of the publicly available sources to your style.")}
         </p>
         <div className="maputnik-public-sources" style={{maxwidth: 500}}>
           {tilesetOptionsMsp}
         </div>
       </section>
 
-      <section className="maputnik-modal-section">
-        <h1>{getLableName("Choose Public Source")}</h1>
+      <section className="maputnik-modal-section"
+                style={{display: runConfig.mainLayout.toolBar.toolDataSourcePublicSource === false ? "none" : "block"}}
+      >
+        <h1>{getLabelName("Choose Public Source")}</h1>
         <p>
-          {getLableName("Add one of the publicly available sources to your style.")}
+          {getLabelName("Add one of the publicly available sources to your style.")}
         </p>
         <div className="maputnik-public-sources" style={{maxwidth: 500}}>
           {tilesetOptions}
@@ -404,13 +406,14 @@ export default class ModalSources extends React.Component {
       </section>
 
       <section className="maputnik-modal-section">
-        <h1>{getLableName("Active Sources")}</h1>
+        <h1>{getLabelName("Active Sources")}</h1>
         {activeSources}
       </section>
 
-      <section className="maputnik-modal-section" style={{display: "block"}}>
-				<h1>{getLableName("Add New Source")}</h1>
-				<p>{getLableName("Add a new source to your style. You can only choose the source type and id at creation time!")}</p>
+      <section className="maputnik-modal-section"
+               style={{display: runConfig.mainLayout.toolBar.toolDataSourceAddNewSource === false ? "none" : "block"}}>
+				<h1>{getLabelName("Add New Source")}</h1>
+				<p>{getLabelName("Add a new source to your style. You can only choose the source type and id at creation time!")}</p>
 				<AddSource
 					onAdd={(sourceId, source) => this.props.onStyleChanged(addSource(mapStyle, sourceId, source))}
 				/>

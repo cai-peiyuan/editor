@@ -8,7 +8,7 @@ import LayerListItem from './LayerListItem'
 import ModalAdd from './ModalAdd'
 
 import {SortableContainer} from 'react-sortable-hoc';
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 
 const layerListPropTypes = {
   layers: PropTypes.array.isRequired,
@@ -281,7 +281,7 @@ class LayerListContainer extends React.Component {
           onLayersChange={this.props.onLayersChange}
       />
       <header className="maputnik-layer-list-header">
-        <span className="maputnik-layer-list-header-title">{ getLableName("Layers") } </span>
+        <span className="maputnik-layer-list-header-title">{ getLabelName("Layers") } </span>
         <span className="maputnik-space" />
         <div className="maputnik-default-property">
           <div className="maputnik-multibutton">
@@ -289,7 +289,7 @@ class LayerListContainer extends React.Component {
               id="skip-target-layer-list"
               onClick={this.toggleLayers}
               className="maputnik-button">
-              {this.state.areAllGroupsExpanded === true ? getLableName("Collapse") : getLableName("Expand")}
+              {this.state.areAllGroupsExpanded === true ? getLabelName("Collapse") : getLabelName("Expand")}
             </button>
           </div>
         </div>
@@ -300,7 +300,7 @@ class LayerListContainer extends React.Component {
               data-wd-key="layer-list:add-layer"
               style={{display:runConfig.mainLayout.layerList.addLayer?"block":"none"}}
               className="maputnik-button maputnik-button-selected">
-              {getLableName("Add Layer")}
+              {getLabelName("Add Layer")}
             </button>
           </div>
         </div>

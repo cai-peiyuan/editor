@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {latest} from '@mapbox/mapbox-gl-style-spec'
 import Block from './Block'
 import InputNumber from './InputNumber'
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 
 export default class FieldMaxZoom extends React.Component {
   static propTypes = {
@@ -14,7 +14,7 @@ export default class FieldMaxZoom extends React.Component {
   }
 
   render() {
-    return <Block label={getLableName("Max Zoom")} fieldSpec={latest.layer.maxzoom}
+    return <Block label={getLabelName("Max Zoom")} fieldSpec={latest.layer.maxzoom}
       error={this.props.error}
       data-wd-key="max-zoom"
     >

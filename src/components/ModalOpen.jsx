@@ -12,7 +12,7 @@ import {MdAddCircleOutline} from 'react-icons/md'
 import { getToken } from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 import url from 'url'
 
 class PublicStyle extends React.Component {
@@ -233,7 +233,7 @@ export default class ModalOpen extends React.Component {
   }
 
   getPublicStyles = () => {
-    let url = api_config.url + "/api/mapStyle?page=0&size=100&sort=id%2Cdesc";
+    let url = api_config.url + "/api/mapStyle?page=0&size=100&sort=updateTime%2Cdesc";
     fetch(url, {
       method: "GET",
       mode: "cors",
@@ -356,9 +356,9 @@ export default class ModalOpen extends React.Component {
 
         <ModalLoading
           isOpen={!!this.state.activeRequest}
-          title={getLableName("Loading")}
+          title={getLabelName("Loading")}
           onCancel={(e) => this.onCancelActiveRequest(e)}
-          message={getLableName("Loading")+ " : " +this.state.activeRequestUrl}
+          message={getLabelName("Loading")+ " : " +this.state.activeRequestUrl}
         />
       </div>
     )

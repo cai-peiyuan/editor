@@ -13,7 +13,7 @@ import InputButton from './InputButton'
 import Doc from './Doc'
 import ExpressionProperty from './_ExpressionProperty';
 import {mdiFunctionVariant} from '@mdi/js';
-import {getLableName} from "../libs/lang";
+import {getLabelName} from "../libs/lang";
 
 
 function combiningFilter (props) {
@@ -243,7 +243,7 @@ export default class FilterEditor extends React.Component {
           <Block
             key="top"
             fieldSpec={fieldSpec}
-            label={getLableName("Data Filter")}
+            label={getLabelName("Data Filter")}
             action={actions}
           >
             <InputSelect
@@ -264,7 +264,7 @@ export default class FilterEditor extends React.Component {
             >
               <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                 <path fill="currentColor" d={mdiTableRowPlusAfter} />
-              </svg> {getLableName("Add filter")}
+              </svg> {getLabelName("Add filter")}
             </InputButton>
           </div>
           <div

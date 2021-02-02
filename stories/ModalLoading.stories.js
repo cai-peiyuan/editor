@@ -3,11 +3,11 @@ import ModalLoading from '../src/components/ModalLoading';
 import {action} from '@storybook/addon-actions';
 import {Wrapper} from './ui';
 import {withA11y} from '@storybook/addon-a11y';
-import {getLableName} from "../src/libs/lang";
+import {getLabelName} from "../src/libs/lang";
 
 
 export default {
-  title: getLableName("Loading Modal"),
+  title: getLabelName("Loading Modal"),
   component: ModalLoading,
   decorators: [withA11y],
 };
@@ -17,8 +17,8 @@ export const Basic = () => (
     <div style={{maxHeight: "200px"}}>
       <ModalLoading
         isOpen={true}
-        title= {getLableName("Loading")}
-        message={getLableName("Loading") +  'something.geojson'}
+        title= {getLabelName("Loading")}
+        message={getLabelName("Loading") +  'something.geojson'}
       />
     </div>
   </Wrapper>

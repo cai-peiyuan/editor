@@ -1,4 +1,4 @@
-import {getLableName} from "./lang";
+import {getLabelName} from "./lang";
 
 export default class ZoomControl {
   onAdd(map) {
@@ -16,7 +16,7 @@ export default class ZoomControl {
   }
 
   updateZoomLevel() {
-    this._textEl.innerHTML = getLableName("Zoom") + ":" + this._map.getZoom().toFixed(2);
+    this._textEl.innerHTML = getLabelName("Zoom") + ":" + this._map.getZoom().toFixed(2);
   }
 
   addEventListeners (){

@@ -18,6 +18,18 @@
     "en": "Show",
     "zh": "显示"
   },
+  "Glyphs URL": {
+    "en": "Glyphs URL",
+    "zh": "字体资源地址URL"
+  },
+  "Sprite URL": {
+    "en": "Sprite URL",
+    "zh": "图标资源地址URL"
+  },
+  "Sprite Name": {
+    "en": "Sprite Name",
+    "zh": "图标资源"
+  },
   "Hide": {
     "en": "Hide",
     "zh": "隐藏"
