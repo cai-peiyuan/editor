@@ -78,7 +78,7 @@ export default class ModalSettings extends React.Component {
       ...this.props.mapStyle,
     };
     // const oldSprite = changedStyle["sprite"]
-    changedStyle["sprite"] = api_config.url + "/api/mapSprite/" + value;
+    changedStyle["sprite"] = api_config.url + "/api/mapSpriteData/" + value;
     this.props.onStyleChanged(changedStyle);
   }
 

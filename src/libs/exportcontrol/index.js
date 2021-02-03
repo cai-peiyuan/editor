@@ -4,6 +4,8 @@ import icons from './icons'
 
 class ExportControl {
 
+  map = null
+
   constructor(options = {}) {
     this.options = Object.assign({
         dpi: 300,
@@ -28,9 +30,9 @@ class ExportControl {
     const _container = document.createElement('div')
     document.body.appendChild(_container)
 
-    const width = map.getContainer().offsetWidth
-    const height = map.getContainer().offsetHeight
-    const bottomRight = map.unproject([width, height]).toArray()
+    const width = this.map.getContainer().offsetWidth
+    const height = this.map.getContainer().offsetHeight
+    const bottomRight = this.map.unproject([width, height]).toArray()
 
     this.setStyles(_container, {
       visibility: "hidden",
@@ -42,8 +44,8 @@ class ExportControl {
     })
 
     let fontFamily = []
-    if (map.style.glyphManager && map.style.glyphManager.localIdeographFontFamily) {
-      fontFamily = map.style.glyphManager.localIdeographFontFamily
+    if (this.map.style.glyphManager && this.map.style.glyphManager.localIdeographFontFamily) {
+      fontFamily = this.map.style.glyphManager.localIdeographFontFamily
     }
 
     let mbgl;
@@ -56,11 +58,11 @@ class ExportControl {
 
     const _map = new mbgl({
       container: _container,
-      center: map.getCenter(),
-      zoom: map.getZoom(),
-      bearing: map.getBearing(),
-      pitch: map.getPitch(),
-      style: map.getStyle(),
+      center: this.map.getCenter(),
+      zoom: this.map.getZoom(),
+      bearing: this.map.getBearing(),
+      pitch: this.map.getPitch(),
+      style: this.map.getStyle(),
       localIdeographFontFamily: fontFamily,
       hash: false,
       preserveDrawingBuffer: true,
@@ -92,10 +94,10 @@ class ExportControl {
       if (this.options.textFont.length) {
         textFont = this.options.textFont
       } else {
-        const layers = map.getStyle().layers
+        const layers = this.map.getStyle().layers
         for (let i = 0; i < layers.length; i++) {
           try {
-            const fonts = map.getLayoutProperty(layers[i].id, 'text-font')
+            const fonts = this.map.getLayoutProperty(layers[i].id, 'text-font')
             if (fonts && fonts.length) {
               textFont = fonts
               break;
@@ -147,6 +149,7 @@ class ExportControl {
   }
 
   onAdd(map) {
+    this.map = map;
     this.container = document.createElement('div')
     this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group'
 

@@ -50,6 +50,10 @@ class TileURLSourceEditor extends React.Component {
 
   renderTileUrls() {
     const tiles = this.props.source.tiles || [];
+
+    if(runConfig.mainLayout.toolBar.toolDataSourceSelectedSourceUrl === false){
+      return null
+    }
     return <FieldDynamicArray
       label={getLabelName("1st Tile URL")}
       fieldSpec={latest.source_vector.tiles}

@@ -109,7 +109,6 @@ export default class FieldDynamicArray extends React.Component {
 
     return (
       <div className="maputnik-array"
-      style={{display: runConfig.mainLayout.toolBar.toolDataSourceAddValue === false ? "none" : "block"}}
       >
         {inputs}
         <InputButton

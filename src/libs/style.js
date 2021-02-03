@@ -137,13 +137,13 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
     if(spriteUrl.startsWith(api_config.url)){
       spriteUrl_Http = spriteUrl;
     }else{
-      spriteUrl_Http = api_config.url + "/api/mapSprite" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+      spriteUrl_Http = api_config.url + "/api/mapSpriteData" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
     }
   }else if( spriteUrl.startsWith("mapabc://")){
     const spriteName = spriteUrl.replace("mapabc://sprites/","");
-    spriteUrl_Http = api_config.url + "/api/mapSprite/"+spriteName;
+    spriteUrl_Http = api_config.url + "/api/mapSpriteData/"+spriteName;
   }else{
-    spriteUrl_Http = api_config.url + "/api/mapSprite" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+    spriteUrl_Http = api_config.url + "/api/mapSpriteData" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
 
   return {
