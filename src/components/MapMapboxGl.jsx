@@ -16,6 +16,7 @@ import '../libs/mapbox-rtl'
 import FileSaver from 'file-saver'
 
 import ExportControl from '../libs/exportcontrol/index'
+import {getLabelName} from "../libs/lang";
 
 const IS_SUPPORTED = MapboxGl.supported();
 
@@ -145,6 +146,9 @@ export default class MapMapboxGl extends React.Component {
    * @param blobData
    */
   downLoadMapSnapCallBackFunc(blobData) {
+    let thumbnailSrc = window.URL.createObjectURL(blobData);
+    let thumbnailBlob = blobData;
+    console.log(this)
     console.log("custom call back function " + blobData)
   }
 
@@ -267,7 +271,7 @@ export default class MapMapboxGl extends React.Component {
         className="maputnik-map maputnik-map--error"
       >
         <div className="maputnik-map__error-message">
-          Error: Cannot load MapboxGL, WebGL is either unsupported or disabled
+          {getLabelName("Error: Cannot load MapAbcGL, WebGL is either unsupported or disabled")}
         </div>
       </div>
     }

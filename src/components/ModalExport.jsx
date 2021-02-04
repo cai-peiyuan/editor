@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Slugify from 'slugify'
-import { saveAs } from 'file-saver'
+import {saveAs} from 'file-saver'
 import pkgLockJson from '../../package-lock.json'
 
 import {format} from '@mapbox/mapbox-gl-style-spec'
@@ -9,15 +9,16 @@ import FieldString from './FieldString'
 import FieldCheckbox from './FieldCheckbox'
 import InputButton from './InputButton'
 import Modal from './Modal'
-import { MdFileDownload, MdSave, MdThumbDown, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
+import {MdFileDownload, MdSave, MdThumbDown, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
 import style from '../libs/style'
 import fieldSpecAdditional from '../libs/field-spec-additional'
-import { getToken } from '../util/auth.js'
+import {getToken} from '../util/auth.js'
 import 'canvas-toBlob'
 import FileSaver from 'file-saver'
 import icons from "../libs/exportcontrol/icons";
 import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
+import {getLabelName} from "../libs/lang";
 
 const MAPBOX_GL_VERSION = pkgLockJson.dependencies["mapbox-gl"].version;
 
@@ -26,8 +27,9 @@ class Image extends React.Component {
   static propTypes = {
     srcImg: PropTypes.string.isRequired
   }
+
   render() {
-    return <img src={this.props.srcImg} width="200" />
+    return <img src={this.props.srcImg} width="200"/>
   }
 }
 
@@ -49,7 +51,7 @@ export default class ModalExport extends React.Component {
     }
   }
 
-  tokenizedStyle () {
+  tokenizedStyle() {
     return format(
       style.stripAccessTokens(
         style.replaceAccessTokens(this.props.mapStyle)
@@ -57,8 +59,8 @@ export default class ModalExport extends React.Component {
     );
   }
 
-  exportName () {
-    if(this.props.mapStyle.name) {
+  exportName() {
+    if (this.props.mapStyle.name) {
       return Slugify(this.props.mapStyle.name, {
         replacement: '_',
         remove: /[*\-+~.()'"!:]/g,
@@ -157,9 +159,10 @@ export default class ModalExport extends React.Component {
       element.style[style] = styles[style]
     }
   }
+
   //  保存缩略图
   saveThumbnail() {
-    window.exportControl.downloadMap(false, (blob)=>{
+    window.exportControl.downloadMap(false, (blob) => {
       this.setState({
         thumbnailSrc: window.URL.createObjectURL(blob),
         thumbnailBlob: blob
@@ -186,48 +189,10 @@ export default class ModalExport extends React.Component {
 
     const metadata = this.props.mapStyle.metadata;
     const mspInfo = metadata.mspInfo
-    fetch(api_config.url + '/api/mapStyle/updateStyleContent/' + mspInfo.id, {
-      method: "PUT",
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        'Authorization': getToken(),
-      },
-      body: tokenStyle
-    })
-      .then(function(response) {
-        return response.json();
-      })
-      .then((body) => {
-        console.log(body)
-        alert(body.msg)
-      })
-      .catch(function(error) {
-        alert(error)
-        if(error) console.error(error)
-      })
-    if(this.state.thumbnailBlob){
-      this.blobToDataURL(this.state.thumbnailBlob, (result)=>{
-        fetch(api_config.url + '/api/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
-          method: "PUT",
-          mode: 'cors',
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            'Authorization': getToken(),
-          },
-          body: JSON.stringify({ base64: result })
-        })
-          .then(function(response) {
-            return response.json();
-          })
-          .then((body) => {
-            console.log(body)
-            alert(body.msg)
-          })
-          .catch(function(error) {
-            alert(error)
-            if(error) console.error(error)
-          })
+    style.saveStyleJsonToMsp(mspInfo, tokenStyle);
+    if (this.state.thumbnailBlob) {
+      this.blobToDataURL(this.state.thumbnailBlob, (result) => {
+        style.saveStyleThumbnailToMsp(mspInfo, result);
       })
     }
     // saveAs(blob, exportName + ".json");
@@ -236,7 +201,9 @@ export default class ModalExport extends React.Component {
   //**blob to dataURL**
   blobToDataURL(blob, callback) {
     var a = new FileReader();
-    a.onload = function (e) { callback(e.target.result); }
+    a.onload = function (e) {
+      callback(e.target.result);
+    }
     a.readAsDataURL(blob);
   }
 
@@ -257,38 +224,38 @@ export default class ModalExport extends React.Component {
       data-wd-key="modal:export"
       isOpen={this.props.isOpen}
       onOpenToggle={this.props.onOpenToggle}
-      title={'保存样式'}
+      title={getLabelName('Save Style')}
       className="maputnik-export-modal"
     >
       <section className="maputnik-modal-section">
-        <h1>样式缩略图</h1>
-        <div >
-          <Image srcImg={this.state.thumbnailSrc} />
+        <h1>{getLabelName("Style Thumbnail")}</h1>
+        <div style={{"text-align": "center"}}>
+          <Image srcImg={this.state.thumbnailSrc}/>
           {/*<img src={this.state.thumbnailSrc} alt="" width="200" height="200"/>*/}
         </div>
-        <div >
+        <div style={{"text-align": "center"}}>
           <InputButton
             onClick={this.saveThumbnail.bind(this)}
           >
-            <MdPhotoLibrary />
-            获取缩略图
+            <MdPhotoLibrary/>
+            {getLabelName("Get Style Thumbnail")}
           </InputButton>
         </div>
       </section>
 
 
       <section className="maputnik-modal-section">
-        <h1>保存样式</h1>
+        <h1>{getLabelName("Save Style")}</h1>
         <p>
-          保存到在线服务
+          {getLabelName("Save Style To Msp")}
         </p>
         <div className="maputnik-modal-export-buttons">
           <InputButton
             onClick={this.saveToMsp.bind(this)}
             title={this.saveToMspTitle}
           >
-            <MdCloudUpload />
-            保存到服务
+            <MdCloudUpload/>
+            {getLabelName("Save")}
           </InputButton>
         </div>
       </section>
@@ -296,9 +263,9 @@ export default class ModalExport extends React.Component {
       <section className="maputnik-modal-section"
                style={{display: runConfig.mainLayout.toolBar.toolBarExportSaveToFile === false ? "none" : "block"}}
       >
-        <h1>下载样式文件</h1>
+        <h1>{getLabelName("Download Style Json")}</h1>
         <p>
-          下载一个.json样式描述文件到本地
+          {getLabelName("Download a JSON style to your computer.")}
         </p>
 
         {/*<div>
@@ -323,20 +290,19 @@ export default class ModalExport extends React.Component {
         </div>*/}
 
         <div className="maputnik-modal-export-buttons"
-        >
-
+             style={{"text-align": "center"}}>
           <InputButton
             onClick={this.downloadStyle.bind(this)}
           >
-            <MdFileDownload />
-            下载JSON文件
+            <MdFileDownload/>
+            {getLabelName("Download Json File")}
           </InputButton>
 
           <InputButton
             onClick={this.downloadHtml.bind(this)}
           >
-            <MdFileDownload />
-            下载Html文件
+            <MdFileDownload/>
+            {getLabelName("Download Html File")}
           </InputButton>
         </div>
       </section>

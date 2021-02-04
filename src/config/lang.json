@@ -233,5 +233,49 @@
   "Add filter": {
     "en": "Add filter",
     "zh": "添加过滤"
+  },
+  "Save Style": {
+    "en": "Save Style",
+    "zh": "保存样式"
+  },
+  "Style Thumbnail": {
+    "en": "Style Thumbnail",
+    "zh": "样式缩略图"
+  },
+  "Get Style Thumbnail": {
+    "en": "Get Style Thumbnail",
+    "zh": "获取缩略图"
+  },
+  "Save Style": {
+    "en": "Save Style",
+    "zh": "保存样式"
+  },
+  "Save Style To Msp": {
+    "en": "Save Style To Msp",
+    "zh": "保存到在线服务"
+  },
+  "Save": {
+    "en": "Save",
+    "zh": "保存样式"
+  },
+  "Download Style Json": {
+    "en": "Download Style Json",
+    "zh": "下载样式文件"
+  },
+  "Download a JSON style to your computer.": {
+    "en": "Download a JSON style to your computer.",
+    "zh": "下载一个.json样式描述文件到本地"
+  },
+  "Download Json File": {
+    "en": "Download Json File",
+    "zh": "下载json文件"
+  },
+  "Download Html File": {
+    "en": "Download Html File",
+    "zh": "下载html文件"
+  },
+  "Error: Cannot load MapAbcGL, WebGL is either unsupported or disabled": {
+    "en": "Error: Cannot load MapAbcGL, WebGL is either unsupported or disabled",
+    "zh": "错误：不能加载MapAbc矢量地图引擎，浏览器WebGL功能不支持或者被禁用"
   }
 }
