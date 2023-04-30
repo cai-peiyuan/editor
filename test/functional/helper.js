@@ -1,5 +1,5 @@
 var wd = require("../wd-helper");
-var uuid = require('uuid/v1');
+var {v1: uuid} = require('uuid');
 var geoServer = require("../geojson-server");
 
 var testNetwork = process.env.TEST_NETWORK || "localhost";
@@ -21,11 +21,10 @@ module.exports = {
     var port = geoserver.address().port;
     return "http://"+testNetwork+":"+port+"/"+urlPath;
   },
-  getStyleStore: function(browser) {
-    var result = browser.executeAsync(function(done) {
+  getStyleStore: async function(browser) {
+    return await browser.executeAsync(function(done) {
       window.debug.get("maputnik", "styleStore").latestStyle(done);
-    })
-    return result;
+    });
   },
   getStyleNameStore: function(browser) {
     var result = browser.executeAsync(function(done) {
@@ -33,8 +32,8 @@ module.exports = {
     })
     return result;
   },
-  getRevisionStore: function(browser) {
-    var result = browser.execute(function(done) {
+  getRevisionStore: async function(browser) {
+    var result = await browser.execute(function(done) {
       var rs = window.debug.get("maputnik", "revisionStore")
 
       return {
@@ -46,22 +45,22 @@ module.exports = {
   },
   modal: {
     addLayer: {
-      open: function() {
-        const selector = $(wd.$('layer-list:add-layer'));
-        selector.click();
+      open: async function() {
+        const selector = await $(wd.$('layer-list:add-layer'));
+        await selector.click();
 
         // Wait for events
-        browser.flushReactUpdates();
+        await browser.flushReactUpdates();
 
-        const elem = $(wd.$('modal:add-layer'));
-        elem.waitForExist();
-        elem.isDisplayed();
-        elem.isDisplayedInViewport();
+        const elem = await $(wd.$('modal:add-layer'));
+        await elem.waitForExist();
+        await elem.isDisplayed();
+        await elem.isDisplayedInViewport();
 
         // Wait for events
-        browser.flushReactUpdates();
+        await browser.flushReactUpdates();
       },
-      fill: function(opts) {
+      fill: async function(opts) {
         var type = opts.type;
         var layer = opts.layer;
         var id;
@@ -72,18 +71,18 @@ module.exports = {
           id = type+":"+uuid();
         }
 
-        const selectBox = $(wd.$("add-layer.layer-type", "select"));
-        selectBox.selectByAttribute('value', type);
-        browser.flushReactUpdates();
+        const selectBox = await $(wd.$("add-layer.layer-type", "select"));
+        await selectBox.selectByAttribute('value', type);
+        await browser.flushReactUpdates();
 
-        browser.setValueSafe(wd.$("add-layer.layer-id", "input"), id);
+        await browser.setValueSafe(wd.$("add-layer.layer-id", "input"), id);
         if(layer) {
-          browser.setValueSafe(wd.$("add-layer.layer-source-block", "input"), layer);
+          await browser.setValueSafe(wd.$("add-layer.layer-source-block", "input"), layer);
         }
 
-        browser.flushReactUpdates();
-        const elem_addLayer = $(wd.$("add-layer"));
-        elem_addLayer.click();
+        await browser.flushReactUpdates();
+        const elem_addLayer = await $(wd.$("add-layer"));
+        await elem_addLayer.click();
 
         return id;
       }
