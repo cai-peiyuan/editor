@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Slugify from 'slugify'
 import {saveAs} from 'file-saver'
 import pkgLockJson from '../../package-lock.json'
+import pkgJson from '../../package.json'
 
 import {format} from '@mapbox/mapbox-gl-style-spec'
 import FieldString from './FieldString'
@@ -20,7 +21,9 @@ import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
 
-const MAPBOX_GL_VERSION = pkgLockJson.dependencies["mapbox-gl"].version;
+console.log('------------', pkgJson);
+console.log('------------', pkgLockJson);
+const MAPBOX_GL_VERSION = pkgLockJson.packages["node_modules/mapbox-gl"].version;
 
 
 class Image extends React.Component {
