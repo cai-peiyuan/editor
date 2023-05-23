@@ -30,11 +30,6 @@ module.exports = {
     ],
     rules: rules
   },
-  node: {
-    fs: "empty",
-    net: 'empty',
-    tls: 'empty'
-  },
   devServer: {
     // enable HMR
     hot: true,
