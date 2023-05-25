@@ -57,19 +57,13 @@ export default class ModalExport extends React.Component {
   }
 
   tokenizedStyle() {
-    return format(
-      style.stripAccessTokens(
-        style.replaceAccessTokens(this.props.mapStyle)
-      )
-    );
+    return format(style.stripAccessTokens(style.replaceAccessTokens(this.props.mapStyle)));
   }
 
   exportName() {
     if (this.props.mapStyle.name) {
       return Slugify(this.props.mapStyle.name, {
-        replacement: '_',
-        remove: /[*\-+~.()'"!:]/g,
-        lower: true
+        replacement: '_', remove: /[*\-+~.()'"!:]/g, lower: true
       });
     } else {
       return this.props.mapStyle.id
@@ -131,12 +125,7 @@ export default class ModalExport extends React.Component {
     document.body.appendChild(container)
 
     this.setStyles(container, {
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      width: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
-      zIndex: 9999,
+      position: "absolute", top: 0, bottom: 0, width: "100%", backgroundColor: "rgba(0, 0, 0, 0.6)", zIndex: 9999,
     })
 
     const icon = document.createElement('div')
@@ -169,24 +158,25 @@ export default class ModalExport extends React.Component {
   getThumbnail() {
     window.exportControl.downloadMap(false, (blob) => {
       this.setState({
-        thumbnailSrc: window.URL.createObjectURL(blob),
-        thumbnailBlob: blob
+        thumbnailSrc: window.URL.createObjectURL(blob), thumbnailBlob: blob
       })
     })
   }
 
   // 上传地图截图
   uploadThumbnail() {
-
     const metadata = this.props.mapStyle.metadata;
     const mspInfo = metadata.mspInfo || {
-      id: uuid().replaceAll('-', ''),
-      styleType: 'public'
+      id: uuid().replaceAll('-', ''), styleType: 'public'
     }
-
     if (this.state.thumbnailBlob) {
       this.blobToDataURL(this.state.thumbnailBlob, (result) => {
-        style.saveStyleThumbnailToMsp(mspInfo, result);
+        let saveStyleThumbnailToMspResult = style.saveStyleThumbnailToMsp(mspInfo, result);
+        if (saveStyleThumbnailToMspResult.message == 'success') {
+          this.setState({
+            isStyleLoaded: false
+          });
+        }
       })
     } else {
 
@@ -208,15 +198,17 @@ export default class ModalExport extends React.Component {
 
     const metadata = this.props.mapStyle.metadata;
     const mspInfo = metadata.mspInfo || {
-      id: uuid().replaceAll('-', ''),
-      styleCode: exportName,
-      styleName: exportName,
-      styleType: 'public'
+      id: uuid().replaceAll('-', ''), styleCode: exportName, styleName: exportName, styleType: 'public'
     }
     style.saveStyleJsonToMsp(mspInfo, tokenStyle);
     if (this.state.thumbnailBlob) {
       this.blobToDataURL(this.state.thumbnailBlob, (result) => {
-        style.saveStyleThumbnailToMsp(mspInfo, result);
+        let saveStyleThumbnailToMspResult = style.saveStyleThumbnailToMsp(mspInfo, result);
+        if (saveStyleThumbnailToMspResult.message == 'success') {
+          this.setState({
+            isStyleLoaded: false
+          });
+        }
       })
     }
     // saveAs(blob, exportName + ".json");
@@ -233,10 +225,8 @@ export default class ModalExport extends React.Component {
 
   changeMetadataProperty(property, value) {
     const changedStyle = {
-      ...this.props.mapStyle,
-      metadata: {
-        ...this.props.mapStyle.metadata,
-        [property]: value
+      ...this.props.mapStyle, metadata: {
+        ...this.props.mapStyle.metadata, [property]: value
       }
     }
     this.props.onStyleChanged(changedStyle)

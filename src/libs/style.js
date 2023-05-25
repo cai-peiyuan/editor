@@ -183,8 +183,8 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
 }
 
 
-function saveStyleThumbnailToMsp(mspInfo, result) {
-  fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
+async function saveStyleThumbnailToMsp(mspInfo, result) {
+  const res = await fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
     method: "PUT",
     mode: 'cors',
     headers: {
@@ -192,18 +192,23 @@ function saveStyleThumbnailToMsp(mspInfo, result) {
       'Authorization': getToken(),
     },
     body: JSON.stringify({base64: result})
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then((body) => {
-      console.log(body)
-      alert('保存样式预览图成功' + body.message)
-    })
-    .catch(function (error) {
-      alert('保存样式预览图失败' + error)
-      if (error) console.error(error)
-    })
+  });
+  const result11 = await res.json();
+  alert('保存样式预览图成功' + result11.message)
+  return result11;
+//
+//
+// .then(function (response) {
+//     return response.json();
+//   })
+//     .then((body) => {
+//       console.log(body)
+//       alert('保存样式预览图成功' + body.message)
+//     })
+//     .catch(function (error) {
+//       alert('保存样式预览图失败' + error)
+//       if (error) console.error(error)
+//     })
 }
 
 export default {
