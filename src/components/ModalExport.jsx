@@ -20,6 +20,7 @@ import icons from "../libs/exportcontrol/icons";
 import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
+var {v1: uuid} = require('uuid');
 
 console.log('------------', pkgJson);
 console.log('------------', pkgLockJson);
@@ -191,7 +192,12 @@ export default class ModalExport extends React.Component {
     console.log(blob)
 
     const metadata = this.props.mapStyle.metadata;
-    const mspInfo = metadata.mspInfo
+    const mspInfo = metadata.mspInfo || {
+      id: uuid().replaceAll('-',''),
+      styleCode: exportName,
+      styleName: exportName,
+      styleType: 'public'
+    }
     style.saveStyleJsonToMsp(mspInfo, tokenStyle);
     if (this.state.thumbnailBlob) {
       this.blobToDataURL(this.state.thumbnailBlob, (result) => {
@@ -232,11 +238,11 @@ export default class ModalExport extends React.Component {
     >
       <section className="maputnik-modal-section">
         <h1>{getLabelName("Style Thumbnail")}</h1>
-        <div style={{"text-align": "center"}}>
+        <div style={{"textAlign": "center"}}>
           <Image srcImg={this.state.thumbnailSrc}/>
           {/*<img src={this.state.thumbnailSrc} alt="" width="200" height="200"/>*/}
         </div>
-        <div style={{"text-align": "center"}}>
+        <div style={{"textAlign": "center"}}>
           <InputButton
             onClick={this.saveThumbnail.bind(this)}
           >
@@ -293,7 +299,7 @@ export default class ModalExport extends React.Component {
         </div>*/}
 
         <div className="maputnik-modal-export-buttons"
-             style={{"text-align": "center"}}>
+             style={{"textAlign": "center"}}>
           <InputButton
             onClick={this.downloadStyle.bind(this)}
           >

@@ -142,14 +142,14 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
     }
   } else if (spriteUrl.startsWith("mapabc://")) {
     const spriteName = spriteUrl.replace("mapabc://sprites/", "");
-    spriteUrl_Http = api_config.url + "/api/mapSpriteData/" + spriteName;
+    spriteUrl_Http = api_config.url + "/msp-api/sprite/v2/" + spriteName;
   } else {
     spriteUrl_Http = api_config.url + "/api/mapSpriteData" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
 
   return {
     ...mapStyle,
-    glyphs: api_config.url + "/api/mapFont/glyphs/{fontstack}/{range}.pbf",
+    glyphs: api_config.url + "/msp-api/glyphs/{fontstack}/{range}.pbf",
     sprite: spriteUrl_Http
   };
 }
@@ -160,8 +160,8 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
  * @param jsonStr
  */
 function saveStyleJsonToMsp(mspInfo, jsonStr) {
-  fetch(api_config.url + '/api/mapStyle/updateStyleContent/' + mspInfo.id, {
-    method: "PUT",
+  fetch(api_config.url + '/open/editor/mapStyle/updateStyleContent/' + mspInfo.id, {
+    method: 'PUT',
     mode: 'cors',
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -174,10 +174,10 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
     })
     .then((body) => {
       console.log(body)
-      alert(body.msg)
+      alert('保存成功' + body.message)
     })
     .catch(function (error) {
-      alert(error)
+      alert('保存失败' + error)
       if (error) console.error(error)
     })
 }

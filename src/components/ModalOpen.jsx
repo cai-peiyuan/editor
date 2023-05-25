@@ -9,7 +9,7 @@ import InputUrl from './InputUrl'
 import {MdFileUpload} from 'react-icons/md'
 import {MdAddCircleOutline} from 'react-icons/md'
 
-import { getToken } from '../util/auth.js'
+import {getToken} from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
 import {getLabelName} from "../libs/lang";
@@ -32,8 +32,8 @@ class PublicStyle extends React.Component {
       >
         <div className="maputnik-public-style-header">
           <div>{this.props.title}</div>
-          <span className="maputnik-space" />
-          <MdAddCircleOutline />
+          <span className="maputnik-space"/>
+          <MdAddCircleOutline/>
         </div>
         <div
           className="maputnik-public-style-thumbnail"
@@ -48,16 +48,13 @@ class PublicStyle extends React.Component {
 
 export default class ModalOpen extends React.Component {
   static propTypes = {
-    isOpen: PropTypes.bool.isRequired,
-    onOpenToggle: PropTypes.func.isRequired,
-    onStyleOpen: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired, onOpenToggle: PropTypes.func.isRequired, onStyleOpen: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      styleUrl: "",
-      isOpen: false
+      styleUrl: "", isOpen: false
     };
   }
 
@@ -69,75 +66,60 @@ export default class ModalOpen extends React.Component {
 
   onCancelActiveRequest(e) {
     // Else the click propagates to the underlying modal
-    if(e) e.stopPropagation();
+    if (e) e.stopPropagation();
 
-    if(this.state.activeRequest) {
+    if (this.state.activeRequest) {
       this.state.activeRequest.abort();
       this.setState({
-        activeRequest: null,
-        activeRequestUrl: null
+        activeRequest: null, activeRequestUrl: null
       });
     }
   }
 
   onStyleSelect = (styleUrl) => {
     this.clearError();
-
     let canceled;
-
     const activeRequest = fetch(styleUrl, {
-      mode: 'cors',
-      credentials: "same-origin",
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': getToken(),
-      },
-      cache: "no-cache"
+      mode: 'cors', credentials: "same-origin", method: "GET", headers: {
+        'Content-Type': 'application/json', 'Authorization': getToken(),
+      }, cache: "no-cache"
     })
-    .then(function(response) {
-      return response.json();
-    })
-    .then((body) => {
-      if(canceled) {
-        return;
-      }
-
-      this.setState({
-        activeRequest: null,
-        activeRequestUrl: null
-      });
-
-      /**
-       * 打开指定的style后 在浏览器url中设置styleId为对应样式的styleId
-       */
-      const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body))
-      const url = new URL(location.href);
-      url.searchParams.set("styleId", mapStyle.metadata.mspInfo.styleId);
-      history.replaceState({}, "Maputnik", url.href);
-
-      console.log('Loaded style ', mapStyle.id)
-      console.log('Loaded style ', mapStyle)
-      this.props.onStyleOpen(mapStyle)
-      this.onOpenToggle()
-    })
-    .catch((err) => {
-      this.setState({
-        error: `Failed to load: '${styleUrl}'`,
-        activeRequest: null,
-        activeRequestUrl: null
-      });
-      console.error(err);
-      console.warn('Could not open the style URL', styleUrl)
-    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then((body) => {
+        if (canceled) {
+          return;
+        }
+        this.setState({
+          activeRequest: null, activeRequestUrl: null
+        });
+        /**
+         * 打开指定的style后 在浏览器url中设置styleId为对应样式的styleId
+         */
+        const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body.data))
+        const url = new URL(location.href);
+        url.searchParams.set("styleId", mapStyle.metadata.mspInfo.id);
+        history.replaceState({}, "Maputnik", url.href);
+        console.log('Loaded style ', mapStyle.id)
+        console.log('Loaded style ', mapStyle)
+        this.props.onStyleOpen(mapStyle)
+        this.onOpenToggle()
+      })
+      .catch((err) => {
+        this.setState({
+          error: `Failed to load: '${styleUrl}'`, activeRequest: null, activeRequestUrl: null
+        });
+        console.error(err);
+        console.warn('Could not open the style URL', styleUrl)
+      })
 
     this.setState({
       activeRequest: {
-        abort: function() {
+        abort: function () {
           canceled = true;
         }
-      },
-      activeRequestUrl: styleUrl
+      }, activeRequestUrl: styleUrl
     })
   }
 
@@ -147,44 +129,39 @@ export default class ModalOpen extends React.Component {
     let canceled;
 
     const activeRequest = fetch(styleUrl, {
-      mode: 'cors',
-      credentials: "same-origin"
+      mode: 'cors', credentials: "same-origin"
     })
-    .then(function(response) {
-      return response.json();
-    })
-    .then((body) => {
-      if(canceled) {
-        return;
-      }
+      .then(function (response) {
+        return response.json();
+      })
+      .then((body) => {
+        if (canceled) {
+          return;
+        }
 
-      this.setState({
-        activeRequest: null,
-        activeRequestUrl: null
-      });
+        this.setState({
+          activeRequest: null, activeRequestUrl: null
+        });
 
-      const mapStyle = style.ensureStyleValidity(body)
-      console.log('Loaded style ', mapStyle.id)
-      this.props.onStyleOpen(mapStyle)
-      this.onOpenToggle()
-    })
-    .catch((err) => {
-      this.setState({
-        error: `Failed to load: '${styleUrl}'`,
-        activeRequest: null,
-        activeRequestUrl: null
-      });
-      console.error(err);
-      console.warn('Could not open the style URL', styleUrl)
-    })
+        const mapStyle = style.ensureStyleValidity(body)
+        console.log('Loaded style ', mapStyle.id)
+        this.props.onStyleOpen(mapStyle)
+        this.onOpenToggle()
+      })
+      .catch((err) => {
+        this.setState({
+          error: `Failed to load: '${styleUrl}'`, activeRequest: null, activeRequestUrl: null
+        });
+        console.error(err);
+        console.warn('Could not open the style URL', styleUrl)
+      })
 
     this.setState({
       activeRequest: {
-        abort: function() {
+        abort: function () {
           canceled = true;
         }
-      },
-      activeRequestUrl: styleUrl
+      }, activeRequestUrl: styleUrl
     })
   }
 
@@ -204,8 +181,7 @@ export default class ModalOpen extends React.Component {
       let mapStyle;
       try {
         mapStyle = JSON.parse(e.target.result)
-      }
-      catch(err) {
+      } catch (err) {
         this.setState({
           error: err.toString()
         });
@@ -232,36 +208,34 @@ export default class ModalOpen extends React.Component {
     });
   }
 
+  /**
+   * 获取样式编辑器有权限读取的样式
+   */
   getPublicStyles = () => {
-    let url = api_config.url + "/api/mapStyle?page=0&size=100&sort=updateTime%2Cdesc";
+    let url = api_config.url + "/open/editor/mapStyleList?page=0&size=100";
     fetch(url, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': getToken(),
-      },
-      cache: "no-cache"
+      method: "GET", mode: "cors", headers: {
+        'Content-Type': 'application/json', 'Authorization': getToken(),
+      }, cache: "no-cache"
     }).then((response) => {
       return response.json();
     }).then((json) => {
+      console.log('mapStyleList json data -> ', json)
       let isOpen = this.props.isOpen
       this.setState({
-        publicStyles: json.content,
-        isOpen: this.props.isOpen
+        publicStyles: json.data, isOpen: this.props.isOpen
       });
     });
   }
 
 
   render() {
-
     if (this.props.isOpen && !this.state.isOpen) {
       this.getPublicStyles();
     }
 
     if (!this.state.publicStyles) {
-      return <div />
+      return <div/>
     }
 
     const styleOptions_MapBox = publicStyles.map(style => {
@@ -277,91 +251,89 @@ export default class ModalOpen extends React.Component {
       return <PublicStyle
         key={style.id}
         name={style.styleRemark}
-        url={ api_config.url + "/api/mapStyle/content/"+ style.styleId}
+        url={api_config.url + "/open/editor/mapStyleById/" + style.id}
         title={style.styleName}
-        thumbnailUrl={style.styleTemplateImgBase64}
+        thumbnailUrl_bak={style.styleTemplateImgBase64}
+        thumbnailUrl={api_config.url + '/erupt-attachment' + style.styleThumbnailUrl}
         onSelect={this.onStyleSelect}
       />
     });
 
     // console.log(getToken())
     let errorElement;
-    if(this.state.error) {
-      errorElement = (
-        <div className="maputnik-modal-error">
-          {this.state.error}
-          <a href="#" onClick={() => this.clearError()} className="maputnik-modal-error-close">×</a>
-        </div>
-      );
+    if (this.state.error) {
+      errorElement = (<div className="maputnik-modal-error">
+        {this.state.error}
+        <a href="#" onClick={() => this.clearError()} className="maputnik-modal-error-close">×</a>
+      </div>);
     }
 
-    return  (
-      <div>
-        <Modal
-          data-wd-key="modal:open"
-          isOpen={this.props.isOpen}
-          onOpenToggle={() => this.onOpenToggle()}
-          title={'打开一个样式'}
-        >
-          {errorElement}
+    return (<div>
+      <Modal
+        data-wd-key="modal:open"
+        isOpen={this.props.isOpen}
+        onOpenToggle={() => this.onOpenToggle()}
+        title={'打开一个样式'}
+      >
+        {errorElement}
 
-          <section className="maputnik-modal-section maputnik-modal-section--shrink">
-            <h1>我的所有可用样式</h1>
-            <p>
-              打开一个样式来设计
-            </p>
-            <div className="maputnik-style-gallery-container">
+        <section className="maputnik-modal-section maputnik-modal-section--shrink">
+          <h1>我的所有可用样式</h1>
+          <p>
+            打开一个样式来设计
+          </p>
+          <div className="maputnik-style-gallery-container">
             {/*{styleOptions_MapBox}*/}
 
             {styleOptions}
+          </div>
+        </section>
+
+        <section className="maputnik-modal-section">
+          <h1>上传样式</h1>
+          <p>从本地上传一个json格式的样式文件.</p>
+          <FileReaderInput onChange={this.onUpload} tabIndex="-1" aria-label="Style file">
+            <InputButton className="maputnik-upload-button"><MdFileUpload/> 上传</InputButton>
+          </FileReaderInput>
+        </section>
+
+        <section className="maputnik-modal-section">
+          <form onSubmit={this.onSubmitUrl}>
+            <h1>网络资源</h1>
+            <p>
+              从一个URL加载网络样式资源，资源需要支持<a href="https://enable-cors.org" target="_blank"
+                                                       rel="noopener noreferrer">CORS</a>请求。
+            </p>
+            <InputUrl
+              aria-label="样式 URL"
+              data-wd-key="modal:open.url.input"
+              type="text"
+              className="maputnik-input"
+              default="输入资源 URL..."
+              value={this.state.styleUrl}
+              onInput={this.onChangeUrl}
+              onChange={this.onChangeUrl}
+            />
+            <div>
+              <InputButton
+                data-wd-key="modal:open.url.button"
+                type="submit"
+                className="maputnik-big-button"
+                disabled={this.state.styleUrl.length < 1}
+              >加载资源</InputButton>
             </div>
-          </section>
+          </form>
+        </section>
 
-          <section className="maputnik-modal-section">
-            <h1>上传样式</h1>
-            <p>从本地上传一个json格式的样式文件.</p>
-            <FileReaderInput onChange={this.onUpload} tabIndex="-1" aria-label="Style file">
-              <InputButton className="maputnik-upload-button"><MdFileUpload /> 上传</InputButton>
-            </FileReaderInput>
-          </section>
+      </Modal>
 
-          <section className="maputnik-modal-section">
-            <form onSubmit={this.onSubmitUrl}>
-              <h1>网络资源</h1>
-              <p>
-                从一个URL加载网络样式资源，资源需要支持<a href="https://enable-cors.org" target="_blank" rel="noopener noreferrer">CORS</a>请求。
-              </p>
-              <InputUrl
-                aria-label="样式 URL"
-                data-wd-key="modal:open.url.input"
-                type="text"
-                className="maputnik-input"
-                default="输入资源 URL..."
-                value={this.state.styleUrl}
-                onInput={this.onChangeUrl}
-                onChange={this.onChangeUrl}
-              />
-              <div>
-                <InputButton
-                  data-wd-key="modal:open.url.button"
-                  type="submit"
-                  className="maputnik-big-button"
-                  disabled={this.state.styleUrl.length < 1}
-                >加载资源</InputButton>
-              </div>
-            </form>
-          </section>
-
-        </Modal>
-
-        <ModalLoading
-          isOpen={!!this.state.activeRequest}
-          title={getLabelName("Loading")}
-          onCancel={(e) => this.onCancelActiveRequest(e)}
-          message={getLabelName("Loading")+ " : " +this.state.activeRequestUrl}
-        />
-      </div>
-    )
+      <ModalLoading
+        isOpen={!!this.state.activeRequest}
+        title={getLabelName("Loading")}
+        onCancel={(e) => this.onCancelActiveRequest(e)}
+        message={getLabelName("Loading") + " : " + this.state.activeRequestUrl}
+      />
+    </div>)
   }
 }
 

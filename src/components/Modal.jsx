@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {MdClose} from 'react-icons/md'
 import AriaModal from 'react-aria-modal'
-import classnames from 'classnames';
+import classnames from 'classnames'
 
 export default class Modal extends React.Component {
   static propTypes = {
@@ -26,9 +26,9 @@ export default class Modal extends React.Component {
       document.activeElement.blur();
     }
 
-    setImmediate(() => {
-      this.props.onOpenToggle(false);
-    });
+    this.props.onOpenToggle(false);
+    // setImmediate(() => {
+    // });
   }
 
   render() {

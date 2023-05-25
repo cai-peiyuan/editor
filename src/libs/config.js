@@ -3,7 +3,8 @@ import {getToken} from "../util/auth";
  * 获取图层配置信息
  */
 export async function getAppConfig() {
-  const res = await fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/editor1', {
+  //const res = await fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/editor1', {
+  const res = await fetch(api_config.url + '/open/editor/mapStyleEditorConfig/runConfig/editor1', {
     method: "GET",
     mode: 'cors',
     headers: {

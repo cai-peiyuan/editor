@@ -287,7 +287,7 @@ export default class App extends React.Component {
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress);
     const initialUrl =url.parse(window.location.href, true)
-    const editorConfig = (initialUrl.query.editorConfig) || 'editor1'
+    const editorConfig = (initialUrl.query.editorConfig) || 'editor_dev'
     const styleId = (initialUrl.query.styleId) || ''
     /**
      * 获取网络资源配置参数
@@ -304,7 +304,7 @@ export default class App extends React.Component {
      * layerDic为图层字典表
      */
     // fetch(api_config.url + '/api/mapStyleEditorConfig/runConfig/' + editorConfig + '?styleId=' + styleId, {
-    fetch(api_config.url + '/api/mapStyleEditorConfig/initData?editorKey='+editorConfig+'&styleId='+styleId, {
+    fetch(api_config.url + '/open/editor/mapStyleEditorConfig/initData?editorKey='+editorConfig+'&styleId='+styleId, {
       method: "GET",
       mode: 'cors',
       headers: {
@@ -323,45 +323,46 @@ export default class App extends React.Component {
       }
       console.log(response);
     }).then((body) => {
+      let data = body.data;
       /***
        * 设置全局配置参数 合并网络参数到默认参数
        */
-      if(body.runConfig){
-        runConfig = Object.assign(runConfig, JSON.parse(body.runConfig.configValue))
+      if(data.runConfig){
+        runConfig = Object.assign(runConfig, JSON.parse(data.runConfig.configValue))
       }
       /***
        * 加载url参数中的样式内容
        */
-      if(body.mapStyle){
+      if(data.mapStyle){
         this.setState({
-          mapStyle: style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body.mapStyle))
+          mapStyle: style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(data.mapStyle))
         })
       }
       /***
        * 加载图层字典
        */
-      if(body.layerDic){
-          layerDic = Object.assign(layerDic, (body.layerDic));
+      if(data.layerDic){
+          layerDic = Object.assign(layerDic, (data.layerDic));
       }
       /***
        * 加载翻译字典
        */
-      if(body.langDic){
-        langDic = Object.assign(langDic, (body.langDic));
+      if(data.langDic){
+        langDic = Object.assign(langDic, (data.langDic));
         // 服务中没有的数据 在本地有的 保存到msp服务中
         saveLangToMsp();
       }
       /***
        * 加载图标字典
        */
-      if(body.spriteDic){
-        spriteDic = Object.assign(spriteDic, (body.spriteDic));
+      if(data.spriteDic){
+        spriteDic = Object.assign(spriteDic, (data.spriteDic));
       }
       /***
        * 加载字体字典
        */
-      if(body.fontDic){
-        fontDic = Object.assign(fontDic, (body.fontDic));
+      if(data.fontDic){
+        fontDic = Object.assign(fontDic, (data.fontDic));
       }
       this.setState({
         runConfigLoaded: true
