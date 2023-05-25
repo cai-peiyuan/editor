@@ -107,6 +107,7 @@ export default class SpecField extends React.Component {
         )
         case 'array':
           if(this.props.fieldName === 'text-font') {
+            console.log(' -0-0-0-0-0-0-0-0-0- ' ,this.props.fieldName)
             return <InputFont
               {...commonProps}
               fonts={this.props.fieldSpec.values}

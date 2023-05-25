@@ -83,6 +83,7 @@ export class StyleStore {
 
   // Save current style replacing previous version
   save(mapStyle) {
+    this.purge();
     mapStyle = style.ensureStyleValidity(mapStyle)
     const key = styleKey(mapStyle.id)
     window.localStorage.setItem(key, JSON.stringify(mapStyle))

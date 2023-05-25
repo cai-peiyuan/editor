@@ -20,6 +20,7 @@ import icons from "../libs/exportcontrol/icons";
 import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
+
 var {v1: uuid} = require('uuid');
 
 console.log('------------', pkgJson);
@@ -164,8 +165,8 @@ export default class ModalExport extends React.Component {
     }
   }
 
-  //  保存缩略图
-  saveThumbnail() {
+  //  生成地图截图
+  getThumbnail() {
     window.exportControl.downloadMap(false, (blob) => {
       this.setState({
         thumbnailSrc: window.URL.createObjectURL(blob),
@@ -174,8 +175,22 @@ export default class ModalExport extends React.Component {
     })
   }
 
-  saveThumbnail1() {
+  // 上传地图截图
+  uploadThumbnail() {
 
+    const metadata = this.props.mapStyle.metadata;
+    const mspInfo = metadata.mspInfo || {
+      id: uuid().replaceAll('-', ''),
+      styleType: 'public'
+    }
+
+    if (this.state.thumbnailBlob) {
+      this.blobToDataURL(this.state.thumbnailBlob, (result) => {
+        style.saveStyleThumbnailToMsp(mspInfo, result);
+      })
+    } else {
+
+    }
   }
 
   // 保存到在线服务
@@ -193,7 +208,7 @@ export default class ModalExport extends React.Component {
 
     const metadata = this.props.mapStyle.metadata;
     const mspInfo = metadata.mspInfo || {
-      id: uuid().replaceAll('-',''),
+      id: uuid().replaceAll('-', ''),
       styleCode: exportName,
       styleName: exportName,
       styleType: 'public'
@@ -238,20 +253,28 @@ export default class ModalExport extends React.Component {
     >
       <section className="maputnik-modal-section">
         <h1>{getLabelName("Style Thumbnail")}</h1>
+
         <div style={{"textAlign": "center"}}>
           <Image srcImg={this.state.thumbnailSrc}/>
           {/*<img src={this.state.thumbnailSrc} alt="" width="200" height="200"/>*/}
         </div>
+
         <div style={{"textAlign": "center"}}>
           <InputButton
-            onClick={this.saveThumbnail.bind(this)}
-          >
+            onClick={this.getThumbnail.bind(this)}>
             <MdPhotoLibrary/>
             {getLabelName("Get Style Thumbnail")}
           </InputButton>
         </div>
-      </section>
 
+        <div style={{"textAlign": "center"}}>
+          <InputButton
+            onClick={this.uploadThumbnail.bind(this)}>
+            <MdPhotoLibrary/>
+            {getLabelName("Upload Style Thumbnail")}
+          </InputButton>
+        </div>
+      </section>
 
       <section className="maputnik-modal-section">
         <h1>{getLabelName("Save Style")}</h1>
@@ -261,8 +284,7 @@ export default class ModalExport extends React.Component {
         <div className="maputnik-modal-export-buttons">
           <InputButton
             onClick={this.saveToMsp.bind(this)}
-            title={this.saveToMspTitle}
-          >
+            title={this.saveToMspTitle}>
             <MdCloudUpload/>
             {getLabelName("Save")}
           </InputButton>

@@ -174,17 +174,17 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
     })
     .then((body) => {
       console.log(body)
-      alert('保存成功' + body.message)
+      alert('保存样式内容成功' + body.message)
     })
     .catch(function (error) {
-      alert('保存失败' + error)
+      alert('保存样式内容失败' + error)
       if (error) console.error(error)
     })
 }
 
 
 function saveStyleThumbnailToMsp(mspInfo, result) {
-  fetch(api_config.url + '/api/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
+  fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
     method: "PUT",
     mode: 'cors',
     headers: {
@@ -198,10 +198,10 @@ function saveStyleThumbnailToMsp(mspInfo, result) {
     })
     .then((body) => {
       console.log(body)
-      alert(body.msg)
+      alert('保存样式预览图成功' + body.message)
     })
     .catch(function (error) {
-      alert(error)
+      alert('保存样式预览图失败' + error)
       if (error) console.error(error)
     })
 }

@@ -13,7 +13,8 @@ import {getToken} from '../util/auth.js'
 import style from '../libs/style.js'
 import publicStyles from '../config/styles.json'
 import {getLabelName} from "../libs/lang";
-import url from 'url'
+
+var {v1: uuid} = require('uuid');
 
 class PublicStyle extends React.Component {
   static propTypes = {
@@ -223,14 +224,17 @@ export default class ModalOpen extends React.Component {
       console.log('mapStyleList json data -> ', json)
       let isOpen = this.props.isOpen
       this.setState({
-        publicStyles: json.data, isOpen: this.props.isOpen
+        publicStyles: json.data,
+        isStyleLoaded: true
       });
     });
   }
 
 
   render() {
-    if (this.props.isOpen && !this.state.isOpen) {
+    if (this.props.isOpen
+      && !this.state.isStyleLoaded
+    ) {
       this.getPublicStyles();
     }
 
@@ -254,7 +258,7 @@ export default class ModalOpen extends React.Component {
         url={api_config.url + "/open/editor/mapStyleById/" + style.id}
         title={style.styleName}
         thumbnailUrl_bak={style.styleTemplateImgBase64}
-        thumbnailUrl={api_config.url + '/erupt-attachment' + style.styleThumbnailUrl}
+        thumbnailUrl={api_config.url + '/erupt-attachment' + style.styleThumbnailUrl + '?id=' + uuid().replaceAll('-', '')}
         onSelect={this.onStyleSelect}
       />
     });
