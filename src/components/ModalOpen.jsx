@@ -258,7 +258,7 @@ export default class ModalOpen extends React.Component {
         url={api_config.url + "/open/editor/mapStyleById/" + style.id}
         title={style.styleName}
         thumbnailUrl_bak={style.styleTemplateImgBase64}
-        thumbnailUrl={api_config.url + '/erupt-attachment' + style.styleThumbnailUrl + '?id=' + uuid().replaceAll('-', '')}
+        thumbnailUrl={api_config.url + '/erupt-attachment' + style.styleThumbnailUrl}
         onSelect={this.onStyleSelect}
       />
     });
