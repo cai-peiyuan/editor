@@ -1,7 +1,7 @@
-import {latest} from '@mapbox/mapbox-gl-style-spec'
 import styleLayerDic from '../config/layer-dic.json'
 import sourceLayerDic from '../config/source-layer.json'
 import {getToken} from "../util/auth";
+import {latest} from '@maplibre/maplibre-gl-style-spec'
 
 export function changeType(layer, newType) {
   const changedPaintProps = { ...layer.paint }
@@ -35,7 +35,7 @@ export function changeProperty(layer, group, property, newValue) {
     if(group) {
       const newLayer = {
         ...layer,
-        // Change object so the diff works in ./src/components/map/MapboxGlMap.jsx
+        // Change object so the diff works in ./src/components/map/MaplibreGlMap.jsx
         [group]: {
           ...layer[group]
         }

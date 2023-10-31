@@ -138,7 +138,7 @@ export default class AppToolbar extends React.Component {
 
   onSkip = (target) => {
     if (target === "map") {
-      document.querySelector(".mapboxgl-canvas").focus();
+      document.querySelector(".maplibregl-canvas").focus();
     }
     else {
       const el = document.querySelector("#skip-target-"+target);
@@ -157,7 +157,7 @@ export default class AppToolbar extends React.Component {
         id: "inspect",
         group: "general",
         title: "Inspect",
-        disabled: this.props.renderer !== 'mbgljs',
+        disabled: this.props.renderer === 'ol',
       },
       {
         id: "filter-deuteranopia",

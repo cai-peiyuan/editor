@@ -1,11 +1,10 @@
 export function deleteSource(mapStyle, sourceId) {
   const remainingSources = { ...mapStyle.sources}
   delete remainingSources[sourceId]
-  const changedStyle = {
+  return {
     ...mapStyle,
     sources: remainingSources
   }
-  return changedStyle
 }
 
 
@@ -36,11 +35,10 @@ export function changeSource(mapStyle, sourceId, source) {
     ...mapStyle.sources,
     [sourceId]: source
   }
-  const changedStyle = {
+  return {
     ...mapStyle,
     sources: changedSources
   }
-  return changedStyle
 }
 
 export function changeSourceMsp(mapStyle, sourceId, source) {

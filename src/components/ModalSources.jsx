@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {latest} from '@mapbox/mapbox-gl-style-spec'
+import {latest} from '@maplibre/maplibre-gl-style-spec'
 import Modal from './Modal'
 import InputButton from './InputButton'
 import Block from './Block'
@@ -132,6 +132,7 @@ class AddSource extends React.Component {
       }
       case 'geojson_json': return {
         type: 'geojson',
+        cluster: source.cluster || false,
         data: {}
       }
       case 'tilejson_vector': return {

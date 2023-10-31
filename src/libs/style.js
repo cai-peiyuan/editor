@@ -1,4 +1,4 @@
-import deref from '@mapbox/mapbox-gl-style-spec/deref'
+import {derefLayers} from '@maplibre/maplibre-gl-style-spec'
 import tokens from '../config/tokens.json'
 import {getToken} from "../util/auth";
 
@@ -26,19 +26,17 @@ function ensureHasNoInteractive(style) {
     return changedLayer
   })
 
-  const nonInteractiveStyle = {
+  return {
     ...style,
     layers: changedLayers
   }
-  return nonInteractiveStyle
 }
 
 function ensureHasNoRefs(style) {
-  const derefedStyle = {
+  return {
     ...style,
-    layers: deref(style.layers)
+    layers: derefLayers(style.layers)
   }
-  return derefedStyle
 }
 
 function ensureStyleValidity(style) {
@@ -119,7 +117,6 @@ function stripAccessTokens(mapStyle) {
   const changedMetadata = {
     ...mapStyle.metadata
   };
-  delete changedMetadata['maputnik:mapbox_access_token'];
   delete changedMetadata['maputnik:openmaptiles_access_token'];
   return {
     ...mapStyle,

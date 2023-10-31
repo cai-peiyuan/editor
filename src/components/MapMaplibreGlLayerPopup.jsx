@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import IconLayer from './IconLayer'
-import {latest, expression, function as styleFunction} from '@mapbox/mapbox-gl-style-spec'
+import {latest} from '@maplibre/maplibre-gl-style-spec'
 import {getStyleLayerChnNameById, getSourceLayerChnNameById} from '../libs/layer'
 
 function groupFeaturesBySourceLayer(features) {
