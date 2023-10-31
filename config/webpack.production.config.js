@@ -25,11 +25,6 @@ module.exports = {
   module: {
     rules: rules
   },
-  node: {
-    fs: "empty",
-    net: 'empty',
-    tls: 'empty'
-  },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new WebpackCleanupPlugin(),
