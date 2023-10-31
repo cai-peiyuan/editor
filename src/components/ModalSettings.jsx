@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {latest} from '@mapbox/mapbox-gl-style-spec'
+import {latest} from '@maplibre/maplibre-gl-style-spec'
 import Block from './Block'
 import FieldArray from './FieldArray'
 import FieldNumber from './FieldNumber'
@@ -282,10 +282,10 @@ export default class ModalSettings extends React.Component {
           fieldSpec={fieldSpecAdditional.maputnik.style_renderer}
           data-wd-key="modal:settings.maputnik:renderer"
           options={[
-            ['mbgljs', 'MapboxGL JS'],
+            ['mlgljs', 'MapLibreGL JS'],
             ['ol', 'Open Layers (experimental)'],
           ]}
-          value={metadata['maputnik:renderer'] || 'mbgljs'}
+          value={metadata['maputnik:renderer'] || 'mlgljs'}
           onChange={onChangeMetadataProperty.bind(this, 'maputnik:renderer')}
         />*/}
       </div>

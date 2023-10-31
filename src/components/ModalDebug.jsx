@@ -8,10 +8,10 @@ export default class ModalDebug extends React.Component {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     renderer: PropTypes.string.isRequired,
-    onChangeMaboxGlDebug: PropTypes.func.isRequired,
+    onChangeMaplibreGlDebug: PropTypes.func.isRequired,
     onChangeOpenlayersDebug: PropTypes.func.isRequired,
     onOpenToggle: PropTypes.func.isRequired,
-    mapboxGlDebugOptions: PropTypes.object,
+    maplibreGlDebugOptions: PropTypes.object,
     openlayersDebugOptions: PropTypes.object,
     mapView: PropTypes.object,
   }
@@ -31,12 +31,12 @@ export default class ModalDebug extends React.Component {
     >
       <section className="maputnik-modal-section maputnik-modal-shortcuts">
         <h1>Options</h1>
-        {this.props.renderer === 'mbgljs' &&
+        {this.props.renderer === 'mlgljs' &&
           <ul>
-            {Object.entries(this.props.mapboxGlDebugOptions).map(([key, val]) => {
+            {Object.entries(this.props.maplibreGlDebugOptions).map(([key, val]) => {
               return <li key={key}>
                 <label>
-                  <input type="checkbox" checked={val} onClick={(e) => this.props.onChangeMaboxGlDebug(key, e.target.checked)} /> {key}
+                  <input type="checkbox" checked={val} onClick={(e) => this.props.onChangeMaplibreGlDebug(key, e.target.checked)} /> {key}
                 </label>
               </li>
             })}

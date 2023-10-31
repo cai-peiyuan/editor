@@ -2,13 +2,14 @@ import autoBind from 'react-autobind';
 import React from 'react'
 import cloneDeep from 'lodash.clonedeep'
 import clamp from 'lodash.clamp'
+import buffer from 'buffer'
 import get from 'lodash.get'
 import {unset} from 'lodash'
 import {arrayMoveMutable} from 'array-move'
 import url from 'url'
 import hash from "string-hash";
 
-import MapMapboxGl from './MapMapboxGl'
+import MapMaplibreGl from './MapMaplibreGl'
 import MapOpenLayers from './MapOpenLayers'
 import LayerList from './LayerList'
 import LayerEditor from './LayerEditor'
@@ -25,7 +26,8 @@ import ModalSurvey from './ModalSurvey'
 import ModalDebug from './ModalDebug'
 
 import {downloadGlyphsMetadata, downloadSpriteMetadata} from '../libs/metadata'
-import {latest, validate} from '@mapbox/mapbox-gl-style-spec'
+import {latest, validate} from '@maplibre/maplibre-gl-style-spec'
+import { downloadGlyphsMetadata, downloadSpriteMetadata } from '../libs/metadata'
 import style from '../libs/style'
 import {initialStyleUrl, loadStyleUrl, removeStyleQuerystring} from '../libs/urlopen'
 import {undoMessages, redoMessages} from '../libs/diffmessage'
@@ -36,7 +38,6 @@ import LayerWatcher from '../libs/layerwatcher'
 import tokens from '../config/tokens.json'
 import isEqual from 'lodash.isequal'
 import Debug from '../libs/debug'
-import queryUtil from '../libs/query-util'
 import {formatLayerId} from '../util/format';
 import {getLayerChnNameDicByStyleFile} from '../libs/layer'
 
@@ -56,6 +57,8 @@ function normalizeSourceURL(url, apiToken = "") {
     return url;
   }
 }
+// Buffer must be defined globally for @maplibre/maplibre-gl-style-spec validate() function to succeed.
+window.Buffer = buffer.Buffer;
 
 function setFetchAccessToken(url, mapStyle) {
   const matchesTilehosting = url.match(/\.tilehosting\.com/);
@@ -152,7 +155,7 @@ export default class App extends React.Component {
       {
         key: "m",
         handler: () => {
-          document.querySelector(".mapboxgl-canvas").focus();
+          document.querySelector(".maplibregl-canvas").focus();
         }
       },
       {
@@ -237,7 +240,7 @@ export default class App extends React.Component {
         survey: false,
         debug: false,
       },
-      mapboxGlDebugOptions: {
+      maplibreGlDebugOptions: {
         showTileBoundaries: false,
         showCollisionBoxes: false,
         showOverdrawInspector: false,
@@ -406,7 +409,7 @@ export default class App extends React.Component {
     // If we're changing renderer reset the map state.
     if (
       property === 'maputnik:renderer' &&
-      value !== get(this.state.mapStyle, ['metadata', 'maputnik:renderer'], 'mbgljs')
+      value !== get(this.state.mapStyle, ['metadata', 'maputnik:renderer'], 'mlgljs')
     ) {
       this.setState({
         mapState: 'map'
@@ -663,7 +666,7 @@ export default class App extends React.Component {
         ...styleObj,
         metadata: {
           ...styleObj.metadata,
-          'maputnik:renderer': 'mbgljs'
+          'maputnik:renderer': 'mlgljs'
         }
       }
       return changedStyle
@@ -751,7 +754,7 @@ export default class App extends React.Component {
 
   _getRenderer() {
     const metadata = this.state.mapStyle.metadata || {};
-    return metadata['maputnik:renderer'] || 'mbgljs';
+    return metadata['maputnik:renderer'] || 'mlgljs';
   }
 
   onMapChange = (mapView) => {
@@ -790,12 +793,12 @@ export default class App extends React.Component {
         onLayerSelect={this.onLayerSelect}
       />
     } else {
-      mapElement = <MapMapboxGl {...mapProps}
-                                onChange={this.onMapChange}
-                                options={this.state.mapboxGlDebugOptions}
-                                inspectModeEnabled={this.state.mapState === "inspect"}
-                                highlightedLayer={this.state.mapStyle.layers[this.state.selectedLayerIndex]}
-                                onLayerSelect={this.onLayerSelect}/>
+      mapElement = <MapMaplibreGl {...mapProps}
+        onChange={this.onMapChange}
+        options={this.state.maplibreGlDebugOptions}
+        inspectModeEnabled={this.state.mapState === "inspect"}
+        highlightedLayer={this.state.mapStyle.layers[this.state.selectedLayerIndex]}
+        onLayerSelect={this.onLayerSelect} />
     }
 
     let filterName;
@@ -808,7 +811,6 @@ export default class App extends React.Component {
     if (filterName) {
       elementStyle.filter = `url('#${filterName}')`;
     }
-    ;
 
     return <div style={elementStyle} className="maputnik-map__container">
       {mapElement}
@@ -926,10 +928,10 @@ export default class App extends React.Component {
     });
   }
 
-  onChangeMaboxGlDebug = (key, value) => {
+  onChangeMaplibreGlDebug = (key, value) => {
     this.setState({
-      mapboxGlDebugOptions: {
-        ...this.state.mapboxGlDebugOptions,
+      maplibreGlDebugOptions: {
+        ...this.state.maplibreGlDebugOptions,
         [key]: value,
       }
     });
@@ -998,9 +1000,9 @@ export default class App extends React.Component {
     const modals = <div>
       <ModalDebug
         renderer={this._getRenderer()}
-        mapboxGlDebugOptions={this.state.mapboxGlDebugOptions}
+        maplibreGlDebugOptions={this.state.maplibreGlDebugOptions}
         openlayersDebugOptions={this.state.openlayersDebugOptions}
-        onChangeMaboxGlDebug={this.onChangeMaboxGlDebug}
+        onChangeMaplibreGlDebug={this.onChangeMaplibreGlDebug}
         onChangeOpenlayersDebug={this.onChangeOpenlayersDebug}
         isOpen={this.state.isOpen.debug}
         onOpenToggle={this.toggleModal.bind(this, 'debug')}

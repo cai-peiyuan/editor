@@ -1,24 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import MapboxGl from 'mapbox-gl'
+import MapLibreGl from 'maplibre-gl'
 import MapboxInspect from 'mapbox-gl-inspect'
-import MapMapboxGlLayerPopup from './MapMapboxGlLayerPopup'
-import MapMapboxGlFeaturePropertyPopup from './MapMapboxGlFeaturePropertyPopup'
+import MapMaplibreGlLayerPopup from './MapMaplibreGlLayerPopup'
+import MapMaplibreGlFeaturePropertyPopup from './MapMaplibreGlFeaturePropertyPopup'
 import tokens from '../config/tokens.json'
 import colors from 'mapbox-gl-inspect/lib/colors'
 import Color from 'color'
 import ZoomControl from '../libs/zoomcontrol'
 import { colorHighlightedLayer } from '../libs/highlight'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import '../mapboxgl.css'
-import '../libs/mapbox-rtl'
 import FileSaver from 'file-saver'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import '../maplibregl.css'
+import '../libs/maplibre-rtl'
 
 import ExportControl from '../libs/exportcontrol/index'
 import {getLabelName} from "../libs/lang";
 
-const IS_SUPPORTED = MapboxGl.supported();
+const IS_SUPPORTED = MapLibreGl.supported();
 
 function renderPopup(popup, mountNode) {
   ReactDOM.render(popup, mountNode);
@@ -55,7 +55,7 @@ function buildInspectStyle(originalMapStyle, coloredLayers, highlightedLayer) {
   return inspectStyle
 }
 
-export default class MapMapboxGl extends React.Component {
+export default class MapMaplibreGl extends React.Component {
   static propTypes = {
     onDataChange: PropTypes.func,
     onLayerSelect: PropTypes.func.isRequired,
@@ -72,13 +72,11 @@ export default class MapMapboxGl extends React.Component {
     onDataChange: () => {},
     onLayerSelect: () => {},
     onChange: () => {},
-    mapboxAccessToken: tokens.mapbox,
     options: {},
   }
 
   constructor(props) {
     super(props)
-    MapboxGl.accessToken = tokens.mapbox
     this.state = {
       map: null,
       inspect: null,
@@ -89,10 +87,8 @@ export default class MapMapboxGl extends React.Component {
     if(!IS_SUPPORTED) return;
 
     if(!this.state.map) return
-    const metadata = props.mapStyle.metadata || {}
-    MapboxGl.accessToken = metadata['maputnik:mapbox_access_token'] || tokens.mapbox
 
-    //Mapbox GL now does diffing natively so we don't need to calculate
+    //Maplibre GL now does diffing natively so we don't need to calculate
     //the necessary operations ourselves!
     this.state.map.setStyle(
       this.props.replaceAccessTokens(props.mapStyle),
@@ -110,7 +106,7 @@ export default class MapMapboxGl extends React.Component {
     return should;
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     if(!IS_SUPPORTED) return;
 
     const map = this.state.map;
@@ -126,7 +122,7 @@ export default class MapMapboxGl extends React.Component {
     if (map) {
       if (this.props.inspectModeEnabled) {
         // HACK: We need to work out why we need to do this and what's causing
-        // this error. I'm assuming an issue with mapbox-gl update and
+        // this error. I'm assuming an issue with maplibre-gl update and
         // mapbox-gl-inspect.
         try {
           this.state.inspect.render();
@@ -163,7 +159,7 @@ export default class MapMapboxGl extends React.Component {
       maxZoom: 24
     }
 
-    const map = new MapboxGl.Map(mapOpts);
+    const map = new MapLibreGl.Map(mapOpts);
 
     window.mapboxgl = MapboxGl;
     document.mapboxgl = MapboxGl;
@@ -185,7 +181,7 @@ export default class MapMapboxGl extends React.Component {
     const zoomControl = new ZoomControl;
     map.addControl(zoomControl, 'top-right');
 
-    const nav = new MapboxGl.NavigationControl({visualizePitch:true});
+    const nav = new MapLibreGl.NavigationControl({visualizePitch:true});
     map.addControl(nav, 'top-right');
 
     window.exportControl = new ExportControl({
@@ -200,7 +196,7 @@ export default class MapMapboxGl extends React.Component {
     const tmpNode = document.createElement('div');
 
     const inspect = new MapboxInspect({
-      popup: new MapboxGl.Popup({
+      popup: new MapLibreGl.Popup({
         closeOnClick: false
       }),
       showMapPopup: true,
@@ -214,9 +210,9 @@ export default class MapMapboxGl extends React.Component {
       buildInspectStyle: (originalMapStyle, coloredLayers) => buildInspectStyle(originalMapStyle, coloredLayers, this.props.highlightedLayer),
       renderPopup: features => {
         if(this.props.inspectModeEnabled) {
-          return renderPopup(<MapMapboxGlFeaturePropertyPopup features={features} />, tmpNode);
+          return renderPopup(<MapMaplibreGlFeaturePropertyPopup features={features} />, tmpNode);
         } else {
-          return renderPopup(<MapMapboxGlLayerPopup features={features} onLayerSelect={this.onLayerSelectById} zoom={this.state.zoom} />, tmpNode);
+          return renderPopup(<MapMaplibreGlLayerPopup features={features} onLayerSelect={this.onLayerSelectById} zoom={this.state.zoom} />, tmpNode);
         }
       }
     })
