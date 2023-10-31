@@ -21,10 +21,10 @@ import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
 
-console.log('------------', pkgJson);
-console.log('------------', pkgLockJson);
+console.log('pkgJson', pkgJson);
+console.log('pkgLockJson', pkgLockJson);
 const MAPBOX_GL_VERSION = pkgLockJson.packages["node_modules/mapbox-gl"].version;
-const MAPLIBRE_GL_VERSION = pkgLockJson.dependencies["maplibre-gl"].version;
+const MAPLIBRE_GL_VERSION = pkgJson.dependencies["maplibre-gl"].version;
 
 
 class Image extends React.Component {
