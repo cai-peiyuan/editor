@@ -161,9 +161,9 @@ export default class MapMaplibreGl extends React.Component {
 
     const map = new MapLibreGl.Map(mapOpts);
 
-    window.mapboxgl = MapboxGl;
-    document.mapboxgl = MapboxGl;
-    mapboxgl = MapboxGl;
+    window.mapboxgl = MapLibreGl;
+    document.mapboxgl = MapLibreGl;
+    mapboxgl = MapLibreGl;
     window.map = map;
     document.map = map;
 

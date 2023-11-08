@@ -25,7 +25,6 @@ import ModalShortcuts from './ModalShortcuts'
 import ModalSurvey from './ModalSurvey'
 import ModalDebug from './ModalDebug'
 
-import {downloadGlyphsMetadata, downloadSpriteMetadata} from '../libs/metadata'
 import {latest, validate} from '@maplibre/maplibre-gl-style-spec'
 import { downloadGlyphsMetadata, downloadSpriteMetadata } from '../libs/metadata'
 import style from '../libs/style'

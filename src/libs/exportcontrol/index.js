@@ -151,10 +151,10 @@ class ExportControl {
   onAdd(map) {
     this.map = map;
     this.container = document.createElement('div')
-    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group'
+    this.container.className = 'maplibregl-ctrl maplibregl-ctrl-group'
 
     const btn = document.createElement('button')
-    btn.className = 'mapboxgl-ctrl-icon mapbox-gl-download'
+    btn.className = 'maplibregl-ctrl-icon mapbox-gl-download'
     btn.type = "button"
     btn.title = "下载当前视野地图"
     btn.setAttribute("aria-label", "下载当前视野地图")
