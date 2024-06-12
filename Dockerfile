@@ -2,21 +2,15 @@ FROM node:18 as builder
 WORKDIR /maputnik
 
 # Only copy package.json to prevent npm install from running on every build
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci
 
 # Build maputnik
-# TODO:  we should also do a   npm run test   here (needs more dependencies)
 COPY . .
-RUN npm run build
+RUN npx vite build
 
 #---------------------------------------------------------------------------
+# Create a clean nginx-alpine slim image with just the build results
+FROM nginx:alpine-slim
 
-# Create a clean python-based image with just the build results
-FROM python:3-slim
-WORKDIR /maputnik
-
-COPY --from=builder /maputnik/build/build .
-
-EXPOSE 8888
-CMD python -m http.server 8888
+COPY --from=builder /maputnik/dist /usr/share/nginx/html/
