@@ -1,8 +1,6 @@
 import React, {type JSX} from 'react'
 import PropTypes from 'prop-types'
 import { Wrapper, Button, Menu, MenuItem } from 'react-aria-menubutton'
-import {Accordion} from 'react-accessible-accordion';
-import {MdMoreVert} from 'react-icons/md'
 import {BackgroundLayerSpecification, LayerSpecification, SourceSpecification} from 'maplibre-gl';
 
 import FieldJson from './FieldJson'
@@ -17,7 +15,6 @@ import FieldComment from './FieldComment'
 import FieldSource from './FieldSource'
 import FieldSourceLayer from './FieldSourceLayer'
 import {Accordion} from 'react-accessible-accordion';
-
 import {MdMoreVert} from 'react-icons/md'
 
 import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'

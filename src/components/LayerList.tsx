@@ -6,7 +6,6 @@ import LayerListGroup from './LayerListGroup'
 import LayerListItem from './LayerListItem'
 import ModalAdd from './ModalAdd'
 
-import {SortableContainer} from 'react-sortable-hoc';
 import {getLabelName} from "../libs/lang";
 import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
 import type {LayerSpecification} from 'maplibre-gl';

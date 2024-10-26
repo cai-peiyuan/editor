@@ -8,15 +8,11 @@ import Modal from './Modal'
 import InputButton from './InputButton'
 import InputUrl from './InputUrl'
 
-import {MdFileUpload} from 'react-icons/md'
-import {MdAddCircleOutline} from 'react-icons/md'
-
-import {getToken} from '../util/auth.js'
+import {getToken} from '../libs/auth.js'
 import style from '../libs/style'
 import publicStyles from '../config/styles.json'
 import {getLabelName} from "../libs/lang";
 
-var {v1: uuid} = require('uuid');
 
 type PublicStyleProps = {
   url: string

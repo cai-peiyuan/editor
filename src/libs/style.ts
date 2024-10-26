@@ -1,7 +1,7 @@
 import {derefLayers} from '@maplibre/maplibre-gl-style-spec'
 import type {StyleSpecification, LayerSpecification} from 'maplibre-gl'
 import tokens from '../config/tokens.json'
-import {getToken} from "../util/auth";
+import {getToken} from "../libs/auth";
 
 // Empty style is always used if no style could be restored or fetched
 const emptyStyle = ensureStyleValidity({

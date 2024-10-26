@@ -14,8 +14,7 @@ import { deleteSource, addSource, changeSource, deleteSourceMsp, addSourceMsp, c
 import publicSources from '../config/tilesets.json'
 import publicSourcesMsp from '../config/tilesets.json'
 
-import {MdAddCircleOutline, MdDelete} from 'react-icons/md'
-import {getToken} from "../util/auth";
+import {getToken} from "../libs/auth";
 import {getLabelName} from "../libs/lang";
 
 type PublicSourceProps = {

@@ -154,7 +154,7 @@ export default class ZoomProperty extends React.Component<ZoomPropertyProps, Zoo
   render() {
     const zoomFields = this.props.value?.stops.map((stop, idx) => {
       const zoomLevel = stop[0]
-      const key  = this.state.refs[idx];
+      const key  = 'ZoomProperty-' + idx + '-'+ this.state.refs[idx];
       const value = stop[1]
       const deleteStopBtn= <DeleteStopButton onClick={this.props.onDeleteStop?.bind(this, idx)} />
       return <tr

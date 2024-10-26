@@ -1,5 +1,5 @@
 import langDict from '../config/lang.json'
-import {getToken} from "../util/auth";
+import {getToken} from "../libs/auth";
 
 /**
  * 获取翻译字段

@@ -1,4 +1,4 @@
-import {getToken} from "../util/auth";
+import {getToken} from "../libs/auth";
 /**
  * 获取图层配置信息
  */

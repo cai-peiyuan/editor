@@ -27,7 +27,6 @@ import ModalShortcuts from './ModalShortcuts'
 import ModalSurvey from './ModalSurvey'
 import ModalDebug from './ModalDebug'
 
-import {latest, validate} from '@maplibre/maplibre-gl-style-spec'
 import {downloadGlyphsMetadata, downloadSpriteMetadata} from '../libs/metadata'
 import style from '../libs/style'
 import {initialStyleUrl, loadStyleUrl, removeStyleQuerystring} from '../libs/urlopen'
@@ -44,11 +43,10 @@ import {getLayerChnNameDicByStyleFile} from '../libs/layer'
 import { SortEnd } from 'react-sortable-hoc';
 import { MapOptions } from 'maplibre-gl';
 
-import MapboxGl from 'mapbox-gl'
+import MapboxGl from 'maplibre-gl'
 import {getAppConfig, getAppConfig1} from '../libs/config'
-import {getToken} from '../util/auth'
+import {getToken} from '../libs/auth.js'
 import {saveLangToMsp} from "../libs/lang";
-
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
 function normalizeSourceURL(url, apiToken = "") {
@@ -346,9 +344,9 @@ export default class App extends React.Component<any, AppState> {
 
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeyPress);
-    const initialUrl = url.parse(window.location.href, true)
-    const editorConfig = (initialUrl.query.editorConfig) || 'editor_dev'
-    const styleId = (initialUrl.query.styleId) || ''
+    const initialUrl = new URL(window.location.href);
+    const editorConfig = initialUrl.searchParams.get('editorConfig') || 'editor_dev';
+    const styleId = initialUrl.searchParams.get('styleId') || '';
     /**
      * 获取网络资源配置参数
      */
@@ -876,7 +874,7 @@ export default class App extends React.Component<any, AppState> {
     if (this.state.mapState.match(/^filter-/)) {
       filterName = this.state.mapState.replace(/^filter-/, "");
     }
-    const elementStyle: {filter?: string} = = runConfig.mainLayout.toolBar.show === false ? {
+    const elementStyle: {filter?: string} = runConfig.mainLayout.toolBar.show === false ? {
       top: "0px", height: "calc(100% - 0px)"
     } : {};
     if (filterName) {

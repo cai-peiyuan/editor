@@ -1,6 +1,6 @@
 import styleLayerDic from '../config/layer-dic.json'
 import sourceLayerDic from '../config/source-layer.json'
-import {getToken} from "../util/auth";
+import {getToken} from "../libs/auth";
 import {latest} from '@maplibre/maplibre-gl-style-spec'
 import { LayerSpecification } from 'maplibre-gl'
 
@@ -216,6 +216,8 @@ export function getLayerChnNameDicByStyleFile(mapStyle) {
   })
   console.log(JSON.stringify(styleLayerDic))
   console.log(JSON.stringify(sourceLayerDic))
+}
+
 export function layerPrefix(name: string) {
   return name.replace(' ', '-').replace('_', '-').split('-')[0]
 }

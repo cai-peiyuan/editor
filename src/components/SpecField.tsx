@@ -31,7 +31,7 @@ export default class SpecField extends React.Component<SpecFieldProps> {
       TypeBlock = typeBlockFn(this.props);
     }
     else {
-      console.warn("No such type for '%s'", fieldType);
+      console.warn("------- No such type for '%s'", fieldType);
       TypeBlock = Block;
     }
 

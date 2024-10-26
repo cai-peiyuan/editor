@@ -14,9 +14,12 @@ import '../libs/maplibre-rtl'
 //@ts-ignore
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
+import { createRoot } from 'react-dom/client';
 
 function renderPopup(popup: JSX.Element, mountNode: ReactDOM.Container): HTMLElement {
-  ReactDOM.render(popup, mountNode);
+  //ReactDOM.render(popup, mountNode);
+  const root = createRoot(mountNode); // createRoot(container!) if you use TypeScript
+  root.render(popup);
   return mountNode as HTMLElement;
 }
 

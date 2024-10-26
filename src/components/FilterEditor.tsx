@@ -3,7 +3,6 @@ import {mdiTableRowPlusAfter} from '@mdi/js';
 import {isEqual} from 'lodash';
 import {ExpressionSpecification, LegacyFilterSpecification, StyleSpecification} from 'maplibre-gl'
 import {latest, migrate, convertFilter} from '@maplibre/maplibre-gl-style-spec'
-import {mdiFunctionVariant} from '@mdi/js';
 
 import {combiningFilterOps} from '../libs/filterops'
 import InputSelect from './InputSelect'

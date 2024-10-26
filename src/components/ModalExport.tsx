@@ -7,7 +7,6 @@ import pkgJson from '../../package.json'
 import {version} from 'maplibre-gl/package.json'
 import {format} from '@maplibre/maplibre-gl-style-spec'
 import type {StyleSpecification} from 'maplibre-gl'
-import {MdFileDownload} from 'react-icons/md'
 
 import FieldString from './FieldString'
 import InputButton from './InputButton'
@@ -15,7 +14,7 @@ import Modal from './Modal'
 import {MdFileDownload, MdSave, MdThumbDown, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
 import style from '../libs/style'
 import fieldSpecAdditional from '../libs/field-spec-additional'
-import {getToken} from '../util/auth.js'
+import {getToken} from '../libs/auth.js'
 import 'canvas-toBlob'
 import FileSaver from 'file-saver'
 import icons from "../libs/exportcontrol/icons";
@@ -23,12 +22,11 @@ import FieldUrl from "./FieldUrl";
 import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
 
-var {v1: uuid} = require('uuid');
-
 console.log('pkgJson', pkgJson);
 console.log('pkgLockJson', pkgLockJson);
-const MAPBOX_GL_VERSION = pkgLockJson.packages["node_modules/mapbox-gl"].version;
+// const MAPBOX_GL_VERSION = pkgLockJson.packages["node_modules/mapbox-gl"].version;
 const MAPLIBRE_GL_VERSION = pkgJson.dependencies["maplibre-gl"].version;
+import PropTypes from 'prop-types'
 
 
 class Image extends React.Component {
@@ -39,7 +37,7 @@ class Image extends React.Component {
     return <img src={this.props.srcImg} width="200"/>
   }
 }
-const MAPLIBRE_GL_VERSION = version;
+// const MAPLIBRE_GL_VERSION = version;
 
 
 type ModalExportProps = {

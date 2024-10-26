@@ -6,6 +6,8 @@ type AppLayoutProps = {
   toolbar: React.ReactElement
   layerList: React.ReactElement
   layerEditor?: React.ReactElement
+  layerListPlus: React.ReactElement
+  layerEditorPlus?: React.ReactElement
   map: React.ReactElement
   bottom?: React.ReactElement
   modals?: React.ReactNode
@@ -18,18 +20,22 @@ class AppLayout extends React.Component<AppLayoutProps> {
 
   getChildContext() {
     return {
-      reactIconBase: { size: 14 }
+      reactIconBase: { size: 16 }
     }
   }
 
   render() {
     return <div className="maputnik-layout">
       {this.props.toolbar}
+
+      {/*图层列表*/}
       <div className="maputnik-layout-list"
            style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
       >
         {this.props.layerList}
       </div>
+
+      {/*图层详细配置*/}
       <div className="maputnik-layout-drawer"
            style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
       >
@@ -37,6 +43,7 @@ class AppLayout extends React.Component<AppLayoutProps> {
           {this.props.layerEditor}
         </ScrollContainer>
       </div>
+      
       {this.props.map}
       {this.props.bottom && <div className="maputnik-layout-bottom">
         {this.props.bottom}
