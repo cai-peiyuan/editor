@@ -56,6 +56,9 @@
       "url2": "http://121.36.56.157:58090",
       "url": "http://localhost:35001/msp"
     };
+
+    let layerGroupTree = [];
+
     let layerDic = {
       "sourceLayer": {
 
@@ -96,8 +99,9 @@
       styleLayerLang: 'zh', // 样式图层id翻译语言  en为原始id  zh翻译成中文图层名称
       sourceLayerLang: 'zh', //　数据源切图中的图层id en为显示原始id zh翻译成中文名称
       rumMode: 'customer', // 系统功能界面控制 customer 为用户部署  developer为开发样式部署 内部使用时部署
-      addStyleLayerCommentToMsp: true,
-      addSourceLayerToMsp: true,
+      addStyleLayerCommentToMsp: true, //自动添加样式图层备注到msp
+      addSourceLayerToMsp: true, //自动添加数据图层到msp
+      layerEditMode: 'mini', //简版的图层编辑模式
       mainLayout: {
         toolBar : {
           show: true,

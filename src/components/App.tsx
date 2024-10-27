@@ -15,6 +15,7 @@ import MapMaplibreGl from './MapMaplibreGl'
 import MapOpenLayers from './MapOpenLayers'
 import LayerList from './LayerList'
 import LayerEditor from './LayerEditor'
+import LayerEditorMini from './LayerEditorMini'
 import AppToolbar, { MapState } from './AppToolbar'
 import AppLayout from './AppLayout'
 import MessagePanel from './AppMessagePanel'
@@ -46,7 +47,8 @@ import { MapOptions } from 'maplibre-gl';
 import MapboxGl from 'maplibre-gl'
 import {getAppConfig, getAppConfig1} from '../libs/config'
 import {getToken} from '../libs/auth.js'
-import {saveLangToMsp} from "../libs/lang";
+import {saveLangToMsp} from "../libs/lang.ts";
+import LayerListGroupList from "./LayerListGroupList";
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
 function normalizeSourceURL(url, apiToken = "") {
@@ -397,11 +399,20 @@ export default class App extends React.Component<any, AppState> {
         })
       }
       /***
+       * 加载图层分组字典
+       */
+      if (data.layerGroupTree) {
+        layerGroupTree = Object.assign(layerGroupTree, (data.layerGroupTree));
+      }
+
+      /***
        * 加载图层字典
        */
       if (data.layerDic) {
         layerDic = Object.assign(layerDic, (data.layerDic));
       }
+
+
       /***
        * 加载翻译字典
        */
@@ -1035,7 +1046,39 @@ export default class App extends React.Component<any, AppState> {
       errors={this.state.errors}
     />
 
+    /*简化版的图层分组*/
+    const layerListGroupList = <LayerListGroupList
+      onMoveLayer={this.onMoveLayer}
+      onLayerDestroy={this.onLayerDestroy}
+      onLayerCopy={this.onLayerCopy}
+      onLayerVisibilityToggle={this.onLayerVisibilityToggle}
+      onLayersChange={this.onLayersChange}
+      onLayerSelect={this.onLayerSelect}
+      selectedLayerIndex={this.state.selectedLayerIndex}
+      layers={layers}
+      sources={this.state.sources}
+      errors={this.state.errors}
+    />
+
     const layerEditor = selectedLayer ? <LayerEditor
+      key={this.state.selectedLayerOriginalId}
+      layer={selectedLayer}
+      layerIndex={this.state.selectedLayerIndex}
+      isFirstLayer={this.state.selectedLayerIndex < 1}
+      isLastLayer={this.state.selectedLayerIndex === this.state.mapStyle.layers.length - 1}
+      sources={this.state.sources}
+      vectorLayers={this.state.vectorLayers}
+      spec={this.state.spec}
+      onMoveLayer={this.onMoveLayer}
+      onLayerChanged={this.onLayerChanged}
+      onLayerDestroy={this.onLayerDestroy}
+      onLayerCopy={this.onLayerCopy}
+      onLayerVisibilityToggle={this.onLayerVisibilityToggle}
+      onLayerIdChange={this.onLayerIdChange}
+      errors={this.state.errors}
+    /> : undefined
+
+    const layerEditorMini = selectedLayer ? <LayerEditorMini
       key={this.state.selectedLayerOriginalId}
       layer={selectedLayer}
       layerIndex={this.state.selectedLayerIndex}
@@ -1118,7 +1161,9 @@ export default class App extends React.Component<any, AppState> {
     return <AppLayout
       toolbar={toolbar}
       layerList={layerList}
+      LayerListGroupList={layerListGroupList}
       layerEditor={layerEditor}
+      layerEditorMini={layerEditorMini}
       map={this.mapRenderer()}
       bottom={bottomPanel}
       modals={modals}

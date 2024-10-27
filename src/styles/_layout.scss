@@ -14,6 +14,7 @@
   font-family: $font-family;
   color: $color-white;
 
+  //图层列表
   &-list {
     position: fixed;
     bottom: 0;
@@ -25,6 +26,7 @@
     background-color: $color-black;
   }
 
+  //图层配置
   &-drawer {
     position: fixed;
     bottom: 0;
@@ -33,6 +35,18 @@
     left: 250px;
     z-index: 1;
     width: 370px;
+    background-color: $color-black;
+  }
+
+  //图层列表
+  &-list-mini {
+    position: fixed;
+    bottom: 0;
+    height: calc(100% - #{$toolbar-height + $toolbar-offset});
+    top: $toolbar-height + $toolbar-offset;
+    left: 625px;
+    z-index: 1;
+    width: 245px;
     background-color: $color-black;
   }
 

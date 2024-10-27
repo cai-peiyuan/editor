@@ -7,7 +7,7 @@ import FieldSelect from './FieldSelect'
 import FieldDynamicArray from './FieldDynamicArray'
 import FieldArray from './FieldArray'
 import FieldJson from './FieldJson'
-import {getLabelName} from '../libs/lang.js'
+import {getLabelName} from '../libs/lang.ts'
 import FieldCheckbox from './FieldCheckbox'
 
 export type EditorMode = "video" | "image" | "tilejson_vector" | "tilexyz_raster" | "tilejson_raster" | "tilexyz_raster-dem" | "tilejson_raster-dem" | "tilexyz_vector" | "geojson_url" | "geojson_json" | null;

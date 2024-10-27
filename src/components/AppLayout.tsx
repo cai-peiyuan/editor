@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ScrollContainer from './ScrollContainer'
+import LayerListGroupList from "./LayerListGroupList";
 
 type AppLayoutProps = {
   toolbar: React.ReactElement
   layerList: React.ReactElement
   layerEditor?: React.ReactElement
-  layerListPlus: React.ReactElement
-  layerEditorPlus?: React.ReactElement
+  LayerListGroupList: React.ReactElement
+  layerEditorMini?: React.ReactElement
   map: React.ReactElement
   bottom?: React.ReactElement
   modals?: React.ReactNode
@@ -40,10 +41,17 @@ class AppLayout extends React.Component<AppLayoutProps> {
            style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
       >
         <ScrollContainer>
-          {this.props.layerEditor}
+          {runConfig.layerEditMode == 'pro'?this.props.layerEditor:this.props.layerEditorMini}
         </ScrollContainer>
       </div>
-      
+
+
+      <div className="maputnik-layout-list-mini"
+           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
+      >
+        {this.props.LayerListGroupList}
+      </div>
+
       {this.props.map}
       {this.props.bottom && <div className="maputnik-layout-bottom">
         {this.props.bottom}

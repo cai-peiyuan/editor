@@ -4,7 +4,6 @@ import lodash from 'lodash';
 
 import LayerListGroup from './LayerListGroup'
 import LayerListItem from './LayerListItem'
-import ModalAdd from './ModalAdd'
 
 import {getLabelName} from "../libs/lang";
 import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
@@ -12,6 +11,7 @@ import type {LayerSpecification} from 'maplibre-gl';
 import generateUniqueId from '../libs/document-uid';
 import { findClosestCommonPrefix, layerPrefix } from '../libs/layer';
 
+/*图层分组*/
 type LayerListContainerProps = {
   layers: LayerSpecification[]
   selectedLayerIndex: number
@@ -93,29 +93,6 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     })
   }
 
-  groupedLayers(): (LayerSpecification & {key: string})[][] {
-    const groups = []
-    const layerIdCount = new Map();
-
-    for (let i = 0; i < this.props.layers.length; i++) {
-      const origLayer = this.props.layers[i];
-      const previousLayer = this.props.layers[i-1]
-      layerIdCount.set(origLayer.id,
-        layerIdCount.has(origLayer.id) ? layerIdCount.get(origLayer.id) + 1 : 0
-      );
-      const layer = {
-        ...origLayer,
-        key: `layers-list-${origLayer.id}-${layerIdCount.get(origLayer.id)}`,
-      }
-      if(previousLayer && layerPrefix(previousLayer.id) == layerPrefix(layer.id)) {
-        const lastGroup = groups[groups.length - 1]
-        lastGroup.push(layer)
-      } else {
-        groups.push([layer])
-      }
-    }
-    return groups
-  }
 
   toggleLayerGroup(groupPrefix: string, idx: number) {
     const lookupKey = [groupPrefix, idx].join('-')
@@ -204,61 +181,44 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
 
     const listItems: JSX.Element[] = []
     let idx = 0
-    const layersByGroup = this.groupedLayers();
-    layersByGroup.forEach(layers => {
-      const groupPrefix = layerPrefix(layers[0].id)
+    const layersByGroup = layerGroupTree;
+    layersByGroup.forEach(layerGroup => {
+      const groupPrefix = layerGroup.id
+
       /*前缀相同的图层分组显示*/
-      if(layers.length > 1) {
         const grp = <LayerListGroup
           data-wd-key={[groupPrefix, idx].join('-')}
-          aria-controls={layers.map(l => l.key).join(" ")}
+          aria-controls={layerGroup.id}
           key={`group-${groupPrefix}-${idx}`}
-          title={groupPrefix}
+          title={layerGroup.data.name}
           isActive={!this.isCollapsed(groupPrefix, idx) || idx === this.props.selectedLayerIndex}
           onActiveToggle={this.toggleLayerGroup.bind(this, groupPrefix, idx)}
         />
         listItems.push(grp)
+
+      if(layerGroup.children){
+        layerGroup.children.forEach((layer, idxInGroup) => {
+
+          const listItem = <LayerListItem
+              className={classnames({
+              })}
+              index={idx}
+              key={layer.id}
+              id={layer.id}
+              layerId={layer.data.name}
+              layerIndex={idx}
+              layerType={'line'}
+              visibility={true}
+              isSelected={idx === this.props.selectedLayerIndex}
+              onLayerSelect={this.props.onLayerSelect}
+              onLayerDestroy={this.props.onLayerDestroy?.bind(this)}
+              onLayerCopy={this.props.onLayerCopy.bind(this)}
+              onLayerVisibilityToggle={this.props.onLayerVisibilityToggle.bind(this)}
+          />
+          listItems.push(listItem)
+          idx += 1
+        })
       }
-
-      layers.forEach((layer, idxInGroup) => {
-        const groupIdx = findClosestCommonPrefix(this.props.layers, idx)
-
-        const layerError = this.props.errors.find(error => {
-          return (
-            error.parsed &&
-            error.parsed.type === "layer" &&
-            error.parsed.data.index == idx
-          );
-        });
-
-        const additionalProps: {ref?: React.RefObject<any>} = {};
-        if (idx === this.props.selectedLayerIndex) {
-          additionalProps.ref = this.selectedItemRef;
-        }
-
-        const listItem = <LayerListItem
-          className={classnames({
-            'maputnik-layer-list-item-collapsed': layers.length > 1 && this.isCollapsed(groupPrefix, groupIdx) && idx !== this.props.selectedLayerIndex,
-            'maputnik-layer-list-item-group-last': idxInGroup == layers.length - 1 && layers.length > 1,
-            'maputnik-layer-list-item--error': !!layerError
-          })}
-          index={idx}
-          key={layer.key}
-          id={layer.key}
-          layerId={layer.id}
-          layerIndex={idx}
-          layerType={layer.type}
-          visibility={(layer.layout || {}).visibility}
-          isSelected={idx === this.props.selectedLayerIndex}
-          onLayerSelect={this.props.onLayerSelect}
-          onLayerDestroy={this.props.onLayerDestroy?.bind(this)}
-          onLayerCopy={this.props.onLayerCopy.bind(this)}
-          onLayerVisibilityToggle={this.props.onLayerVisibilityToggle.bind(this)}
-          {...additionalProps}
-        />
-        listItems.push(listItem)
-        idx += 1
-      })
     })
 
     return <section
@@ -267,41 +227,11 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
       aria-label="Layers list"
       ref={this.scrollContainerRef}
     >
-      <ModalAdd
-        key={this.state.keys.add}
-        layers={this.props.layers}
-        sources={this.props.sources}
-        isOpen={this.state.isOpen.add}
-        onOpenToggle={this.toggleModal.bind(this, 'add')}
-        onLayersChange={this.props.onLayersChange}
-      />
-      <header className="maputnik-layer-list-header">
-        <span className="maputnik-layer-list-header-title">{ getLabelName("Layers") } </span>
-        <span className="maputnik-space" />
 
-        {/*展开和收缩所有图层*/}
-        <div className="maputnik-default-property">
-          <div className="maputnik-multibutton">
-            <button
-              id="skip-target-layer-list"
-              data-wd-key="skip-target-layer-list"
-              onClick={this.toggleLayers}
-              className="maputnik-button">
-              {this.state.areAllGroupsExpanded === true ? getLabelName("Collapse") : getLabelName("Expand")}
-            </button>
-          </div>
-        </div>
-        <div className="maputnik-default-property">
-          <div className="maputnik-multibutton">
-            <button
-              onClick={this.toggleModal.bind(this, 'add')}
-              data-wd-key="layer-list:add-layer"
-              style={{display:runConfig.mainLayout.layerList.addLayer?"block":"none"}}
-              className="maputnik-button maputnik-button-selected">
-              {getLabelName("Add Layer")}
-            </button>
-          </div>
-        </div>
+      <header className="maputnik-layer-list-header">
+        {/*组件标题*/}
+        <span className="maputnik-layer-list-header-title">{ getLabelName("Layers Group") } </span>
+        <span className="maputnik-space" />
       </header>
       <div
         role="navigation"
@@ -322,7 +252,7 @@ type LayerListProps = LayerListContainerProps & {
   onMoveLayer: SortEndHandler
 };
 
-export default class LayerList extends React.Component<LayerListProps> {
+export default class LayerListGroupList extends React.Component<LayerListProps> {
   render() {
     return <LayerListContainerSortable
       {...this.props}
