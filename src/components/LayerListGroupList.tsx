@@ -2,8 +2,8 @@ import React, {type JSX} from 'react'
 import classnames from 'classnames'
 import lodash from 'lodash';
 
-import LayerListGroup from './LayerListGroup'
-import LayerListItem from './LayerListItem'
+import LayerListGroupListTitle from './LayerListGroupListTitle'
+import LayerListGroupListItem from './LayerListGroupListItem'
 
 import {getLabelName} from "../libs/lang";
 import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
@@ -94,6 +94,11 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
   }
 
 
+  /**
+   * 关闭某个分类下的子分类
+   * @param groupPrefix
+   * @param idx
+   */
   toggleLayerGroup(groupPrefix: string, idx: number) {
     const lookupKey = [groupPrefix, idx].join('-')
     const newGroups = { ...this.state.collapsedGroups }
@@ -186,7 +191,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
       const groupPrefix = layerGroup.id
 
       /*前缀相同的图层分组显示*/
-        const grp = <LayerListGroup
+        const grp = <LayerListGroupListTitle
           data-wd-key={[groupPrefix, idx].join('-')}
           aria-controls={layerGroup.id}
           key={`group-${groupPrefix}-${idx}`}
@@ -199,7 +204,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
       if(layerGroup.children){
         layerGroup.children.forEach((layer, idxInGroup) => {
 
-          const listItem = <LayerListItem
+          const listItem = <LayerListGroupListItem
               className={classnames({
               })}
               index={idx}
@@ -207,7 +212,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
               id={layer.id}
               layerId={layer.data.name}
               layerIndex={idx}
-              layerType={'line'}
+              layerType={layer.data.layerGroupType}
               visibility={true}
               isSelected={idx === this.props.selectedLayerIndex}
               onLayerSelect={this.props.onLayerSelect}
