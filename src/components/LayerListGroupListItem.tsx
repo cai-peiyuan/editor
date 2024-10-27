@@ -94,7 +94,7 @@ type LayerListGroupListItemProps = {
   isSelected?: boolean
   visibility?: string
   className?: string
-  onLayerSelect(...args: unknown[]): unknown
+  onLayerGroupSelect(...args: unknown[]): unknown
   onLayerCopy?(...args: unknown[]): unknown
   onLayerDestroy?(...args: unknown[]): unknown
   onLayerVisibilityToggle?(...args: unknown[]): unknown
@@ -127,7 +127,7 @@ class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps
     return <li
       id={this.props.id}
       key={this.props.layerId}
-      onClick={_e => this.props.onLayerSelect(this.props.layerIndex)}
+      onClick={_e => this.props.onLayerGroupSelect(this.props.id)}
       data-wd-key={"layer-list-item:"+this.props.layerId}
       className={classnames({
         "maputnik-layer-list-group-item": true,

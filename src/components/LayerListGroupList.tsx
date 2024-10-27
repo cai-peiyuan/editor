@@ -14,9 +14,9 @@ import { findClosestCommonPrefix, layerPrefix } from '../libs/layer';
 /*图层分组*/
 type LayerListContainerProps = {
   layers: LayerSpecification[]
-  selectedLayerIndex: number
+  selectedLayerGroupId: string
   onLayersChange(layers: LayerSpecification[]): unknown
-  onLayerSelect(...args: unknown[]): unknown
+  onLayerGroupSelect(...args: unknown[]): unknown
   onLayerDestroy?(...args: unknown[]): unknown
   onLayerCopy(...args: unknown[]): unknown
   onLayerVisibilityToggle(...args: unknown[]): unknown
@@ -34,7 +34,7 @@ type LayerListContainerState = {
 // List of collapsible layer editors
 class LayerListContainer extends React.Component<LayerListContainerProps, LayerListContainerState> {
   static defaultProps = {
-    onLayerSelect: () => {},
+    onLayerGroupSelect: () => {},
   }
   selectedItemRef: React.RefObject<any>;
   scrollContainerRef: React.RefObject<HTMLElement>;
@@ -55,33 +55,15 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     }
   }
 
-  toggleModal(modalName: string) {
-    this.setState({
-      keys: {
-        ...this.state.keys,
-        [modalName]: +generateUniqueId(),
-      },
-      isOpen: {
-        ...this.state.isOpen,
-        [modalName]: !this.state.isOpen[modalName]
-      }
-    })
-  }
-
   toggleLayers = () => {
     let idx = 0
-
     const newGroups: {[key:string]: boolean} = {}
-
     this.groupedLayers().forEach(layers => {
       const groupPrefix = layerPrefix(layers[0].id)
       const lookupKey = [groupPrefix, idx].join('-')
-
-
       if (layers.length > 1) {
         newGroups[lookupKey] = this.state.areAllGroupsExpanded
       }
-
       layers.forEach((_layer) => {
         idx += 1
       })
@@ -95,12 +77,13 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
 
 
   /**
-   * 关闭某个分类下的子分类
-   * @param groupPrefix
+   * 打开或者关闭某个分类下的子分类
+   * @param groupId
    * @param idx
    */
-  toggleLayerGroup(groupPrefix: string, idx: number) {
-    const lookupKey = [groupPrefix, idx].join('-')
+  toggleLayerGroup(groupId: string, idx: number) {
+    const lookupKey = [groupId, idx].join('-')
+    console.log("折叠分组", lookupKey)
     const newGroups = { ...this.state.collapsedGroups }
     if(lookupKey in this.state.collapsedGroups) {
       newGroups[lookupKey] = !this.state.collapsedGroups[lookupKey]
@@ -112,8 +95,13 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     })
   }
 
-  isCollapsed(groupPrefix: string, idx: number) {
-    const collapsed = this.state.collapsedGroups[[groupPrefix, idx].join('-')]
+  /**
+   * 判断一个分组是否为打开状态
+   * @param groupId
+   * @param idx
+   */
+  isCollapsed(groupId: string, idx: number) {
+    const collapsed = this.state.collapsedGroups[[groupId, idx].join('-')]
     return collapsed === undefined ? true : collapsed
   }
 
@@ -162,7 +150,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
   }
 
   componentDidUpdate (prevProps: LayerListContainerProps) {
-    if (prevProps.selectedLayerIndex !== this.props.selectedLayerIndex) {
+    if (prevProps.selectedLayerGroupId !== this.props.selectedLayerGroupId) {
       const selectedItemNode = this.selectedItemRef.current;
       if (selectedItemNode && selectedItemNode.node) {
         const target = selectedItemNode.node;
@@ -187,43 +175,45 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     const listItems: JSX.Element[] = []
     let idx = 0
     const layersByGroup = layerGroupTree;
-    layersByGroup.forEach(layerGroup => {
-      const groupPrefix = layerGroup.id
+    layersByGroup.forEach( (layerGroup) => {
+      const groupId = layerGroup.id
 
       /*前缀相同的图层分组显示*/
         const grp = <LayerListGroupListTitle
-          data-wd-key={[groupPrefix, idx].join('-')}
+          data-wd-key={[groupId, idx].join('-')}
           aria-controls={layerGroup.id}
-          key={`group-${groupPrefix}-${idx}`}
+          key={`group-${groupId}-${idx}`}
           title={layerGroup.data.name}
-          isActive={!this.isCollapsed(groupPrefix, idx) || idx === this.props.selectedLayerIndex}
-          onActiveToggle={this.toggleLayerGroup.bind(this, groupPrefix, idx)}
+          isActive={!this.isCollapsed(groupId, idx) || groupId === this.props.selectedLayerGroupId}
+          onActiveToggle={this.toggleLayerGroup.bind(this, groupId, idx)}
         />
         listItems.push(grp)
 
       if(layerGroup.children){
-        layerGroup.children.forEach((layer, idxInGroup) => {
+        layerGroup.children.forEach((childLayerGroup, idxInGroup) => {
 
           const listItem = <LayerListGroupListItem
               className={classnames({
+                'maputnik-layer-list-group-item-collapsed': this.isCollapsed(groupId, idx) //判断是否隐藏折叠起来
               })}
-              index={idx}
-              key={layer.id}
-              id={layer.id}
-              layerId={layer.data.name}
-              layerIndex={idx}
-              layerType={layer.data.layerGroupType}
+              index={idxInGroup}
+              key={childLayerGroup.id}
+              id={childLayerGroup.id}
+              layerId={childLayerGroup.data.name}
+              layerIndex={idxInGroup}
+              layerType={childLayerGroup.data.layerGroupType}
               visibility={true}
-              isSelected={idx === this.props.selectedLayerIndex}
-              onLayerSelect={this.props.onLayerSelect}
+              isSelected={childLayerGroup.id === this.props.selectedLayerGroupId}
+              onLayerGroupSelect={this.props.onLayerGroupSelect}
               onLayerDestroy={this.props.onLayerDestroy?.bind(this)}
               onLayerCopy={this.props.onLayerCopy.bind(this)}
               onLayerVisibilityToggle={this.props.onLayerVisibilityToggle.bind(this)}
           />
           listItems.push(listItem)
-          idx += 1
+          //idxInGroup += 1
         })
       }
+      idx += 1
     })
 
     return <section
@@ -253,18 +243,14 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
 // eslint-disable-next-line react-refresh/only-export-components
 const LayerListContainerSortable = SortableContainer((props: LayerListContainerProps) => <LayerListContainer {...props} />)
 
-type LayerListProps = LayerListContainerProps & {
-  onMoveLayer: SortEndHandler
-};
 
-export default class LayerListGroupList extends React.Component<LayerListProps> {
+export default class LayerListGroupList extends React.Component<LayerListContainerProps> {
   render() {
     return <LayerListContainerSortable
       {...this.props}
       helperClass='sortableHelper'
-      onSortEnd={this.props.onMoveLayer.bind(this)}
-      useDragHandle={true}
-      shouldCancelStart={() => false}
+      useDragHandle={false}
+      shouldCancelStart={() => true}
     />
   }
 }

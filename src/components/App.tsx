@@ -280,6 +280,7 @@ export default class App extends React.Component<any, AppState> {
       mapStyle: style.emptyStyle,
       spriteName: 'mapabcjt',
       selectedLayerIndex: 0,
+      selectedLayerGroupId: '',
       sources: {},
       vectorLayers: {},
       mapState: "map",
@@ -403,6 +404,13 @@ export default class App extends React.Component<any, AppState> {
        */
       if (data.layerGroupTree) {
         layerGroupTree = Object.assign(layerGroupTree, (data.layerGroupTree));
+      }
+
+      /**
+       * 图层分组对应的具体图层
+       */
+      if (data.groupedLayerMap) {
+        groupedLayerMap = Object.assign(groupedLayerMap, (data.groupedLayerMap));
       }
 
       /***
@@ -975,10 +983,27 @@ export default class App extends React.Component<any, AppState> {
     }
   }
 
+  /**
+   * 图层被选择
+   * @param index
+   */
   onLayerSelect = (index: number) => {
     this.setState({
       selectedLayerIndex: index,
       selectedLayerOriginalId: this.state.mapStyle.layers[index].id,
+    }, this.setStateInUrl);
+  }
+
+  /**
+   * 图层分组选择
+   * @param layerGroupId
+   */
+  onLayerGroupSelect = (layerGroupId: string) => {
+    console.log("选择某个图层分组 ->", layerGroupId)
+    console.log("分组下的图层配置 ->", groupedLayerMap[layerGroupId])
+    this.setState({
+      selectedLayerOriginalId: this.state.layerGroupId,
+      selectedLayerGroupId: layerGroupId,
     }, this.setStateInUrl);
   }
 
@@ -1048,13 +1073,12 @@ export default class App extends React.Component<any, AppState> {
 
     /*简化版的图层分组*/
     const layerListGroupList = <LayerListGroupList
-      onMoveLayer={this.onMoveLayer}
       onLayerDestroy={this.onLayerDestroy}
       onLayerCopy={this.onLayerCopy}
       onLayerVisibilityToggle={this.onLayerVisibilityToggle}
       onLayersChange={this.onLayersChange}
-      onLayerSelect={this.onLayerSelect}
-      selectedLayerIndex={this.state.selectedLayerIndex}
+      onLayerGroupSelect={this.onLayerGroupSelect}
+      selectedLayerGroupId={this.state.selectedLayerGroupId}
       layers={layers}
       sources={this.state.sources}
       errors={this.state.errors}
