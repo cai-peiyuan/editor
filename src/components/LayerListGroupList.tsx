@@ -104,23 +104,25 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
 
       if(layerGroup.children){
         layerGroup.children.forEach((childLayerGroup, idxInGroup) => {
-
-          const listItem = <LayerListGroupListItem
-              className={classnames({
-                'maputnik-layer-list-group-item-collapsed': this.isCollapsed(groupId, idx) //判断是否隐藏折叠起来
-              })}
-              index={idxInGroup}
-              key={childLayerGroup.id}
-              id={childLayerGroup.id}
-              layerId={childLayerGroup.data.name}
-              layerIndex={idxInGroup}
-              layerType={childLayerGroup.data.layerGroupType}
-              visibility={true}
-              isSelected={childLayerGroup.id === this.props.selectedLayerGroupId}
-              onLayerGroupSelect={this.props.onLayerGroupSelect}
-              onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}
-          />
-          listItems.push(listItem)
+            //没有对应图层的分组不显示
+          if(groupedLayerMap.groupToLayer[childLayerGroup.id]){
+              const listItem = <LayerListGroupListItem
+                  className={classnames({
+                    'maputnik-layer-list-group-item-collapsed': this.isCollapsed(groupId, idx) //判断是否隐藏折叠起来
+                  })}
+                  index={idxInGroup}
+                  key={childLayerGroup.id}
+                  id={childLayerGroup.id}
+                  layerId={childLayerGroup.data.name}
+                  layerIndex={idxInGroup}
+                  layerType={childLayerGroup.data.layerGroupType}
+                  visibility={true}
+                  isSelected={childLayerGroup.id === this.props.selectedLayerGroupId}
+                  onLayerGroupSelect={this.props.onLayerGroupSelect}
+                  onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}
+              />
+              listItems.push(listItem)
+          }
           //idxInGroup += 1
         })
       }

@@ -750,7 +750,18 @@ export default class App extends React.Component<any, AppState> {
     const changedLayers = this.state.mapStyle.layers.slice(0)
     changedLayers[index] = layer
 
+    console.log("onLayerChanged . layer ->", layer)
+    console.log("onLayerChanged . onLayerChanged ->", onLayerChanged)
     this.onLayersChange(changedLayers)
+  }
+  /**
+   * 更新一个分组的图层的属性
+   * @param groupId
+   * @param layer
+   */
+  onLayerGroupChanged = (groupId: string, layer: LayerSpecification) => {
+    console.log("onLayerGroupChanged . groupId ->", groupId)
+    console.log("onLayerGroupChanged . layer ->", layer)
   }
 
   setMapState = (newState: MapState) => {
@@ -1025,6 +1036,7 @@ export default class App extends React.Component<any, AppState> {
     console.log("选择某个图层分组 ->", this.state.selectedLayerGroupId)
     console.log("选择某个图层分组 ->", this.state.selectedLayerOriginalId)
     console.log("分组下的图层配置 ->", groupedLayerMap.groupToLayer[layerGroupId])
+    console.log("选择某个图层分组 ->", groupedLayerMap.groupLayer[layerGroupId])
     this.setState({
       selectedLayerOriginalId: this.state.selectedLayerGroupId,
       selectedLayerGroupId: layerGroupId,
@@ -1075,8 +1087,10 @@ export default class App extends React.Component<any, AppState> {
         return []
       }
       let groupLayers = groupedLayerMap.groupToLayer[selectedLayerGroupId];
-
-      console.log("计算某个分组下的图层对象 -> ", selectedLayerGroupId, groupLayers, layers)
+      let layerIdsArry = groupLayers.map(layer => layer.layerId)
+      let groupStyleLayers = layers.filter(layer=>layerIdsArry.includes(layer.id))
+     // console.log("计算某个分组下的图层对象 -> ", selectedLayerGroupId, groupLayers, layerIdsArry, layers, groupStyleLayers)
+      return groupStyleLayers;
   }
   //数据 变化后会重新执行render方法
   render() {
@@ -1084,12 +1098,42 @@ export default class App extends React.Component<any, AppState> {
     const layers = this.state.mapStyle.layers || []
     const selectedLayer = layers.length > 0 ? layers[this.state.selectedLayerIndex] : undefined
     //已经选择了一个分组
-    const selectedLayerGroup = this.state.selectedLayerGroupId == '' ? undefined: this.state.selectedLayerGroupId
+    const selectedLayerGroup = this.state.selectedLayerGroupId === '' ? undefined: this.state.selectedLayerGroupId
     //选择的一个分组下的图层
     const selectedGroupLayers = this.getSelectedGroupLayers(this.state.selectedLayerGroupId, layers)
+    //分组下的图层应该都是同一类型  所以取第一个layer
+    const selectedGroupLayer = selectedGroupLayers[0];
 
     console.log('app render layers ->', layers)
     console.log('selectedLayerGroup ->', selectedLayerGroup)
+    console.log('selectedGroupLayers ->', selectedGroupLayers)
+
+    /*简化版的图层分组*/
+    const layerListGroupList = <LayerListGroupList
+        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
+        onLayersGroupChange={this.onLayersGroupChange}
+        onLayerGroupSelect={this.onLayerGroupSelect}
+        selectedLayerGroupId={this.state.selectedLayerGroupId}
+        layers={layers}
+        sources={this.state.sources}
+        errors={this.state.errors}
+    />
+    /**
+     * 简化版编辑器
+     */
+    const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
+        key={this.state.selectedLayerOriginalId} //选中的分组id
+        layer={selectedGroupLayer}
+        layers={layers}  //所有的图层
+        selectedGroupLayers={selectedGroupLayers} //选中的分组里面的图层layer  样式文件中查找到的图层
+        selectedLayerGroupId={this.state.selectedLayerGroupId} //选中的分组id、
+        sources={this.state.sources} //数据源
+        vectorLayers={this.state.vectorLayers}
+        spec={this.state.spec}  //图层规范
+        onLayerGroupChanged={this.onLayerGroupChanged}
+        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
+        errors={this.state.errors}
+    /> : undefined
 
     const toolbar = <AppToolbar
       renderer={this._getRenderer()}
@@ -1134,34 +1178,6 @@ export default class App extends React.Component<any, AppState> {
       errors={this.state.errors}
     /> : undefined
 
-    /*简化版的图层分组*/
-    const layerListGroupList = <LayerListGroupList
-        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
-        onLayersGroupChange={this.onLayersGroupChange}
-        onLayerGroupSelect={this.onLayerGroupSelect}
-        selectedLayerGroupId={this.state.selectedLayerGroupId}
-        layers={layers}
-        sources={this.state.sources}
-        errors={this.state.errors}
-    />
-
-    /**
-     * 简化版编辑器
-     */
-    const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
-      key={this.state.selectedLayerOriginalId}
-      layer={selectedLayer}
-      layers={layers}
-      selectedGroupLayers={selectedGroupLayers}
-      selectedLayerGroupId={this.state.selectedLayerGroupId}
-      layerIndex={this.state.selectedLayerIndex}
-      sources={this.state.sources}
-      vectorLayers={this.state.vectorLayers}
-      spec={this.state.spec}
-      onLayerChanged={this.onLayerChanged}
-      onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
-      errors={this.state.errors}
-    /> : undefined
 
     /* 主页下部分错误提示信息组件 */
     const bottomPanel = (this.state.errors.length + this.state.infos.length) > 0 ? <MessagePanel

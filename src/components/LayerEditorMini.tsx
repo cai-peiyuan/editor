@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { Wrapper, Button, Menu, MenuItem } from 'react-aria-menubutton'
 import {BackgroundLayerSpecification, LayerSpecification, SourceSpecification} from 'maplibre-gl';
 
-import FieldJson from './FieldJson'
-import FilterEditor from './FilterEditor'
 import PropertyGroup from './PropertyGroup'
 import LayerEditorGroup from './LayerEditorGroup'
 import FieldType from './FieldType'
@@ -26,11 +24,7 @@ function getLayoutForType(type: LayerSpecification["type"]) {
 }
 
 function layoutGroups(layerType: LayerSpecification["type"]): {title: string, type: string, fields?: string[]}[] {
-  const layerGroup = {
-    title: getLabelName("Layer Basic"),
-    type: 'layer'
-  }
-  return [layerGroup]
+  return []
     .concat(getLayoutForType(layerType).groups)
     .concat([])
 }
@@ -43,9 +37,8 @@ type LayerEditorProps = {
   sources: {[key: string]: SourceSpecification}
   vectorLayers: {[key: string]: any}
   spec: object
-  onLayerChanged(...args: unknown[]): unknown
+  onLayerGroupChanged(...args: unknown[]): unknown
   onLayerGroupVisibilityToggle(...args: unknown[]): unknown
-  layerIndex: number
   errors?: any[]
 };
 
@@ -56,7 +49,7 @@ type LayerEditorState = {
 /** Layer editor supporting multiple types of layers. */
 export default class LayerEditor extends React.Component<LayerEditorProps, LayerEditorState> {
   static defaultProps = {
-    onLayerChanged: () => {},
+    onLayerGroupChanged: () => {},
     onLayerDestroyed: () => {},
   }
 
@@ -100,8 +93,8 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
   }
 
   changeProperty(group: keyof LayerSpecification | null, property: string, newValue: any) {
-    this.props.onLayerChanged(
-      this.props.layerIndex,
+    this.props.onLayerGroupChanged(
+      this.props.selectedLayerGroupId,
       changeProperty(this.props.layer, group, property, newValue)
     )
   }
@@ -143,48 +136,6 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     }
 
     switch(type) {
-    case 'layer': return <div>
-      <FieldId
-        value={this.props.layer.id}
-        wdKey="layer-editor.layer-id"
-        error={errorData.id}
-      />
-      <FieldType
-        disabled={true}
-        error={errorData.type}
-        value={this.props.layer.type}
-      />
-      {this.props.layer.type !== 'background' && <FieldSource
-        error={errorData.source}
-        sourceIds={Object.keys(this.props.sources!)}
-        value={this.props.layer.source}
-        onChange={v => this.changeProperty(null, 'source', v)}
-      />
-      }
-      {['background', 'raster', 'hillshade', 'heatmap'].indexOf(this.props.layer.type) < 0 &&
-        <FieldSourceLayer
-          error={errorData['source-layer']}
-          sourceLayerIds={sourceLayerIds}
-          value={(this.props.layer as any)['source-layer']}
-          onChange={v => this.changeProperty(null, 'source-layer', v)}
-        />
-      }
-      <FieldMinZoom
-        error={errorData.minzoom}
-        value={this.props.layer.minzoom}
-        onChange={v => this.changeProperty(null, 'minzoom', v)}
-      />
-      <FieldMaxZoom
-        error={errorData.maxzoom}
-        value={this.props.layer.maxzoom}
-        onChange={v => this.changeProperty(null, 'maxzoom', v)}
-      />
-      <FieldComment
-        error={errorData.comment}
-        value={comment}
-        onChange={v => this.changeProperty('metadata', 'maputnik:comment', v == ""  ? undefined : v)}
-      />
-    </div>
     case 'properties':
       return <PropertyGroup
         errors={errorData}
@@ -206,10 +157,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     }).map(group => {
       const groupId = group.title.replace(/ /g, "_");
       groupIds.push(groupId);
-      // console.log(group.title)
-      if(group.type === 'layer' && (runConfig.mainLayout.layerEditor.layer.show === false ) ){
-        return null
-      }
+
       return <LayerEditorGroup
         data-wd-key={group.title}
         id={groupId}
@@ -227,7 +175,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     const items: {[key: string]: {text: string, handler: () => void, disabled?: boolean}} = {
       hide: {
         text: (layout.visibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
-        handler: () => this.props.onLayerGroupVisibilityToggle(this.props.layerIndex)
+        handler: () => this.props.onLayerGroupVisibilityToggle(this.props.selectedLayerGroupId)
       }
     }
 
@@ -244,7 +192,8 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
-            { getLabelName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }
+            {/*显示图层分组名称*/}
+            { getLabelName("Layer Group") } : { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {'('+ this.props.selectedGroupLayers.length + ')'}
           </h2>
           <div className="layer-header__info">
             <Wrapper
