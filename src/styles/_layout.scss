@@ -46,7 +46,19 @@
     top: $toolbar-height + $toolbar-offset;
     left: 625px;
     z-index: 1;
-    width: 245px;
+    width: 240px;
+    background-color: $color-black;
+  }
+
+  //图层配置
+  &-drawer-mini {
+    position: fixed;
+    bottom: 0;
+    height: calc(100% - #{$toolbar-height + $toolbar-offset});
+    top: $toolbar-height + $toolbar-offset;
+    left: 870px;
+    z-index: 1;
+    width: 320px;
     background-color: $color-black;
   }
 

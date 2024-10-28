@@ -122,7 +122,7 @@ class LayerListItem extends React.Component<LayerListItemProps> {
   render() {
     const visibilityAction = this.props.visibility === 'visible' ? 'show' : 'hide';
     if(this.props.layerId == 'background'){
-      console.log(this.props)
+      console.log('background props -> ',this.props)
     }
     return <li
       id={this.props.id}

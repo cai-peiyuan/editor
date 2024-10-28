@@ -58,7 +58,10 @@
     };
 
     let layerGroupTree = [];
-    let groupedLayerMap = {}
+    let groupedLayerMap = {
+      groupToLayer: {},
+      layerToGroup: {}
+    }
 
     let layerDic = {
       "sourceLayer": {

@@ -19,9 +19,7 @@ import {MdMoreVert} from 'react-icons/md'
 
 import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
-import {formatLayerId} from '../util/format';
 import {getLabelName} from '../libs/lang'
-
 
 function getLayoutForType(type: LayerSpecification["type"]) {
   return layout[type] ? layout[type] : layout.invalid;
@@ -32,32 +30,21 @@ function layoutGroups(layerType: LayerSpecification["type"]): {title: string, ty
     title: getLabelName("Layer Basic"),
     type: 'layer'
   }
-  const filterGroup = {
-    title: getLabelName("Data Filter Config"),
-    type: 'filter'
-  }
-  const editorGroup = {
-    title: getLabelName("JSON Editor"),
-    type: 'jsoneditor'
-  }
-  return [layerGroup, filterGroup]
+  return [layerGroup]
     .concat(getLayoutForType(layerType).groups)
-    .concat([editorGroup])
+    .concat([])
 }
 
 type LayerEditorProps = {
   layer: LayerSpecification
+  layers: LayerSpecification[]
+  selectedGroupLayers: LayerSpecification[]
+  selectedLayerGroupId: string
   sources: {[key: string]: SourceSpecification}
   vectorLayers: {[key: string]: any}
   spec: object
   onLayerChanged(...args: unknown[]): unknown
-  onLayerIdChange(...args: unknown[]): unknown
-  onMoveLayer(...args: unknown[]): unknown
-  onLayerDestroy(...args: unknown[]): unknown
-  onLayerCopy(...args: unknown[]): unknown
-  onLayerVisibilityToggle(...args: unknown[]): unknown
-  isFirstLayer?: boolean
-  isLastLayer?: boolean
+  onLayerGroupVisibilityToggle(...args: unknown[]): unknown
   layerIndex: number
   errors?: any[]
 };
@@ -70,7 +57,6 @@ type LayerEditorState = {
 export default class LayerEditor extends React.Component<LayerEditorProps, LayerEditorState> {
   static defaultProps = {
     onLayerChanged: () => {},
-    onLayerIdChange: () => {},
     onLayerDestroyed: () => {},
   }
 
@@ -162,16 +148,11 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
         value={this.props.layer.id}
         wdKey="layer-editor.layer-id"
         error={errorData.id}
-        onChange={newId => this.props.onLayerIdChange(this.props.layerIndex, this.props.layer.id, newId)}
       />
       <FieldType
         disabled={true}
         error={errorData.type}
         value={this.props.layer.type}
-        onChange={newType => this.props.onLayerChanged(
-          this.props.layerIndex,
-          changeType(this.props.layer, newType)
-        )}
       />
       {this.props.layer.type !== 'background' && <FieldSource
         error={errorData.source}
@@ -204,16 +185,6 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
         onChange={v => this.changeProperty('metadata', 'maputnik:comment', v == ""  ? undefined : v)}
       />
     </div>
-    case 'filter': return <div>
-      <div className="maputnik-filter-editor-wrapper">
-        <FilterEditor
-          errors={errorData}
-          filter={(this.props.layer as any).filter}
-          properties={this.props.vectorLayers[(this.props.layer as any)['source-layer']]}
-          onChange={f => this.changeProperty(null, 'filter', f)}
-        />
-      </div>
-    </div>
     case 'properties':
       return <PropertyGroup
         errors={errorData}
@@ -222,26 +193,10 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
         spec={this.props.spec}
         onChange={this.changeProperty.bind(this)}
       />
-    case 'jsoneditor':
-      return <FieldJson
-        layer={this.props.layer}
-        onChange={(layer) => {
-          this.props.onLayerChanged(
-            this.props.layerIndex,
-            layer
-          );
-        }}
-      />
     default: return <></>
     }
   }
 
-  moveLayer(offset: number) {
-    this.props.onMoveLayer({
-      oldIndex: this.props.layerIndex,
-      newIndex: this.props.layerIndex+offset
-    })
-  }
 
   render() {
     const groupIds: string[] = [];
@@ -252,11 +207,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
       const groupId = group.title.replace(/ /g, "_");
       groupIds.push(groupId);
       // console.log(group.title)
-      if(group.type === 'jsoneditor' && (runConfig.mainLayout.layerEditor.jsonEditor.show === false ) ){
-        return null
-      } else if(group.type === 'filter' && (runConfig.mainLayout.layerEditor.filter.show === false ) ){
-        return null
-      } else if(group.type === 'layer' && (runConfig.mainLayout.layerEditor.layer.show === false ) ){
+      if(group.type === 'layer' && (runConfig.mainLayout.layerEditor.layer.show === false ) ){
         return null
       }
       return <LayerEditorGroup
@@ -274,29 +225,9 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     const layout = this.props.layer.layout || {}
 
     const items: {[key: string]: {text: string, handler: () => void, disabled?: boolean}} = {
-      delete: {
-        text: getLabelName("Delete"),
-        handler: () => this.props.onLayerDestroy(this.props.layerIndex)
-      },
-      duplicate: {
-        text: getLabelName("Duplicate"),
-        handler: () => this.props.onLayerCopy(this.props.layerIndex)
-      },
       hide: {
         text: (layout.visibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
-        handler: () => this.props.onLayerVisibilityToggle(this.props.layerIndex)
-      },
-      moveLayerUp: {
-        text: getLabelName("Move layer up"),
-        // Not actually used...
-        disabled: this.props.isFirstLayer,
-        handler: () => this.moveLayer(-1)
-      },
-      moveLayerDown: {
-        text: getLabelName("Move layer down"),
-        // Not actually used...
-        disabled: this.props.isLastLayer,
-        handler: () => this.moveLayer(+1)
+        handler: () => this.props.onLayerGroupVisibilityToggle(this.props.layerIndex)
       }
     }
 
@@ -304,6 +235,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
       event.stopPropagation();
       items[id].handler();
     }
+    const visibilityAction = (this.props.visibility === 'visible' || true) ? 'show' : 'hide';
 
     return <section className="maputnik-layer-editor"
       role="main"
@@ -312,7 +244,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
-            { getLabelName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }  {/*({formatLayerId(this.props.layer.id)})*/}
+            { getLabelName("Layer") } : { getStyleLayerChnNameById(this.props.layer.id) }
           </h2>
           <div className="layer-header__info">
             <Wrapper
@@ -327,15 +259,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
                 <ul className="more-menu__menu">
                   {Object.keys(items).map((id) => {
                     const item = items[id];
-                    if (id === 'delete' && (runConfig.mainLayout.layerList.deleteLayer === false ) ) {
-                      return null
-                    } else if (id === 'duplicate' && (runConfig.mainLayout.layerList.duplicateLayer === false ) ) {
-                      return null
-                    } else if (id === 'hide') {
-                      // return null
-                    } else if (id === 'moveLayerUp') {
-                      // return null
-                    } else if (id === 'moveLayerDown') {
+                    if (id === 'hide') {
                       // return null
                     }
                     return <li key={id}>

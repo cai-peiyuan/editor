@@ -10,22 +10,6 @@ import {SortableElement, SortableHandle} from 'react-sortable-hoc'
 import { getStyleLayerChnNameById } from '../libs/layer'
 import {getLabelName} from '../libs/lang'
 
-type DraggableLabelProps = {
-  layerId: string
-  layerType: string
-};
-
-const DraggableLabel = SortableHandle((props: DraggableLabelProps) => {
-  return <div className="maputnik-layer-list-item-handle">
-    <IconLayer
-      className="layer-handle__icon"
-      type={props.layerType}
-    />
-    <button className="maputnik-layer-list-item-id">
-      { getStyleLayerChnNameById( props.layerId )}
-    </button>
-  </div>
-});
 
 type IconActionProps = {
   action: string
@@ -38,19 +22,15 @@ type IconActionProps = {
 class IconAction extends React.Component<IconActionProps> {
   renderIcon() {
     switch(this.props.action) {
-    case 'duplicate': return <MdContentCopy />
     case 'show': return <MdVisibility />
     case 'hide': return <MdVisibilityOff />
-    case 'delete': return <MdDelete />
     }
   }
 
   getActionCnName(actionEn) {
     switch(actionEn) {
-      case 'duplicate': return getLabelName("Duplicate This Layer")
       case 'show': return getLabelName("Show This Layer")
       case 'hide': return getLabelName("Hide This Layer")
-      case 'delete': return getLabelName("Delete This Layer")
     }
   }
 
@@ -64,13 +44,6 @@ class IconAction extends React.Component<IconActionProps> {
       if (classBlockModifier) {
         classAdditions += ` maputnik-layer-list-icon-action__${classBlockName}--${classBlockModifier}`;
       }
-    }
-
-    // console.log(this.props.action)
-    if(this.props.action === 'delete' && (runConfig.mainLayout.layerList.deleteLayer === false ) ){
-      return null
-    }else if(this.props.action === 'duplicate' && (runConfig.mainLayout.layerList.duplicateLayer === false ) ){
-      return null
     }
 
     return <button
@@ -95,18 +68,14 @@ type LayerListGroupListItemProps = {
   visibility?: string
   className?: string
   onLayerGroupSelect(...args: unknown[]): unknown
-  onLayerCopy?(...args: unknown[]): unknown
-  onLayerDestroy?(...args: unknown[]): unknown
-  onLayerVisibilityToggle?(...args: unknown[]): unknown
+  onLayerGroupVisibilityToggle?(...args: unknown[]): unknown
 };
 
 class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps> {
   static defaultProps = {
     isSelected: false,
     visibility: 'visible',
-    onLayerCopy: () => {},
-    onLayerDestroy: () => {},
-    onLayerVisibilityToggle: () => {},
+    onLayerGroupVisibilityToggle: () => {},
   }
 
   static childContextTypes = {
@@ -134,8 +103,26 @@ class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps
         "maputnik-layer-list-group-item-selected": this.props.isSelected,
         [this.props.className!]: true,
       })}>
-      <DraggableLabel {...this.props} />
+
+      <div className="maputnik-layer-list-item-handle">
+        <IconLayer
+            className="layer-handle__icon"
+            type={this.props.layerType}
+        />
+        <button className="maputnik-layer-list-item-id">
+          { getStyleLayerChnNameById( this.props.layerId )}
+        </button>
+      </div>
+
       <span style={{flexGrow: 1}} />
+
+      <IconAction
+          wdKey={"layer-list-item:"+this.props.layerId+":toggle-visibility"}
+          action={visibilityAction}
+          classBlockName="visibility"
+          classBlockModifier={visibilityAction}
+          onClick={_e => this.props.onLayerGroupVisibilityToggle!(this.props.layerIndex)}
+      />
     </li>
   }
 }

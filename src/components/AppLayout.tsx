@@ -41,7 +41,7 @@ class AppLayout extends React.Component<AppLayoutProps> {
            style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
       >
         <ScrollContainer>
-          {runConfig.layerEditMode == 'pro'?this.props.layerEditor:this.props.layerEditorMini}
+          {this.props.layerEditor}
         </ScrollContainer>
       </div>
 
@@ -51,6 +51,16 @@ class AppLayout extends React.Component<AppLayoutProps> {
       >
         {this.props.LayerListGroupList}
       </div>
+
+
+      <div className="maputnik-layout-drawer-mini"
+           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
+      >
+        <ScrollContainer>
+          {this.props.layerEditorMini}
+        </ScrollContainer>
+      </div>
+
 
       {this.props.map}
       {this.props.bottom && <div className="maputnik-layout-bottom">

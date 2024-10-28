@@ -15,11 +15,9 @@ import { findClosestCommonPrefix, layerPrefix } from '../libs/layer';
 type LayerListContainerProps = {
   layers: LayerSpecification[]
   selectedLayerGroupId: string
-  onLayersChange(layers: LayerSpecification[]): unknown
+  onLayersGroupChange(layers: LayerSpecification[]): unknown
   onLayerGroupSelect(...args: unknown[]): unknown
-  onLayerDestroy?(...args: unknown[]): unknown
-  onLayerCopy(...args: unknown[]): unknown
-  onLayerVisibilityToggle(...args: unknown[]): unknown
+  onLayerGroupVisibilityToggle(...args: unknown[]): unknown
   sources: object
   errors: any[]
 };
@@ -55,27 +53,6 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     }
   }
 
-  toggleLayers = () => {
-    let idx = 0
-    const newGroups: {[key:string]: boolean} = {}
-    this.groupedLayers().forEach(layers => {
-      const groupPrefix = layerPrefix(layers[0].id)
-      const lookupKey = [groupPrefix, idx].join('-')
-      if (layers.length > 1) {
-        newGroups[lookupKey] = this.state.areAllGroupsExpanded
-      }
-      layers.forEach((_layer) => {
-        idx += 1
-      })
-    });
-
-    this.setState({
-      collapsedGroups: newGroups,
-      areAllGroupsExpanded: !this.state.areAllGroupsExpanded
-    })
-  }
-
-
   /**
    * 打开或者关闭某个分类下的子分类
    * @param groupId
@@ -105,70 +82,6 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     return collapsed === undefined ? true : collapsed
   }
 
-  shouldComponentUpdate (nextProps: LayerListContainerProps, nextState: LayerListContainerState) {
-    // Always update on state change
-    if (this.state !== nextState) {
-      return true;
-    }
-
-    // This component tree only requires id and visibility from the layers
-    // objects
-    function getRequiredProps(layer: LayerSpecification) {
-      const out: {id: string, layout?: { visibility: any}} = {
-        id: layer.id,
-      };
-
-      if (layer.layout) {
-        out.layout = {
-          visibility: layer.layout.visibility
-        };
-      }
-      return out;
-    }
-    const layersEqual = lodash.isEqual(
-      nextProps.layers.map(getRequiredProps),
-      this.props.layers.map(getRequiredProps),
-    );
-
-    function withoutLayers(props: LayerListContainerProps) {
-      const out = {
-        ...props
-      } as LayerListContainerProps & { layers?: any };
-      delete out['layers'];
-      return out;
-    }
-
-    // Compare the props without layers because we've already compared them
-    // efficiently above.
-    const propsEqual = lodash.isEqual(
-      withoutLayers(this.props),
-      withoutLayers(nextProps)
-    );
-
-    const propsChanged = !(layersEqual && propsEqual);
-    return propsChanged;
-  }
-
-  componentDidUpdate (prevProps: LayerListContainerProps) {
-    if (prevProps.selectedLayerGroupId !== this.props.selectedLayerGroupId) {
-      const selectedItemNode = this.selectedItemRef.current;
-      if (selectedItemNode && selectedItemNode.node) {
-        const target = selectedItemNode.node;
-        const options = {
-          root: this.scrollContainerRef.current,
-          threshold: 1.0
-        }
-        const observer = new IntersectionObserver(entries => {
-          observer.unobserve(target);
-          if (entries.length > 0 && entries[0].intersectionRatio < 1) {
-            target.scrollIntoView();
-          }
-        }, options);
-
-        observer.observe(target);
-      }
-    }
-  }
 
   render() {
 
@@ -205,9 +118,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
               visibility={true}
               isSelected={childLayerGroup.id === this.props.selectedLayerGroupId}
               onLayerGroupSelect={this.props.onLayerGroupSelect}
-              onLayerDestroy={this.props.onLayerDestroy?.bind(this)}
-              onLayerCopy={this.props.onLayerCopy.bind(this)}
-              onLayerVisibilityToggle={this.props.onLayerVisibilityToggle.bind(this)}
+              onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}
           />
           listItems.push(listItem)
           //idxInGroup += 1
