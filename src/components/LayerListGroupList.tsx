@@ -58,7 +58,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
    * @param groupId
    * @param idx
    */
-  toggleLayerGroup(groupId: string, idx: number) {
+  toggleLayerGroupCollapsed(groupId: string, idx: number) {
     const lookupKey = [groupId, idx].join('-')
     console.log("折叠分组", lookupKey)
     const newGroups = { ...this.state.collapsedGroups }
@@ -73,6 +73,26 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
   }
 
   /**
+   * 计算某个图层分组中是否显示与隐藏
+   * @param groupId
+   */
+  getGroupVisibilityButtonStatus(groupId: string){
+    let groupLayers = groupedLayerMap.groupToLayer[groupId];
+    let layerIdsArry = groupLayers.map(layer => layer.layerId) //分组下的图层id，在样式文件中的id
+    let allLayerVisibility = 'none';
+
+    for (let i = 0; i < this.props.layers.length; i++) {
+      let layer = this.props.layers[i];
+      if(layerIdsArry.includes(layer.id)) {
+        const changedLayout = 'layout' in layer ? {...layer.layout} : {"visibility": "visible"}
+        if(!changedLayout.visibility || changedLayout.visibility === 'visible'){
+            allLayerVisibility = 'visible'
+          }
+        }
+    }
+    return allLayerVisibility;
+  }
+  /**
    * 判断一个分组是否为打开状态
    * @param groupId
    * @param idx
@@ -82,6 +102,84 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     return collapsed === undefined ? true : collapsed
   }
 
+  /**
+   * 判断一个图层分组下的图层是否在样式中存在
+   * @param childLayerGroupId
+   */
+  styleHashGroupLayer(childLayerGroupId: string){
+    let groupLayers = groupedLayerMap.groupToLayer[childLayerGroupId];
+    if(!groupLayers){
+      return false;
+    }
+    let layerIdsArry = groupLayers.map(layer => layer.layerId)
+    let groupStyleLayers = this.props.layers.filter(layer=>layerIdsArry.includes(layer.id))
+    return groupStyleLayers.length>0
+  }
+
+  shouldComponentUpdate (nextProps: LayerListContainerProps, nextState: LayerListContainerState) {
+    // Always update on state change
+    if (this.state !== nextState) {
+      return true;
+    }
+
+    // This component tree only requires id and visibility from the layers
+    // objects
+    function getRequiredProps(layer: LayerSpecification) {
+      const out: {id: string, layout?: { visibility: any}} = {
+        id: layer.id,
+      };
+
+      if (layer.layout) {
+        out.layout = {
+          visibility: layer.layout.visibility
+        };
+      }
+      return out;
+    }
+    const layersEqual = lodash.isEqual(
+        nextProps.layers.map(getRequiredProps),
+        this.props.layers.map(getRequiredProps),
+    );
+
+    function withoutLayers(props: LayerListContainerProps) {
+      const out = {
+        ...props
+      } as LayerListContainerProps & { layers?: any };
+      delete out['layers'];
+      return out;
+    }
+
+    // Compare the props without layers because we've already compared them
+    // efficiently above.
+    const propsEqual = lodash.isEqual(
+        withoutLayers(this.props),
+        withoutLayers(nextProps)
+    );
+
+    const propsChanged = !(layersEqual && propsEqual);
+    return propsChanged;
+  }
+
+  componentDidUpdate (prevProps: LayerListContainerProps) {
+    if (prevProps.selectedLayerGroupId !== this.props.selectedLayerGroupId) {
+      const selectedItemNode = this.selectedItemRef.current;
+      if (selectedItemNode && selectedItemNode.node) {
+        const target = selectedItemNode.node;
+        const options = {
+          root: this.scrollContainerRef.current,
+          threshold: 1.0
+        }
+        const observer = new IntersectionObserver(entries => {
+          observer.unobserve(target);
+          if (entries.length > 0 && entries[0].intersectionRatio < 1) {
+            target.scrollIntoView();
+          }
+        }, options);
+
+        observer.observe(target);
+      }
+    }
+  }
 
   render() {
 
@@ -94,33 +192,40 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
       /*前缀相同的图层分组显示*/
         const grp = <LayerListGroupListTitle
           data-wd-key={[groupId, idx].join('-')}
-          aria-controls={layerGroup.id}
+          aria-controls={groupId}
           key={`group-${groupId}-${idx}`}
           title={layerGroup.data.name}
           isActive={!this.isCollapsed(groupId, idx) || groupId === this.props.selectedLayerGroupId}
-          onActiveToggle={this.toggleLayerGroup.bind(this, groupId, idx)}
+          onActiveToggle={this.toggleLayerGroupCollapsed.bind(this, groupId, idx)}
         />
         listItems.push(grp)
 
       if(layerGroup.children){
         layerGroup.children.forEach((childLayerGroup, idxInGroup) => {
+          const childLayerGroupId = childLayerGroup.id;
             //没有对应图层的分组不显示
-          if(groupedLayerMap.groupToLayer[childLayerGroup.id]){
-              const listItem = <LayerListGroupListItem
+          if(this.styleHashGroupLayer(childLayerGroupId)){
+
+            const additionalProps: {ref?: React.RefObject<any>} = {};
+            if (childLayerGroup.id === this.props.selectedLayerGroupId) {
+              additionalProps.ref = this.selectedItemRef;
+            }
+            const listItem = <LayerListGroupListItem
+                 index={idxInGroup}
                   className={classnames({
                     'maputnik-layer-list-group-item-collapsed': this.isCollapsed(groupId, idx) //判断是否隐藏折叠起来
                   })}
-                  index={idxInGroup}
-                  key={childLayerGroup.id}
-                  id={childLayerGroup.id}
-                  layerId={childLayerGroup.data.name}
-                  layerIndex={idxInGroup}
+                  key={childLayerGroupId}
+                  id={childLayerGroupId}
+                  layerGroupId={childLayerGroupId}
+                  layerGroupName={childLayerGroup.data.name}
                   layerType={childLayerGroup.data.layerGroupType}
-                  visibility={true}
-                  isSelected={childLayerGroup.id === this.props.selectedLayerGroupId}
+                  visibility={this.getGroupVisibilityButtonStatus(childLayerGroupId)}  //控制隐藏显示按钮的状态 通过方法计算分组下所有的图层显示与隐藏
+                  isSelected={childLayerGroupId === this.props.selectedLayerGroupId}
                   onLayerGroupSelect={this.props.onLayerGroupSelect}
                   onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}
-              />
+                  {...additionalProps}
+            />
               listItems.push(listItem)
           }
           //idxInGroup += 1

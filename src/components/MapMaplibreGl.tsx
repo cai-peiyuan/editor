@@ -18,7 +18,7 @@ import { createRoot } from 'react-dom/client';
 
 function renderPopup(popup: JSX.Element, mountNode: ReactDOM.Container): HTMLElement {
   //ReactDOM.render(popup, mountNode);
-  const root = createRoot(mountNode); // createRoot(container!) if you use TypeScript
+  const root = createRoot(mountNode!); // createRoot(container!) if you use TypeScript
   root.render(popup);
   return mountNode as HTMLElement;
 }
@@ -164,7 +164,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     map.addControl(nav, 'top-right');
 
     const tmpNode = document.createElement('div');
-
+   // const tmpNodeRoot = createRoot(tmpNode!);
     const inspect = new MaplibreInspect({
       popup: new MapLibreGl.Popup({
         closeOnClick: false

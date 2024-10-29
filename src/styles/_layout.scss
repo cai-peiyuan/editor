@@ -44,7 +44,7 @@
     bottom: 0;
     height: calc(100% - #{$toolbar-height + $toolbar-offset});
     top: $toolbar-height + $toolbar-offset;
-    left: 625px;
+    right: 50px;
     z-index: 1;
     width: 240px;
     background-color: $color-black;
@@ -56,7 +56,7 @@
     bottom: 0;
     height: calc(100% - #{$toolbar-height + $toolbar-offset});
     top: $toolbar-height + $toolbar-offset;
-    left: 870px;
+    right: 300px;
     z-index: 1;
     width: 320px;
     background-color: $color-black;

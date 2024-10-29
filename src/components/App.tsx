@@ -322,7 +322,6 @@ export default class App extends React.Component<any, AppState> {
     const data = getAppConfig();
   }
 
-
   handleKeyPress = (e: KeyboardEvent) => {
     if(navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
       if(e.metaKey && e.shiftKey && e.keyCode === 90) {
@@ -405,22 +404,18 @@ export default class App extends React.Component<any, AppState> {
       if (data.layerGroupTree) {
         layerGroupTree = Object.assign(layerGroupTree, (data.layerGroupTree));
       }
-
       /**
        * 图层分组对应的具体图层
        */
       if (data.groupedLayerMap) {
         groupedLayerMap = Object.assign(groupedLayerMap, (data.groupedLayerMap));
       }
-
       /***
        * 加载图层字典
        */
       if (data.layerDic) {
         layerDic = Object.assign(layerDic, (data.layerDic));
       }
-
-
       /***
        * 加载翻译字典
        */
@@ -508,6 +503,7 @@ export default class App extends React.Component<any, AppState> {
   }
 
   onStyleChanged = (newStyle: StyleSpecification & {id: string}, opts: OnStyleChangedOpts={}) => {
+    console.log("样式更新 新样式文件 ->", newStyle)
     opts = {
       save: true,
       addRevision: true,
@@ -733,8 +729,23 @@ export default class App extends React.Component<any, AppState> {
    */
   onLayerGroupVisibilityToggle = (groupId: string) => {
     console.log('隐藏或者显示某个分组下所有的图层 ->', groupId)
+    const layers = this.state.mapStyle.layers || []
+    const changedLayers = layers.slice(0)
+    let groupLayers = groupedLayerMap.groupToLayer[groupId];
+    let layerIdsArry = groupLayers.map(layer => layer.layerId)
+    for (let i = 0; i < changedLayers.length; i++) {
+      let changedLayer = changedLayers[i];
+      if(layerIdsArry.includes(changedLayer.id)){
+        const changedLayout = 'layout' in changedLayer ? {...changedLayer.layout} : {}
+        changedLayout.visibility = changedLayout.visibility === 'none' ? 'visible' : 'none'
+        changedLayer.layout = changedLayout
+        console.log("需要更新的图层 -> ", changedLayer.id)
+        console.log("更新后的图层 -> ", changedLayer)
+        changedLayers[i] = changedLayer
+      }
+    }
+    this.onLayersChange(changedLayers)
   }
-
 
   onLayerIdChange = (index: number, _oldId: string, newId: string) => {
     const changedLayers = this.state.mapStyle.layers.slice(0)
@@ -751,7 +762,7 @@ export default class App extends React.Component<any, AppState> {
     changedLayers[index] = layer
 
     console.log("onLayerChanged . layer ->", layer)
-    console.log("onLayerChanged . onLayerChanged ->", onLayerChanged)
+    console.log("onLayerChanged . onLayerChanged ->", changedLayers)
     this.onLayersChange(changedLayers)
   }
   /**
@@ -1032,9 +1043,9 @@ export default class App extends React.Component<any, AppState> {
    * @param layerGroupId
    */
   onLayerGroupSelect = (layerGroupId: string) => {
-    console.log("选择某个图层分组 ->", layerGroupId)
-    console.log("选择某个图层分组 ->", this.state.selectedLayerGroupId)
-    console.log("选择某个图层分组 ->", this.state.selectedLayerOriginalId)
+    console.log("本次选择图层分组 ->", layerGroupId)
+    console.log("上次选择图层分组 ->", this.state.selectedLayerGroupId)
+    console.log("上次选择图层分组 ->", this.state.selectedLayerOriginalId)
     console.log("分组下的图层配置 ->", groupedLayerMap.groupToLayer[layerGroupId])
     console.log("选择某个图层分组 ->", groupedLayerMap.groupLayer[layerGroupId])
     this.setState({
@@ -1110,10 +1121,10 @@ export default class App extends React.Component<any, AppState> {
 
     /*简化版的图层分组*/
     const layerListGroupList = <LayerListGroupList
-        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
         onLayersGroupChange={this.onLayersGroupChange}
         onLayerGroupSelect={this.onLayerGroupSelect}
         selectedLayerGroupId={this.state.selectedLayerGroupId}
+        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
         layers={layers}
         sources={this.state.sources}
         errors={this.state.errors}
@@ -1123,8 +1134,8 @@ export default class App extends React.Component<any, AppState> {
      */
     const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
         key={this.state.selectedLayerOriginalId} //选中的分组id
-        layer={selectedGroupLayer}
         layers={layers}  //所有的图层
+        layer={selectedGroupLayer}
         selectedGroupLayers={selectedGroupLayers} //选中的分组里面的图层layer  样式文件中查找到的图层
         selectedLayerGroupId={this.state.selectedLayerGroupId} //选中的分组id、
         sources={this.state.sources} //数据源

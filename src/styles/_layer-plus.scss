@@ -98,6 +98,9 @@
   }
 
   .maputnik-layer-list-group-icon-action__visibility--hide {
+    display: none;
+  }
+  .maputnik-layer-list-group-icon-action__visibility--show {
     display: block;
   }
 
