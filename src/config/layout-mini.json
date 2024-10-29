@@ -8,23 +8,7 @@
             "line-opacity",
             "line-color",
             "line-width",
-            "line-offset",
-            "line-blur",
-            "line-dasharray",
-            "line-pattern",
-            "line-translate",
-            "line-translate-anchor",
             "line-gap-width"
-          ]
-        },
-        {
-          "title": "Layout properties",
-          "type": "properties",
-          "fields": [
-            "line-cap",
-            "line-join",
-            "line-miter-limit",
-            "line-round-limit"
           ]
         }
       ]
@@ -36,7 +20,6 @@
           "type": "properties",
           "fields": [
             "background-color",
-            "background-pattern",
             "background-opacity"
           ]
         }
@@ -67,12 +50,7 @@
           "fields": [
             "fill-extrusion-opacity",
             "fill-extrusion-color",
-            "fill-extrusion-translate",
-            "fill-extrusion-translate-anchor",
-            "fill-extrusion-pattern",
-            "fill-extrusion-height",
-            "fill-extrusion-base",
-            "fill-extrusion-vertical-gradient"
+            "fill-extrusion-height"
           ]
         }
       ]
@@ -85,15 +63,7 @@
           "fields": [
             "circle-color",
             "circle-opacity",
-            "circle-stroke-color",
-            "circle-stroke-opacity",
-            "circle-blur",
-            "circle-radius",
-            "circle-stroke-width",
-            "circle-pitch-scale",
-            "circle-translate",
-            "circle-translate-anchor",
-            "circle-pitch-alignment"
+            "circle-radius"
           ]
         }
       ]
@@ -101,61 +71,14 @@
     "symbol": {
       "groups": [
         {
-          "title": "General layout properties",
-          "type": "properties",
-          "fields": [
-            "symbol-placement",
-            "symbol-spacing",
-            "symbol-avoid-edges",
-            "symbol-z-order"
-          ]
-        },
-        {
           "title": "Text layout properties",
           "type": "properties",
           "fields": [
-            "text-field",
             "text-font",
             "text-size",
             "text-line-height",
             "text-padding",
-            "text-allow-overlap",
-            "text-ignore-placement",
-            "text-pitch-alignment",
-            "text-rotation-alignment",
-            "text-max-width",
-            "text-letter-spacing",
-            "text-justify",
-            "text-anchor",
-            "text-max-angle",
-            "text-writing-mode",
-            "text-rotate",
-            "text-keep-upright",
-            "text-transform",
-            "text-offset",
-            "text-optional",
-            "text-variable-anchor",
-            "text-radial-offset"
-          ]
-        },
-        {
-          "title": "Icon layout properties",
-          "type": "properties",
-          "fields": [
-            "icon-image",
-            "icon-allow-overlap",
-            "icon-ignore-placement",
-            "icon-optional",
-            "icon-rotation-alignment",
-            "icon-size",
-            "icon-text-fit",
-            "icon-text-fit-padding",
-            "icon-rotate",
-            "icon-padding",
-            "icon-keep-upright",
-            "icon-offset",
-            "icon-anchor",
-            "icon-pitch-alignment"
+            "text-max-width"
           ]
         },
         {
@@ -166,22 +89,7 @@
             "text-opacity",
             "text-halo-color",
             "text-halo-width",
-            "text-halo-blur",
-            "text-translate",
-            "text-translate-anchor"
-          ]
-        },
-        {
-          "title": "Icon paint properties",
-          "type": "properties",
-          "fields": [
-            "icon-color",
-            "icon-opacity",
-            "icon-halo-color",
-            "icon-halo-width",
-            "icon-halo-blur",
-            "icon-translate",
-            "icon-translate-anchor"
+            "text-halo-blur"
           ]
         }
       ]
