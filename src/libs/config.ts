@@ -47,3 +47,25 @@ export async function getAppConfig1() {
     })
 }
 
+
+/**
+ * 计算某个图层分组中是否显示与隐藏
+ * @param groupId
+ * @param layers
+ */
+export function getGroupVisibilityButtonStatus(groupId, layers){
+  let groupLayers = groupedLayerMap.groupToLayer[groupId];
+  let layerIdsArry = groupLayers.map(layer => layer.layerId) //分组下的图层id，在样式文件中的id
+  let allLayerVisibility = 'none';
+
+  for (let i = 0; i < layers.length; i++) {
+    let layer = layers[i];
+    if(layerIdsArry.includes(layer.id)) {
+      const changedLayout = 'layout' in layer ? {...layer.layout} : {"visibility": "visible"}
+      if(!changedLayout.visibility || changedLayout.visibility === 'visible'){
+        allLayerVisibility = 'visible'
+      }
+    }
+  }
+  return allLayerVisibility;
+}

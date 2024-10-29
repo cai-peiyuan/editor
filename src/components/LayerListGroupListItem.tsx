@@ -111,9 +111,9 @@ class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps
 
   render() {
     const visibilityAction = this.props.visibility === 'visible' ? 'show' : 'hide';
-    console.log("图层分组->", this.props.layerGroupName)
-    console.log("图层分组 this.props.visibility->", this.props.visibility)
-    console.log("图层分组 visibilityAction->", visibilityAction)
+    //console.log("图层分组->", this.props.layerGroupName)
+    //console.log("图层分组 this.props.visibility->", this.props.visibility)
+   // console.log("图层分组 visibilityAction->", visibilityAction)
     return <li
       id={this.props.layerGroupId}
       key={this.props.layerGroupId}

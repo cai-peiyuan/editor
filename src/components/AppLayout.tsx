@@ -53,8 +53,11 @@ class AppLayout extends React.Component<AppLayoutProps> {
       </div>
 
 
+
       <div className="maputnik-layout-drawer-mini"
-           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
+           style={
+        runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}
+      }
       >
         <ScrollContainer>
           {this.props.layerEditorMini}

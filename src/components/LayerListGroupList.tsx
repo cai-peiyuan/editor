@@ -10,7 +10,7 @@ import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
 import type {LayerSpecification} from 'maplibre-gl';
 import generateUniqueId from '../libs/document-uid';
 import { findClosestCommonPrefix, layerPrefix } from '../libs/layer';
-
+import { getGroupVisibilityButtonStatus } from "../libs/config"
 /*图层分组*/
 type LayerListContainerProps = {
   layers: LayerSpecification[]
@@ -72,26 +72,6 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
     })
   }
 
-  /**
-   * 计算某个图层分组中是否显示与隐藏
-   * @param groupId
-   */
-  getGroupVisibilityButtonStatus(groupId: string){
-    let groupLayers = groupedLayerMap.groupToLayer[groupId];
-    let layerIdsArry = groupLayers.map(layer => layer.layerId) //分组下的图层id，在样式文件中的id
-    let allLayerVisibility = 'none';
-
-    for (let i = 0; i < this.props.layers.length; i++) {
-      let layer = this.props.layers[i];
-      if(layerIdsArry.includes(layer.id)) {
-        const changedLayout = 'layout' in layer ? {...layer.layout} : {"visibility": "visible"}
-        if(!changedLayout.visibility || changedLayout.visibility === 'visible'){
-            allLayerVisibility = 'visible'
-          }
-        }
-    }
-    return allLayerVisibility;
-  }
   /**
    * 判断一个分组是否为打开状态
    * @param groupId
@@ -220,7 +200,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
                   layerGroupId={childLayerGroupId}
                   layerGroupName={childLayerGroup.data.name}
                   layerType={childLayerGroup.data.layerGroupType}
-                  visibility={this.getGroupVisibilityButtonStatus(childLayerGroupId)}  //控制隐藏显示按钮的状态 通过方法计算分组下所有的图层显示与隐藏
+                  visibility={getGroupVisibilityButtonStatus(childLayerGroupId, this.props.layers)}  //控制隐藏显示按钮的状态 通过方法计算分组下所有的图层显示与隐藏
                   isSelected={childLayerGroupId === this.props.selectedLayerGroupId}
                   onLayerGroupSelect={this.props.onLayerGroupSelect}
                   onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}

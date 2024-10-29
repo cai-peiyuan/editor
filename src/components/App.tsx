@@ -1040,14 +1040,18 @@ export default class App extends React.Component<any, AppState> {
 
   /**
    * 图层分组选择
+   * 打开图层编辑窗口
+   *
    * @param layerGroupId
    */
   onLayerGroupSelect = (layerGroupId: string) => {
-    console.log("本次选择图层分组 ->", layerGroupId)
-    console.log("上次选择图层分组 ->", this.state.selectedLayerGroupId)
-    console.log("上次选择图层分组 ->", this.state.selectedLayerOriginalId)
-    console.log("分组下的图层配置 ->", groupedLayerMap.groupToLayer[layerGroupId])
-    console.log("选择某个图层分组 ->", groupedLayerMap.groupLayer[layerGroupId])
+    //console.log("本次选择图层分组 ->", layerGroupId)
+    //console.log("上次选择图层分组 ->", this.state.selectedLayerGroupId)
+    //console.log("上次选择图层分组 ->", this.state.selectedLayerOriginalId)
+    //console.log("分组下的图层配置 ->", groupedLayerMap.groupToLayer[layerGroupId])
+    //console.log("选择某个图层分组 ->", groupedLayerMap.groupLayer[layerGroupId])
+    let styleLayers = this.getSelectedGroupLayers(layerGroupId, this.state.mapStyle.layers)
+    console.log("选择的图层分组中样式图层 ->",styleLayers);
     this.setState({
       selectedLayerOriginalId: this.state.selectedLayerGroupId,
       selectedLayerGroupId: layerGroupId,
@@ -1114,10 +1118,6 @@ export default class App extends React.Component<any, AppState> {
     const selectedGroupLayers = this.getSelectedGroupLayers(this.state.selectedLayerGroupId, layers)
     //分组下的图层应该都是同一类型  所以取第一个layer
     const selectedGroupLayer = selectedGroupLayers[0];
-
-    console.log('app render layers ->', layers)
-    console.log('selectedLayerGroup ->', selectedLayerGroup)
-    console.log('selectedGroupLayers ->', selectedGroupLayers)
 
     /*简化版的图层分组*/
     const layerListGroupList = <LayerListGroupList

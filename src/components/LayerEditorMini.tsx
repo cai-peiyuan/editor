@@ -17,10 +17,17 @@ import {MdMoreVert} from 'react-icons/md'
 
 import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
-import {getLabelName} from '../libs/lang'
 
+import layoutMini from '../config/layout-mini.json' //编辑器的界面配置项，定义了哪些属性在那个分类下配置
+import {getLabelName} from '../libs/lang'
+import { getGroupVisibilityButtonStatus } from "../libs/config"
+
+/**
+ * 通过json配置文件获取指定类型的图层编辑器界面
+ * @param type
+ */
 function getLayoutForType(type: LayerSpecification["type"]) {
-  return layout[type] ? layout[type] : layout.invalid;
+  return layoutMini[type] ? layoutMini[type] : layoutMini.invalid;
 }
 
 function layoutGroups(layerType: LayerSpecification["type"]): {title: string, type: string, fields?: string[]}[] {
@@ -30,15 +37,15 @@ function layoutGroups(layerType: LayerSpecification["type"]): {title: string, ty
 }
 
 type LayerEditorProps = {
-  layer: LayerSpecification
-  layers: LayerSpecification[]
-  selectedGroupLayers: LayerSpecification[]
-  selectedLayerGroupId: string
-  sources: {[key: string]: SourceSpecification}
-  vectorLayers: {[key: string]: any}
-  spec: object
-  onLayerGroupChanged(...args: unknown[]): unknown
-  onLayerGroupVisibilityToggle(...args: unknown[]): unknown
+  layer: LayerSpecification //分组中得第一个图层
+  layers: LayerSpecification[] //样式中的所有图层
+  selectedGroupLayers: LayerSpecification[] //分组中的所有图层  样式图层
+  selectedLayerGroupId: string //分组id
+  sources: {[key: string]: SourceSpecification} //数据源列表
+  vectorLayers: {[key: string]: any} //矢量图层
+  spec: object //样式规范
+  onLayerGroupChanged(...args: unknown[]): unknown //样式发生变化
+  onLayerGroupVisibilityToggle(...args: unknown[]): unknown //显示隐藏状态发生变化
   errors?: any[]
 };
 
@@ -171,10 +178,10 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     })
 
     const layout = this.props.layer.layout || {}
-
+    const thisGroupVisibility = getGroupVisibilityButtonStatus(this.props.selectedLayerGroupId, this.props.layers)
     const items: {[key: string]: {text: string, handler: () => void, disabled?: boolean}} = {
       hide: {
-        text: (layout.visibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
+        text: (thisGroupVisibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
         handler: () => this.props.onLayerGroupVisibilityToggle(this.props.selectedLayerGroupId)
       }
     }
@@ -195,6 +202,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
             {/*显示图层分组名称*/}
             { getLabelName("Layer Group") } : { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {'('+ this.props.selectedGroupLayers.length + ')'}
           </h2>
+          {/*更多按钮*/}
           <div className="layer-header__info">
             <Wrapper
               className='more-menu'
@@ -208,9 +216,6 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
                 <ul className="more-menu__menu">
                   {Object.keys(items).map((id) => {
                     const item = items[id];
-                    if (id === 'hide') {
-                      // return null
-                    }
                     return <li key={id}>
                       <MenuItem value={id} className='more-menu__menu__item'>
                         {item.text}
