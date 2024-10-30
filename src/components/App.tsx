@@ -774,6 +774,17 @@ export default class App extends React.Component<any, AppState> {
   onLayerGroupChanged = (groupId: string, layer: LayerSpecification) => {
     console.log("onLayerGroupChanged . groupId ->", groupId)
     console.log("onLayerGroupChanged . layer ->", layer)
+    const copyLayers = this.state.mapStyle.layers.slice(0);
+    let groupLayers = groupedLayerMap.groupToLayer[groupId];
+    //图层分组中配置的对应的样式图层id
+    let layerIdsArry = groupLayers.map(layer => layer.layerId)
+    for (let i = 0; i < copyLayers.length; i++) {
+      const changedLayer = {...copyLayers[i]}
+      if(layer.id === (changedLayer.id)){
+        copyLayers[i] = layer;
+      }
+    }
+    this.onLayersChange(copyLayers);
   }
 
   setMapState = (newState: MapState) => {
@@ -1131,21 +1142,6 @@ export default class App extends React.Component<any, AppState> {
         sources={this.state.sources}
         errors={this.state.errors}
     />
-    /**
-     * 简化版编辑器
-     */
-    const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
-        key={this.state.selectedLayerOriginalId} //选中的分组id
-        layers={layersForGroup}  //所有的图层
-        layer={selectedGroupLayer}
-        selectedGroupLayers={selectedGroupLayers} //选中的分组里面的图层layer  样式文件中查找到的图层
-        selectedLayerGroupId={this.state.selectedLayerGroupId} //选中的分组id、
-        sources={this.state.sources} //数据源
-        vectorLayers={this.state.vectorLayers}
-        spec={this.state.spec}  //图层规范
-        onLayerGroupChanged={this.onLayerGroupChanged}
-        errors={this.state.errors}
-    /> : undefined
 
     const toolbar = <AppToolbar
       renderer={this._getRenderer()}
@@ -1188,6 +1184,21 @@ export default class App extends React.Component<any, AppState> {
       onLayerVisibilityToggle={this.onLayerVisibilityToggle}
       onLayerIdChange={this.onLayerIdChange}
       errors={this.state.errors}
+    /> : undefined
+    /**
+     * 简化版编辑器
+     */
+    const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
+        key={selectedGroupLayer.id} //选中的分组id
+        layer={selectedGroupLayer}
+        layers={layersForGroup}  //所有的图层
+        selectedGroupLayers={selectedGroupLayers} //选中的分组里面的图层layer  样式文件中查找到的图层
+        selectedLayerGroupId={this.state.selectedLayerGroupId} //选中的分组id、
+        sources={this.state.sources} //数据源
+        vectorLayers={this.state.vectorLayers}
+        spec={this.state.spec}  //图层规范
+        onLayerGroupChanged={this.onLayerGroupChanged}
+        errors={this.state.errors}
     /> : undefined
 
 

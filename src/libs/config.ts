@@ -57,6 +57,8 @@ export function getGroupVisibilityButtonStatus(groupId, layers){
   let groupLayers = groupedLayerMap.groupToLayer[groupId];
   let layerIdsArry = groupLayers.map(layer => layer.layerId) //分组下的图层id，在样式文件中的id
   let allLayerVisibility = 'none';
+
+  //一定要将数据复制出来 不然会修改原来的数据
   let copyLayers = layers.slice(0);
   for (let i = 0; i < copyLayers.length; i++) {
     let layer = copyLayers[i];
