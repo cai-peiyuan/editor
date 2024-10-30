@@ -5,12 +5,12 @@ import lodash from 'lodash';
 import LayerListGroupListTitle from './LayerListGroupListTitle'
 import LayerListGroupListItem from './LayerListGroupListItem'
 
-import {getLabelName} from "../libs/lang";
+import {getLabelName} from "../../libs/lang";
 import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
 import type {LayerSpecification} from 'maplibre-gl';
-import generateUniqueId from '../libs/document-uid';
-import { findClosestCommonPrefix, layerPrefix } from '../libs/layer';
-import { getGroupVisibilityButtonStatus } from "../libs/config"
+import generateUniqueId from '../../libs/document-uid';
+import { findClosestCommonPrefix, layerPrefix } from '../../libs/layer';
+import { getGroupVisibilityButtonStatus } from "../../libs/config"
 /*图层分组*/
 type LayerListContainerProps = {
   layers: LayerSpecification[]
@@ -60,7 +60,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
    */
   toggleLayerGroupCollapsed(groupId: string, idx: number) {
     const lookupKey = [groupId, idx].join('-')
-    console.log("折叠分组", lookupKey)
+    //console.log("折叠分组", lookupKey)
     const newGroups = { ...this.state.collapsedGroups }
     if(lookupKey in this.state.collapsedGroups) {
       newGroups[lookupKey] = !this.state.collapsedGroups[lookupKey]
@@ -121,6 +121,10 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
         this.props.layers.map(getRequiredProps),
     );
 
+    console.log('nextProps.layers -> ', nextProps.layers)
+
+    console.log('this.props.layers -> ', this.props.layers)
+
     function withoutLayers(props: LayerListContainerProps) {
       const out = {
         ...props
@@ -136,8 +140,14 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
         withoutLayers(nextProps)
     );
 
+    console.log('nextProps -> ', nextProps)
+
+    console.log('this.props -> ', this.props)
+
     const propsChanged = !(layersEqual && propsEqual);
-    return propsChanged;
+    console.log('LayerListGroupList shouldComponentUpdate layersEqual -> ', layersEqual)
+    console.log('LayerListGroupList shouldComponentUpdate propsEqual -> ', propsEqual)
+    return !layersEqual || !propsEqual;
   }
 
   componentDidUpdate (prevProps: LayerListContainerProps) {
@@ -203,7 +213,7 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
                   visibility={getGroupVisibilityButtonStatus(childLayerGroupId, this.props.layers)}  //控制隐藏显示按钮的状态 通过方法计算分组下所有的图层显示与隐藏
                   isSelected={childLayerGroupId === this.props.selectedLayerGroupId}
                   onLayerGroupSelect={this.props.onLayerGroupSelect}
-                  onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle.bind(this)}
+                  onLayerGroupVisibilityToggle={this.props.onLayerGroupVisibilityToggle}
                   {...additionalProps}
             />
               listItems.push(listItem)

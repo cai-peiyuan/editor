@@ -4,19 +4,21 @@ import classnames from 'classnames'
 
 import {MdContentCopy, MdVisibility, MdVisibilityOff, MdDelete} from 'react-icons/md'
 
-import IconLayer from './IconLayer'
+import IconLayer from '../IconLayer'
 import {SortableElement, SortableHandle} from 'react-sortable-hoc'
 
-import { getStyleLayerChnNameById } from '../libs/layer'
-import {getLabelName} from '../libs/lang'
+import { getStyleLayerChnNameById } from '../../libs/layer'
+import {getLabelName} from '../../libs/lang'
 
 type DraggableLabelProps = {
-  layerId: string
+  layerGroupId: string
   layerType: string
 };
 
 const DraggableLabel = SortableHandle((props: DraggableLabelProps) => {
-  return <div className="maputnik-layer-list-group-item-handle">
+  return <div className="maputnik-layer-list-group-item-handle"
+              onClick={_e => props.onLayerGroupSelect(props.layerGroupId)}
+  >
     <IconLayer
         className="layer-handle__icon"
         type={props.layerType}
@@ -72,7 +74,6 @@ class IconAction extends React.Component<IconActionProps> {
         className={`maputnik-layer-list-icon-action ${classAdditions}`}
         data-wd-key={this.props.wdKey}
         onClick={this.props.onClick}
-        aria-hidden="true"
     >
       {this.renderIcon()}
     </button>
@@ -105,7 +106,7 @@ class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps
 
   getChildContext() {
     return {
-      reactIconBase: { size: 14 }
+      reactIconBase: { size: 16 }
     }
   }
 
@@ -117,7 +118,6 @@ class LayerListGroupListItem extends React.Component<LayerListGroupListItemProps
     return <li
       id={this.props.layerGroupId}
       key={this.props.layerGroupId}
-      onClick={_e => this.props.onLayerGroupSelect(this.props.layerGroupId)}
       data-wd-key={"layer-list-group-item:"+this.props.layerGroupId}
       className={classnames({
         "maputnik-layer-list-group-item": true,

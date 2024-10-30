@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ScrollContainer from './ScrollContainer'
-import LayerListGroupList from "./LayerListGroupList";
+import LayerListGroupList from "./layereditor/LayerListGroupList";
 
 type AppLayoutProps = {
   toolbar: React.ReactElement

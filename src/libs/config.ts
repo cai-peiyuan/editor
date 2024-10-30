@@ -57,11 +57,11 @@ export function getGroupVisibilityButtonStatus(groupId, layers){
   let groupLayers = groupedLayerMap.groupToLayer[groupId];
   let layerIdsArry = groupLayers.map(layer => layer.layerId) //分组下的图层id，在样式文件中的id
   let allLayerVisibility = 'none';
-
-  for (let i = 0; i < layers.length; i++) {
-    let layer = layers[i];
+  let copyLayers = layers.slice(0);
+  for (let i = 0; i < copyLayers.length; i++) {
+    let layer = copyLayers[i];
     if(layerIdsArry.includes(layer.id)) {
-      const changedLayout = 'layout' in layer ? {...layer.layout} : {"visibility": "visible"}
+      const changedLayout = 'layout' in layer ? {...layer.layout} : {}
       if(!changedLayout.visibility || changedLayout.visibility === 'visible'){
         allLayerVisibility = 'visible'
       }

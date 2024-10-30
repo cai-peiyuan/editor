@@ -3,24 +3,24 @@ import PropTypes from 'prop-types'
 import { Wrapper, Button, Menu, MenuItem } from 'react-aria-menubutton'
 import {BackgroundLayerSpecification, LayerSpecification, SourceSpecification} from 'maplibre-gl';
 
-import PropertyGroup from './PropertyGroup'
-import LayerEditorGroup from './LayerEditorGroup'
-import FieldType from './FieldType'
-import FieldId from './FieldId'
-import FieldMinZoom from './FieldMinZoom'
-import FieldMaxZoom from './FieldMaxZoom'
-import FieldComment from './FieldComment'
-import FieldSource from './FieldSource'
-import FieldSourceLayer from './FieldSourceLayer'
+import PropertyGroupMini from './PropertyGroupMini'
+import LayerEditorGroup from '../LayerEditorGroup'
+import FieldType from '../FieldType'
+import FieldId from '../FieldId'
+import FieldMinZoom from '../FieldMinZoom'
+import FieldMaxZoom from '../FieldMaxZoom'
+import FieldComment from '../FieldComment'
+import FieldSource from '../FieldSource'
+import FieldSourceLayer from '../FieldSourceLayer'
 import {Accordion} from 'react-accessible-accordion';
 import {MdMoreVert} from 'react-icons/md'
 
-import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
-import layout from '../config/layout.json'
+import {changeType, changeProperty, getStyleLayerChnNameById, getStyleLayerChnNameByIdAndLang} from '../../libs/layer'
+import layout from '../../config/layout.json'
 
-import layoutMini from '../config/layout-mini.json' //编辑器的界面配置项，定义了哪些属性在那个分类下配置
-import {getLabelName} from '../libs/lang'
-import { getGroupVisibilityButtonStatus } from "../libs/config"
+import layoutMini from '../../config/layout-mini.json' //编辑器的界面配置项，定义了哪些属性在那个分类下配置
+import {getLabelName, getLabelNameByLang} from '../../libs/lang'
+import { getGroupVisibilityButtonStatus } from "../../libs/config"
 
 /**
  * 通过json配置文件获取指定类型的图层编辑器界面
@@ -32,7 +32,7 @@ function getLayoutForType(type: LayerSpecification["type"]) {
 
 function layoutGroups(layerType: LayerSpecification["type"]): {title: string, type: string, fields?: string[]}[] {
   return []
-    .concat(getLayoutForType(layerType).groups)
+    .concat(getLayoutForType(layerType).groups) //通过配置文件的设置 获取指定类型图层可编辑的样式属性
     .concat([])
 }
 
@@ -54,7 +54,7 @@ type LayerEditorState = {
 };
 
 /** Layer editor supporting multiple types of layers. */
-export default class LayerEditor extends React.Component<LayerEditorProps, LayerEditorState> {
+export default class LayerEditorMini extends React.Component<LayerEditorProps, LayerEditorState> {
   static defaultProps = {
     onLayerGroupChanged: () => {},
     onLayerDestroyed: () => {},
@@ -72,7 +72,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     layoutGroups(this.props.layer.type).forEach(group => {
       editorGroups[group.title] = true
     })
-
+    //配置文件中的各个编辑分组 默认都展开
     this.state = { editorGroups }
   }
 
@@ -93,12 +93,18 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
   getChildContext () {
     return {
       reactIconBase: {
-        size: 14,
+        size: 18,
         color: '#8e8e8e',
       }
     }
   }
 
+  /**
+   * 更新样式渲染的属性方法
+   * @param group
+   * @param property
+   * @param newValue
+   */
   changeProperty(group: keyof LayerSpecification | null, property: string, newValue: any) {
     this.props.onLayerGroupChanged(
       this.props.selectedLayerGroupId,
@@ -106,6 +112,11 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     )
   }
 
+  /**
+   * 切换分组的展开和闭合状态
+   * @param groupTitle
+   * @param active
+   */
   onGroupToggle(groupTitle: string, active: boolean) {
     const changedActiveGroups = {
       ...this.state.editorGroups,
@@ -116,19 +127,38 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
     })
   }
 
+  getGroupLayerHeaders(selectedGroupLayers: LayerSpecification[]){
+      return selectedGroupLayers.map(layer =>{
+         return <header data-wd-key={layer.id}
+                        id={layer.id}
+                        key={layer.id}>
+          <div className="layer-header">
+            <h5 className="layer-header__title">
+              {/*显示图层分组名称*/}
+              { getStyleLayerChnNameByIdAndLang(layer.id) }
+            </h5>
+          </div>
+        </header>
+      })
+
+  }
+  /**
+   * 渲染指定分组的属性编辑
+   * @param type
+   * @param fields
+   */
   renderGroupType(type: string, fields?: string[]): JSX.Element {
     let comment = ""
     if(this.props.layer.metadata) {
       comment = (this.props.layer.metadata as any)['maputnik:comment']
     }
-    const {errors, layerIndex} = this.props;
+    const {errors} = this.props;
 
     const errorData: {[key in LayerSpecification as string]: {message: string}} = {};
     errors!.forEach(error => {
       if (
         error.parsed &&
-        error.parsed.type === "layer" &&
-        error.parsed.data.index == layerIndex
+        error.parsed.type === "layer"
       ) {
         errorData[error.parsed.data.key] = {
           message: error.parsed.data.message
@@ -144,7 +174,7 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
 
     switch(type) {
     case 'properties':
-      return <PropertyGroup
+      return <PropertyGroupMini
         errors={errorData}
         layer={this.props.layer}
         groupFields={fields!}
@@ -158,11 +188,13 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
 
   render() {
     const groupIds: string[] = [];
+    //图层类型 决定这个编辑器渲染哪些可编辑的属性
     const layerType = this.props.layer.type
+
     const groups = layoutGroups(layerType).filter(group => {
       return !(layerType === 'background' && group.type === 'source')
     }).map(group => {
-      const groupId = group.title.replace(/ /g, "_");
+      const groupId = group.title.replace(/ /g, "_"); //使用group title 作为groupId
       groupIds.push(groupId);
 
       return <LayerEditorGroup
@@ -173,62 +205,27 @@ export default class LayerEditor extends React.Component<LayerEditorProps, Layer
         isActive={this.state.editorGroups[group.title]}
         onActiveToggle={this.onGroupToggle.bind(this, group.title)}
       >
+        {/*渲染某个图层类型下的编辑属性*/}
         {this.renderGroupType(group.type, group.fields)}
       </LayerEditorGroup>
     })
 
-    const layout = this.props.layer.layout || {}
-    const thisGroupVisibility = getGroupVisibilityButtonStatus(this.props.selectedLayerGroupId, this.props.layers)
-    const items: {[key: string]: {text: string, handler: () => void, disabled?: boolean}} = {
-      hide: {
-        text: (thisGroupVisibility === "none") ?  getLabelName("Show"): getLabelName("Hide"),
-        handler: () => this.props.onLayerGroupVisibilityToggle(this.props.selectedLayerGroupId)
-      }
-    }
-
-    function handleSelection(id: string, event: React.SyntheticEvent) {
-      event.stopPropagation();
-      items[id].handler();
-    }
-    const visibilityAction = (this.props.visibility === 'visible' || true) ? 'show' : 'hide';
-
-    return <section className="maputnik-layer-editor"
+    return <section className="maputnik-layer-group-editor"
       role="main"
       aria-label="图层编辑"
     >
+      {/*标题*/}
       <header>
         <div className="layer-header">
           <h2 className="layer-header__title">
             {/*显示图层分组名称*/}
-            { getLabelName("Layer Group") } : { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {'('+ this.props.selectedGroupLayers.length + ')'}
+            { getLabelName("") } { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {' 包含 '+ this.props.selectedGroupLayers.length + '个可配置图层'}
           </h2>
-          {/*更多按钮*/}
-          <div className="layer-header__info">
-            <Wrapper
-              className='more-menu'
-              onSelection={handleSelection}
-              closeOnSelection={false}
-            >
-              <Button id="skip-target-layer-editor" data-wd-key="skip-target-layer-editor" className='more-menu__button' title="Layer options">
-                <MdMoreVert className="more-menu__button__svg" />
-              </Button>
-              <Menu>
-                <ul className="more-menu__menu">
-                  {Object.keys(items).map((id) => {
-                    const item = items[id];
-                    return <li key={id}>
-                      <MenuItem value={id} className='more-menu__menu__item'>
-                        {item.text}
-                      </MenuItem>
-                    </li>
-                  })}
-                </ul>
-              </Menu>
-            </Wrapper>
-          </div>
         </div>
-
       </header>
+
+      {this.getGroupLayerHeaders(this.props.selectedGroupLayers)}
+      {/*风琴组件*/}
       <Accordion
         allowMultipleExpanded={true}
         allowZeroExpanded={true}

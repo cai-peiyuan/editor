@@ -17,6 +17,16 @@ export function getLabelName(labelCode) {
   }
 }
 
+export function getLabelNameByLang(labelCode, lang) {
+  if (langDic[labelCode] && langDic[labelCode][lang]) {
+    return langDic[labelCode][lang];
+  } else if (langDict[labelCode] && langDict[labelCode][lang]) {
+    return langDict[labelCode][lang];
+  } else {
+    return labelCode;
+  }
+}
+
 /**
  * 保存字典到msp服务
  */

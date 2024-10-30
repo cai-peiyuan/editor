@@ -90,6 +90,20 @@ export function getStyleLayerChnNameById(layerid) {
 }
 
 /**
+ * 根据图层的layerid获取图层别名
+ * @param layerid
+ */
+export function getStyleLayerChnNameByIdAndLang(layerid, lang) {
+  /*if(layerid === 'roadoverlying'){
+    console.log(layerid)
+    console.log(layerDic)
+    console.log(layerDic['styleLayer'])
+    console.log(layerDic['styleLayer'][layerid])
+  }*/
+  return runConfig.styleLayerLang && lang == 'en' ? layerid : (layerDic['styleLayer'][layerid] || styleLayerDic[layerid] || layerid);
+}
+
+/**
  * 数据源图层的id获取图层别名
  * @param id
  */

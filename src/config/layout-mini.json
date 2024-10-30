@@ -33,11 +33,7 @@
           "fields": [
             "fill-opacity",
             "fill-color",
-            "fill-antialias",
-            "fill-outline-color",
-            "fill-pattern",
-            "fill-translate",
-            "fill-translate-anchor"
+            "fill-outline-color"
           ]
         }
       ]
@@ -49,8 +45,7 @@
           "type": "properties",
           "fields": [
             "fill-extrusion-opacity",
-            "fill-extrusion-color",
-            "fill-extrusion-height"
+            "fill-extrusion-color"
           ]
         }
       ]
@@ -74,10 +69,8 @@
           "title": "Text layout properties",
           "type": "properties",
           "fields": [
-            "text-font",
             "text-size",
             "text-line-height",
-            "text-padding",
             "text-max-width"
           ]
         },
@@ -103,11 +96,7 @@
             "raster-opacity",
             "raster-hue-rotate",
             "raster-brightness-min",
-            "raster-brightness-max",
-            "raster-saturation",
-            "raster-contrast",
-            "raster-fade-duration",
-            "raster-resampling"
+            "raster-brightness-max"
           ]
         }
       ]
@@ -118,9 +107,6 @@
           "title": "Paint properties",
           "type": "properties",
           "fields": [
-            "hillshade-illumination-direction",
-            "hillshade-illumination-anchor",
-            "hillshade-exaggeration",
             "hillshade-shadow-color",
             "hillshade-highlight-color",
             "hillshade-accent-color"

@@ -1,6 +1,6 @@
 import React from 'react'
-import Collapser from './Collapser'
-import { getStyleLayerChnNameById } from '../libs/layer'
+import Collapser from '../Collapser'
+import { getStyleLayerChnNameById } from '../../libs/layer'
 
 type LayerListGroupProps = {
   title: string

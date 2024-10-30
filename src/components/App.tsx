@@ -15,7 +15,7 @@ import MapMaplibreGl from './MapMaplibreGl'
 import MapOpenLayers from './MapOpenLayers'
 import LayerList from './LayerList'
 import LayerEditor from './LayerEditor'
-import LayerEditorMini from './LayerEditorMini'
+import LayerEditorMini from './layereditor/LayerEditorMini'
 import AppToolbar, { MapState } from './AppToolbar'
 import AppLayout from './AppLayout'
 import MessagePanel from './AppMessagePanel'
@@ -48,7 +48,7 @@ import MapboxGl from 'maplibre-gl'
 import {getAppConfig, getAppConfig1} from '../libs/config'
 import {getToken} from '../libs/auth.js'
 import {saveLangToMsp} from "../libs/lang.ts";
-import LayerListGroupList from "./LayerListGroupList";
+import LayerListGroupList from "./layereditor/LayerListGroupList";
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
 function normalizeSourceURL(url, apiToken = "") {
@@ -504,6 +504,7 @@ export default class App extends React.Component<any, AppState> {
 
   onStyleChanged = (newStyle: StyleSpecification & {id: string}, opts: OnStyleChangedOpts={}) => {
     console.log("样式更新 新样式文件 ->", newStyle)
+    console.log("样式更新 原样式文件 ->", this.state.mapStyle)
     opts = {
       save: true,
       addRevision: true,
@@ -673,19 +674,11 @@ export default class App extends React.Component<any, AppState> {
     this.onLayersChange(layers);
   }
 
-  onLayersChange = (changedLayers: LayerSpecification[]) => {
-    const changedStyle = {
-      ...this.state.mapStyle,
-      layers: changedLayers
-    }
-    this.onStyleChanged(changedStyle)
-  }
-
   /**
-   * 分组图层状态变化
+   * 一部分图层发生变化
    * @param changedLayers
    */
-  onLayersGroupChange = (changedLayers: LayerSpecification[]) => {
+  onLayersChange = (changedLayers: LayerSpecification[]) => {
     const changedStyle = {
       ...this.state.mapStyle,
       layers: changedLayers
@@ -710,11 +703,15 @@ export default class App extends React.Component<any, AppState> {
     this.onLayersChange(changedLayers)
   }
 
+  /**
+   * 图层隐藏和显示切换方法
+   * @param index
+   */
   onLayerVisibilityToggle = (index: number) => {
     const layers = this.state.mapStyle.layers;
     const changedLayers = layers.slice(0)
 
-    const layer = {...changedLayers[index]}
+    const layer = { ...changedLayers[index] }
     const changedLayout = 'layout' in layer ? {...layer.layout} : {}
     changedLayout.visibility = changedLayout.visibility === 'none' ? 'visible' : 'none'
 
@@ -728,23 +725,30 @@ export default class App extends React.Component<any, AppState> {
    * @param index
    */
   onLayerGroupVisibilityToggle = (groupId: string) => {
-    console.log('隐藏或者显示某个分组下所有的图层 ->', groupId)
-    const layers = this.state.mapStyle.layers || []
-    const changedLayers = layers.slice(0)
+    // console.log('隐藏或者显示某个分组下所有的图层 ->', groupId)
+    console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件1 ->", this.state.mapStyle)
+    const copyLayers = this.state.mapStyle.layers.slice(0);
+    console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层1 ->", copyLayers)
+
     let groupLayers = groupedLayerMap.groupToLayer[groupId];
+    //图层分组中配置的对应的样式图层id
     let layerIdsArry = groupLayers.map(layer => layer.layerId)
-    for (let i = 0; i < changedLayers.length; i++) {
-      let changedLayer = changedLayers[i];
+    console.log("onLayerGroupVisibilityToggle 待切换状态的图层 ->", layerIdsArry)
+
+    for (let i = 0; i < copyLayers.length; i++) {
+      const changedLayer = {...copyLayers[i]}
       if(layerIdsArry.includes(changedLayer.id)){
         const changedLayout = 'layout' in changedLayer ? {...changedLayer.layout} : {}
-        changedLayout.visibility = changedLayout.visibility === 'none' ? 'visible' : 'none'
+        changedLayout.visibility = (changedLayout.visibility === 'none' ? 'visible' : 'none');
         changedLayer.layout = changedLayout
-        console.log("需要更新的图层 -> ", changedLayer.id)
-        console.log("更新后的图层 -> ", changedLayer)
-        changedLayers[i] = changedLayer
+        copyLayers[i] = changedLayer;
+       console.log("需要更新的图层 -> ", changedLayer.id)
+       console.log("更新后的图层 -> ", changedLayer)
       }
     }
-    this.onLayersChange(changedLayers)
+    console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件2 ->", this.state.mapStyle)
+    console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层2 ->", copyLayers)
+    this.onLayersChange(copyLayers);
   }
 
   onLayerIdChange = (index: number, _oldId: string, newId: string) => {
@@ -760,9 +764,6 @@ export default class App extends React.Component<any, AppState> {
   onLayerChanged = (index: number, layer: LayerSpecification) => {
     const changedLayers = this.state.mapStyle.layers.slice(0)
     changedLayers[index] = layer
-
-    console.log("onLayerChanged . layer ->", layer)
-    console.log("onLayerChanged . onLayerChanged ->", changedLayers)
     this.onLayersChange(changedLayers)
   }
   /**
@@ -1118,14 +1119,15 @@ export default class App extends React.Component<any, AppState> {
     const selectedGroupLayers = this.getSelectedGroupLayers(this.state.selectedLayerGroupId, layers)
     //分组下的图层应该都是同一类型  所以取第一个layer
     const selectedGroupLayer = selectedGroupLayers[0];
+    const layersForGroup = this.state.mapStyle.layers || []
 
     /*简化版的图层分组*/
     const layerListGroupList = <LayerListGroupList
-        onLayersGroupChange={this.onLayersGroupChange}
+        onLayersGroupChange={this.onLayersChange}
         onLayerGroupSelect={this.onLayerGroupSelect}
         selectedLayerGroupId={this.state.selectedLayerGroupId}
         onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
-        layers={layers}
+        layers={layersForGroup}
         sources={this.state.sources}
         errors={this.state.errors}
     />
@@ -1134,7 +1136,7 @@ export default class App extends React.Component<any, AppState> {
      */
     const layerEditorMini = selectedLayerGroup ? <LayerEditorMini
         key={this.state.selectedLayerOriginalId} //选中的分组id
-        layers={layers}  //所有的图层
+        layers={layersForGroup}  //所有的图层
         layer={selectedGroupLayer}
         selectedGroupLayers={selectedGroupLayers} //选中的分组里面的图层layer  样式文件中查找到的图层
         selectedLayerGroupId={this.state.selectedLayerGroupId} //选中的分组id、
@@ -1142,7 +1144,6 @@ export default class App extends React.Component<any, AppState> {
         vectorLayers={this.state.vectorLayers}
         spec={this.state.spec}  //图层规范
         onLayerGroupChanged={this.onLayerGroupChanged}
-        onLayerGroupVisibilityToggle={this.onLayerGroupVisibilityToggle}
         errors={this.state.errors}
     /> : undefined
 
