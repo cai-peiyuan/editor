@@ -121,10 +121,8 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
         this.props.layers.map(getRequiredProps),
     );
 
-    console.log('nextProps.layers -> ', nextProps.layers)
-
-    console.log('this.props.layers -> ', this.props.layers)
-
+    //console.log('nextProps.layers -> ', nextProps.layers)
+    //console.log('this.props.layers -> ', this.props.layers)
     function withoutLayers(props: LayerListContainerProps) {
       const out = {
         ...props
@@ -140,13 +138,12 @@ class LayerListContainer extends React.Component<LayerListContainerProps, LayerL
         withoutLayers(nextProps)
     );
 
-    console.log('nextProps -> ', nextProps)
-
-    console.log('this.props -> ', this.props)
+    //console.log('nextProps -> ', nextProps)
+    //console.log('this.props -> ', this.props)
 
     const propsChanged = !(layersEqual && propsEqual);
-    console.log('LayerListGroupList shouldComponentUpdate layersEqual -> ', layersEqual)
-    console.log('LayerListGroupList shouldComponentUpdate propsEqual -> ', propsEqual)
+    //console.log('LayerListGroupList shouldComponentUpdate layersEqual -> ', layersEqual)
+    //console.log('LayerListGroupList shouldComponentUpdate propsEqual -> ', propsEqual)
     return !layersEqual || !propsEqual;
   }
 

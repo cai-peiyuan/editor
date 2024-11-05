@@ -108,7 +108,7 @@ export default class LayerEditorMini extends React.Component<LayerEditorProps, L
   changeProperty(group: keyof LayerSpecification | null, property: string, newValue: any) {
     this.props.onLayerGroupChanged(
       this.props.selectedLayerGroupId,
-      changeProperty(this.props.layer, group, property, newValue)
+      changeProperty(this.props.layer, group, property, newValue), this.props.selectedGroupLayers, this.props.layers
     )
   }
 

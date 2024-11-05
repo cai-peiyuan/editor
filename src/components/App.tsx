@@ -503,8 +503,8 @@ export default class App extends React.Component<any, AppState> {
   }
 
   onStyleChanged = (newStyle: StyleSpecification & {id: string}, opts: OnStyleChangedOpts={}) => {
-    console.log("样式更新 新样式文件 ->", newStyle)
-    console.log("样式更新 原样式文件 ->", this.state.mapStyle)
+    //console.log("样式更新 新样式文件 ->", newStyle)
+    //console.log("样式更新 原样式文件 ->", this.state.mapStyle)
     opts = {
       save: true,
       addRevision: true,
@@ -726,14 +726,14 @@ export default class App extends React.Component<any, AppState> {
    */
   onLayerGroupVisibilityToggle = (groupId: string) => {
     // console.log('隐藏或者显示某个分组下所有的图层 ->', groupId)
-    console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件1 ->", this.state.mapStyle)
+    //console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件1 ->", this.state.mapStyle)
     const copyLayers = this.state.mapStyle.layers.slice(0);
-    console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层1 ->", copyLayers)
+    //console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层1 ->", copyLayers)
 
     let groupLayers = groupedLayerMap.groupToLayer[groupId];
     //图层分组中配置的对应的样式图层id
     let layerIdsArry = groupLayers.map(layer => layer.layerId)
-    console.log("onLayerGroupVisibilityToggle 待切换状态的图层 ->", layerIdsArry)
+    //console.log("onLayerGroupVisibilityToggle 待切换状态的图层 ->", layerIdsArry)
 
     for (let i = 0; i < copyLayers.length; i++) {
       const changedLayer = {...copyLayers[i]}
@@ -742,12 +742,12 @@ export default class App extends React.Component<any, AppState> {
         changedLayout.visibility = (changedLayout.visibility === 'none' ? 'visible' : 'none');
         changedLayer.layout = changedLayout
         copyLayers[i] = changedLayer;
-       console.log("需要更新的图层 -> ", changedLayer.id)
-       console.log("更新后的图层 -> ", changedLayer)
+       //console.log("需要更新的图层 -> ", changedLayer.id)
+       //console.log("更新后的图层 -> ", changedLayer)
       }
     }
-    console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件2 ->", this.state.mapStyle)
-    console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层2 ->", copyLayers)
+    //console.log("onLayerGroupVisibilityToggle 样式更新 原样式文件2 ->", this.state.mapStyle)
+    //console.log("onLayerGroupVisibilityToggle 样式更新 复制的图层2 ->", copyLayers)
     this.onLayersChange(copyLayers);
   }
 
@@ -771,9 +771,11 @@ export default class App extends React.Component<any, AppState> {
    * @param groupId
    * @param layer
    */
-  onLayerGroupChanged = (groupId: string, layer: LayerSpecification) => {
+  onLayerGroupChanged = (groupId: string, layer: LayerSpecification, selectedGroupLayers: LayerSpecification[], layers: LayerSpecification[]) => {
     console.log("onLayerGroupChanged . groupId ->", groupId)
     console.log("onLayerGroupChanged . layer ->", layer)
+    console.log("onLayerGroupChanged . selectedGroupLayers ->", selectedGroupLayers)
+    console.log("onLayerGroupChanged . layers ->", layers)
     const copyLayers = this.state.mapStyle.layers.slice(0);
     let groupLayers = groupedLayerMap.groupToLayer[groupId];
     //图层分组中配置的对应的样式图层id

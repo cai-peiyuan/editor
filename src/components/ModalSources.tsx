@@ -372,10 +372,10 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
       />
     })
 
-    console.log(this.state.publicSourcesMsp)
+    // console.log(this.state.publicSourcesMsp)
     const tilesetOptionsMsp = Object.keys(this.state.publicSourcesMsp).filter(sourceId => !(sourceId in mapStyle.sources)).map(sourceId => {
       const source = this.state.publicSourcesMsp[sourceId]
-      console.log(sourceId)
+      // console.log(sourceId)
       return <PublicSource
         key={sourceId}
         id={sourceId}
