@@ -421,6 +421,7 @@ export default class App extends React.Component<any, AppState> {
        */
       if (data.langDic) {
         langDic = Object.assign(langDic, (data.langDic));
+        console.log('翻译字典 ->', langDic)
         // 服务中没有的数据 在本地有的 保存到msp服务中
         saveLangToMsp();
       }

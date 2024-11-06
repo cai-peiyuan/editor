@@ -179,6 +179,9 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
       },
       buildInspectStyle: (originalMapStyle: StyleSpecification, coloredLayers: HighlightedLayer[]) => buildInspectStyle(originalMapStyle, coloredLayers, this.props.highlightedLayer),
       renderPopup: (features: InspectFeature[]) => {
+        if(runConfig.layerEditMode == 'mini'){
+          return null
+        }
         if(this.props.inspectModeEnabled) {
           return renderPopup(<MapMaplibreGlFeaturePropertyPopup features={features} />, tmpNode);
         } else {

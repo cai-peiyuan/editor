@@ -2,6 +2,7 @@ import React, {PropsWithChildren, SyntheticEvent} from 'react'
 import classnames from 'classnames'
 import FieldDocLabel from './FieldDocLabel'
 import Doc from './Doc'
+import {getLabelName} from '../libs/lang'
 
 
 type BlockProps = PropsWithChildren & {
@@ -80,7 +81,7 @@ export default class Block extends React.Component<BlockProps, BlockState> {
       }
       {!this.props.fieldSpec &&
         <div className="maputnik-input-block-label">
-          {this.props.label}
+          {getLabelName(this.props.label)}
         </div>
       }
       <div className="maputnik-input-block-action">

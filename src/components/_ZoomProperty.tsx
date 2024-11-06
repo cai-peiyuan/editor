@@ -13,6 +13,7 @@ import labelFromFieldName from '../libs/label-from-field-name'
 
 import docUid from '../libs/document-uid'
 import sortNumerically from '../libs/sort-numerically'
+import {getLabelName} from "../libs/lang";
 
 
 /**
@@ -187,7 +188,7 @@ export default class ZoomProperty extends React.Component<ZoomPropertyProps, Zoo
     // return <div className="maputnik-zoom-spec-property">
     return <div className="maputnik-data-spec-block">
       <fieldset className="maputnik-data-spec-property">
-        <legend>{labelFromFieldName(this.props.fieldName)}</legend>
+        <legend>{getLabelName(labelFromFieldName(this.props.fieldName))}</legend>
         <div className="maputnik-data-fieldset-inner">
           <Block
             label={"Function"}
@@ -215,11 +216,11 @@ export default class ZoomProperty extends React.Component<ZoomPropertyProps, Zoo
           </Block>
           <div className="maputnik-function-stop">
             <table className="maputnik-function-stop-table maputnik-function-stop-table--zoom">
-              <caption>Stops</caption>
+              <caption>{getLabelName("Stops")}</caption>
               <thead>
                 <tr>
-                  <th>Zoom</th>
-                  <th rowSpan={2}>Output value</th>
+                  <th>{getLabelName("Zoom")}</th>
+                  <th rowSpan={2}>{getLabelName("Output value")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +235,7 @@ export default class ZoomProperty extends React.Component<ZoomPropertyProps, Zoo
             >
               <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                 <path fill="currentColor" d={mdiTableRowPlusAfter} />
-              </svg> Add stop
+              </svg>{getLabelName("Add stop")}
             </InputButton>
             <InputButton
               className="maputnik-add-stop"
@@ -242,7 +243,7 @@ export default class ZoomProperty extends React.Component<ZoomPropertyProps, Zoo
             >
               <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                 <path fill="currentColor" d={mdiFunctionVariant} />
-              </svg> Convert to expression
+              </svg>{getLabelName("Convert to expression")}
             </InputButton>
           </div>
         </div>

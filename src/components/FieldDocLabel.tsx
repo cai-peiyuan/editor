@@ -1,5 +1,6 @@
 import React from 'react'
 import {MdInfoOutline, MdHighlightOff} from 'react-icons/md'
+import {getLabelName} from '../libs/lang'
 
 type FieldDocLabelProps = {
   label: JSX.Element | string | undefined
@@ -38,7 +39,7 @@ export default class FieldDocLabel extends React.Component<FieldDocLabelProps, F
     if (doc) {
       return <label className="maputnik-doc-wrapper">
         <div className="maputnik-doc-target">
-          {label}
+          {getLabelName(label)}
           {'\xa0'}
           <button
             aria-label={this.state.open ? "close property documentation" : "open property documentation"}
@@ -54,7 +55,7 @@ export default class FieldDocLabel extends React.Component<FieldDocLabelProps, F
     else if (label) {
       return <label className="maputnik-doc-wrapper">
         <div className="maputnik-doc-target">
-          {label}
+          {getLabelName(label)}
         </div>
       </label>
     }

@@ -2,6 +2,7 @@ import React, { PropsWithChildren, ReactElement } from 'react'
 import FieldDocLabel from './FieldDocLabel'
 import Doc from './Doc'
 import generateUniqueId from '../libs/document-uid';
+import {getLabelName} from '../libs/lang'
 
 type FieldsetProps = PropsWithChildren & {
   label?: string,
@@ -43,7 +44,7 @@ export default class Fieldset extends React.Component<FieldsetProps, FieldsetSta
       }
       {!this.props.fieldSpec &&
         <div className="maputnik-input-block-label">
-          {this.props.label}
+          {getLabelName(this.props.label)}
         </div>
       }
       <div className="maputnik-input-block-action">

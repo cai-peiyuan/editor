@@ -280,7 +280,7 @@ export default class DataProperty extends React.Component<DataPropertyProps, Dat
 
     return <div className="maputnik-data-spec-block">
       <fieldset className="maputnik-data-spec-property">
-        <legend>{labelFromFieldName(this.props.fieldName)}</legend>
+        <legend>{getLabelName(labelFromFieldName(this.props.fieldName))}</legend>
         <div className="maputnik-data-fieldset-inner">
           <Block
             label={"Function"}
@@ -297,7 +297,7 @@ export default class DataProperty extends React.Component<DataPropertyProps, Dat
           </Block>
           {this.props.value?.type !== "identity" &&
             <Block
-              label={"Base"}
+              label={getLabelName("Base")}
               key="base"
             >
               <div className="maputnik-data-spec-property-input">
@@ -338,12 +338,12 @@ export default class DataProperty extends React.Component<DataPropertyProps, Dat
           {dataFields &&
             <div className="maputnik-function-stop">
               <table className="maputnik-function-stop-table">
-                <caption>Stops</caption>
+                <caption>{getLabelName("Stops")}</caption>
                 <thead>
                   <tr>
-                    <th>Zoom</th>
-                    <th>Input value</th>
-                    <th rowSpan={2}>Output value</th>
+                    <th>{getLabelName("Zoom")}</th>
+                    <th>{getLabelName("Input value")}</th>
+                    <th rowSpan={2}>{getLabelName("Output value")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -360,7 +360,7 @@ export default class DataProperty extends React.Component<DataPropertyProps, Dat
               >
                 <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                   <path fill="currentColor" d={mdiTableRowPlusAfter} />
-                </svg> Add stop
+                </svg>{getLabelName("Add stop")}
               </InputButton>
             }
             <InputButton
@@ -369,7 +369,7 @@ export default class DataProperty extends React.Component<DataPropertyProps, Dat
             >
               <svg style={{width:"14px", height:"14px", verticalAlign: "text-bottom"}} viewBox="0 0 24 24">
                 <path fill="currentColor" d={mdiFunctionVariant} />
-              </svg> Convert to expression
+              </svg>{getLabelName("Convert to expression")}
             </InputButton>
           </div>
         </div>

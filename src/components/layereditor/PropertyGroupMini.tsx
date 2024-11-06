@@ -35,7 +35,7 @@ function getGroupName(spec: any, layerType: LayerSpecification["type"], fieldNam
   }
 }
 
-type PropertyGroupProps = {
+type PropertyGroupMiniProps = {
   layer: LayerSpecification
   groupFields: string[]
   onChange(...args: unknown[]): unknown
@@ -43,7 +43,7 @@ type PropertyGroupProps = {
   errors?: {[key: string]: {message: string}}
 };
 
-export default class PropertyGroup extends React.Component<PropertyGroupProps> {
+export default class PropertyGroupMini extends React.Component<PropertyGroupMiniProps> {
   onPropertyChange = (property: string, newValue: any) => {
     const group = getGroupName(this.props.spec, this.props.layer.type, property)
     this.props.onChange(group ,property, newValue)
