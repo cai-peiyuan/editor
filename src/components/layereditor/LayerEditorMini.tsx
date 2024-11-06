@@ -106,6 +106,12 @@ export default class LayerEditorMini extends React.Component<LayerEditorProps, L
    * @param newValue
    */
   changeProperty(group: keyof LayerSpecification | null, property: string, newValue: any) {
+
+    console.log("图层属性发生变化 ->", group, property, newValue)
+    for (let i=0; i < this.props.selectedGroupLayers.length; i++) {
+      this.props.selectedGroupLayers[i] = changeProperty(this.props.selectedGroupLayers[i], group, property, newValue)
+    }
+
     this.props.onLayerGroupChanged(
       this.props.selectedLayerGroupId,
       changeProperty(this.props.layer, group, property, newValue), this.props.selectedGroupLayers, this.props.layers
@@ -219,12 +225,12 @@ export default class LayerEditorMini extends React.Component<LayerEditorProps, L
         <div className="layer-header">
           <h2 className="layer-header__title">
             {/*显示图层分组名称*/}
-            { getLabelName("") } { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {' 包含 '+ this.props.selectedGroupLayers.length + '个可配置图层'}
+            { getLabelName("") } { groupedLayerMap.groupLayer[this.props.selectedLayerGroupId].name } {' 关联 '+ this.props.selectedGroupLayers.length + '个可配置图层'}
           </h2>
         </div>
       </header>
 
-      {this.getGroupLayerHeaders(this.props.selectedGroupLayers)}
+     {/* {this.getGroupLayerHeaders(this.props.selectedGroupLayers)}*/}
       {/*风琴组件*/}
       <Accordion
         allowMultipleExpanded={true}

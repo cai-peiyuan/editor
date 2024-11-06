@@ -26,52 +26,45 @@ class AppLayout extends React.Component<AppLayoutProps> {
   }
 
   render() {
+
     return <div className="maputnik-layout">
-      {this.props.toolbar}
+                {this.props.toolbar}
+                {runConfig.layerEditMode != 'mini' && <div className="maputnik-layout-list"
+                     style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
+                >
+                  {this.props.layerList}
+                </div>}
 
-      {/*图层列表*/}
-      <div className="maputnik-layout-list"
-           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
-      >
-        {this.props.layerList}
-      </div>
+                {runConfig.layerEditMode != 'mini' && <div className="maputnik-layout-drawer"
+                      style={runConfig.mainLayout.toolBar.show === false ? {top: "0px", height: "calc(100% - 0px)"} : {}}
+                >
+                  <ScrollContainer>
+                    {this.props.layerEditor}
+                  </ScrollContainer>
+                </div>}
 
-      {/*图层详细配置*/}
-      <div className="maputnik-layout-drawer"
-           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
-      >
-        <ScrollContainer>
-          {this.props.layerEditor}
-        </ScrollContainer>
-      </div>
+                {runConfig.layerEditMode == 'mini' && <div className="maputnik-layout-list-mini"
+                      style={runConfig.mainLayout.toolBar.show === false ? {top: "0px", height: "calc(100% - 0px)"} : {}}
+                >
+                  {this.props.LayerListGroupList}
+                </div>}
+                {runConfig.layerEditMode == 'mini' && <div className="maputnik-layout-drawer-mini"
+                      style={
+                        runConfig.mainLayout.toolBar.show === false ? {top: "0px", height: "calc(100% - 0px)"} : {}
+                      }
+                >
+                  <ScrollContainer>
+                    {this.props.layerEditorMini}
+                  </ScrollContainer>
+                </div>}
 
-
-      <div className="maputnik-layout-list-mini"
-           style={runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}}
-      >
-        {this.props.LayerListGroupList}
-      </div>
-
-
-
-      <div className="maputnik-layout-drawer-mini"
-           style={
-        runConfig.mainLayout.toolBar.show === false? {top:"0px",height:"calc(100% - 0px)"}: {}
-      }
-      >
-        <ScrollContainer>
-          {this.props.layerEditorMini}
-        </ScrollContainer>
-      </div>
-
-
-      {this.props.map}
-      {this.props.bottom && <div className="maputnik-layout-bottom">
-        {this.props.bottom}
-      </div>
-      }
-      {this.props.modals}
-    </div>
+                {this.props.map}
+                {this.props.bottom && <div className="maputnik-layout-bottom">
+                  {this.props.bottom}
+                </div>
+                }
+                {this.props.modals}
+              </div>
   }
 }
 

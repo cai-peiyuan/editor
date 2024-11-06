@@ -777,13 +777,14 @@ export default class App extends React.Component<any, AppState> {
     console.log("onLayerGroupChanged . selectedGroupLayers ->", selectedGroupLayers)
     console.log("onLayerGroupChanged . layers ->", layers)
     const copyLayers = this.state.mapStyle.layers.slice(0);
-    let groupLayers = groupedLayerMap.groupToLayer[groupId];
     //图层分组中配置的对应的样式图层id
-    let layerIdsArry = groupLayers.map(layer => layer.layerId)
-    for (let i = 0; i < copyLayers.length; i++) {
-      const changedLayer = {...copyLayers[i]}
-      if(layer.id === (changedLayer.id)){
-        copyLayers[i] = layer;
+    let layerIdsArry = selectedGroupLayers.map(layer => layer.id)
+    for (let j = 0; j < selectedGroupLayers.length; j++) {
+      for (let i = 0; i < copyLayers.length; i++) {
+        const changedLayer = {...copyLayers[i]}
+        if(selectedGroupLayers[j].id === (changedLayer.id)){
+          copyLayers[i] = selectedGroupLayers[j];
+        }
       }
     }
     this.onLayersChange(copyLayers);
@@ -1119,7 +1120,7 @@ export default class App extends React.Component<any, AppState> {
       let layerIdsArry = groupLayers.map(layer => layer.layerId)
       let groupStyleLayers = layers.filter(layer=>layerIdsArry.includes(layer.id))
      // console.log("计算某个分组下的图层对象 -> ", selectedLayerGroupId, groupLayers, layerIdsArry, layers, groupStyleLayers)
-      return groupStyleLayers;
+      return groupStyleLayers.slice(0);
   }
   //数据 变化后会重新执行render方法
   render() {
@@ -1131,7 +1132,7 @@ export default class App extends React.Component<any, AppState> {
     //选择的一个分组下的图层
     const selectedGroupLayers = this.getSelectedGroupLayers(this.state.selectedLayerGroupId, layers)
     //分组下的图层应该都是同一类型  所以取第一个layer
-    const selectedGroupLayer = selectedGroupLayers[0];
+    const selectedGroupLayer = selectedGroupLayers.slice(0,1)[0];
     const layersForGroup = this.state.mapStyle.layers || []
 
     /*简化版的图层分组*/
