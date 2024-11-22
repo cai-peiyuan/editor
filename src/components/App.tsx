@@ -39,19 +39,17 @@ import LayerWatcher from '../libs/layerwatcher'
 import tokens from '../config/tokens.json'
 import isEqual from 'lodash.isequal'
 import Debug from '../libs/debug'
-import {formatLayerId} from '../util/format';
 import {getLayerChnNameDicByStyleFile} from '../libs/layer'
 import { SortEnd } from 'react-sortable-hoc';
 import { MapOptions } from 'maplibre-gl';
 
 import MapboxGl from 'maplibre-gl'
-import {getAppConfig, getAppConfig1} from '../libs/config'
-import {getToken} from '../libs/auth.js'
+import {getToken} from '../libs/auth'
 import {saveLangToMsp} from "../libs/lang.ts";
 import LayerListGroupList from "./layereditor/LayerListGroupList";
 
 // Similar functionality as <https://github.com/mapbox/mapbox-gl-js/blob/7e30aadf5177486c2cfa14fe1790c60e217b5e56/src/util/mapbox.js>
-function normalizeSourceURL(url, apiToken = "") {
+function normalizeSourceURL(url: string, apiToken: string = "") {
   const matches = url.match(/^mapbox:\/\/(.*)/);
   if (matches) {
     // mapbox://mapbox.mapbox-streets-v7
@@ -158,8 +156,6 @@ export default class App extends React.Component<any, AppState> {
 
   constructor(props: any) {
     super(props)
-
-    // this.getEditorConfig();
 
     autoBind(this);
 
@@ -315,11 +311,6 @@ export default class App extends React.Component<any, AppState> {
     this.layerWatcher = new LayerWatcher({
       onVectorLayersChange: v => this.setState({vectorLayers: v})
     })
-  }
-
-  // 获取菜单信息，并放入state中
-  getEditorConfig() {
-    const data = getAppConfig();
   }
 
   handleKeyPress = (e: KeyboardEvent) => {

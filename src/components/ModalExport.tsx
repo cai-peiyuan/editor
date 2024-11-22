@@ -4,22 +4,15 @@ import {saveAs} from 'file-saver'
 import pkgLockJson from '../../package-lock.json'
 import pkgJson from '../../package.json'
 
-import {version} from 'maplibre-gl/package.json'
 import {format} from '@maplibre/maplibre-gl-style-spec'
 import type {StyleSpecification} from 'maplibre-gl'
 
-import FieldString from './FieldString'
 import InputButton from './InputButton'
 import Modal from './Modal'
-import {MdFileDownload, MdSave, MdThumbDown, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
+import {MdFileDownload, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
 import style from '../libs/style'
-import fieldSpecAdditional from '../libs/field-spec-additional'
-import {getToken} from '../libs/auth.js'
 import 'canvas-toBlob'
-import FileSaver from 'file-saver'
 import icons from "../libs/exportcontrol/icons";
-import FieldUrl from "./FieldUrl";
-import FieldArray from "./FieldArray";
 import {getLabelName} from "../libs/lang";
 
 console.log('pkgJson', pkgJson);

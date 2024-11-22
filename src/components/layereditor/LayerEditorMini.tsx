@@ -1,26 +1,15 @@
 import React, {type JSX} from 'react'
 import PropTypes from 'prop-types'
-import { Wrapper, Button, Menu, MenuItem } from 'react-aria-menubutton'
 import {BackgroundLayerSpecification, LayerSpecification, SourceSpecification} from 'maplibre-gl';
 
 import PropertyGroupMini from './PropertyGroupMini'
 import LayerEditorGroup from '../LayerEditorGroup'
-import FieldType from '../FieldType'
-import FieldId from '../FieldId'
-import FieldMinZoom from '../FieldMinZoom'
-import FieldMaxZoom from '../FieldMaxZoom'
-import FieldComment from '../FieldComment'
-import FieldSource from '../FieldSource'
-import FieldSourceLayer from '../FieldSourceLayer'
 import {Accordion} from 'react-accessible-accordion';
-import {MdMoreVert} from 'react-icons/md'
 
-import {changeType, changeProperty, getStyleLayerChnNameById, getStyleLayerChnNameByIdAndLang} from '../../libs/layer'
-import layout from '../../config/layout.json'
+import {changeProperty, getStyleLayerChnNameByIdAndLang} from '../../libs/layer'
 
 import layoutMini from '../../config/layout-mini.json' //编辑器的界面配置项，定义了哪些属性在那个分类下配置
 import {getLabelName, getLabelNameByLang} from '../../libs/lang'
-import { getGroupVisibilityButtonStatus } from "../../libs/config"
 
 /**
  * 通过json配置文件获取指定类型的图层编辑器界面

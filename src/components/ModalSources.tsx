@@ -10,9 +10,8 @@ import FieldSelect from './FieldSelect'
 import ModalSourcesTypeEditor, { EditorMode } from './ModalSourcesTypeEditor'
 
 import style from '../libs/style'
-import { deleteSource, addSource, changeSource, deleteSourceMsp, addSourceMsp, changeSourceMsp } from '../libs/source'
+import { deleteSource, addSource, changeSource, addSourceMsp } from '../libs/source'
 import publicSources from '../config/tilesets.json'
-import publicSourcesMsp from '../config/tilesets.json'
 
 import {getToken} from "../libs/auth";
 import {getLabelName} from "../libs/lang";

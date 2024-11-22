@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import {detect} from 'detect-browser';
 
-import {MdFileDownload, MdOpenInBrowser, MdSettings, MdLayers, MdHelpOutline, MdFindInPage} from 'react-icons/md'
+import {MdFileDownload, MdOpenInBrowser, MdSettings, MdLayers} from 'react-icons/md'
 import pkgJson from '../../package.json'
 import {getLabelName} from '../libs/lang'
 

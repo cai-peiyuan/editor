@@ -6,10 +6,9 @@ import LayerListGroupListTitle from './LayerListGroupListTitle'
 import LayerListGroupListItem from './LayerListGroupListItem'
 
 import {getLabelName} from "../../libs/lang";
-import {SortEndHandler, SortableContainer} from 'react-sortable-hoc';
+import {SortableContainer} from 'react-sortable-hoc';
 import type {LayerSpecification} from 'maplibre-gl';
 import generateUniqueId from '../../libs/document-uid';
-import { findClosestCommonPrefix, layerPrefix } from '../../libs/layer';
 import { getGroupVisibilityButtonStatus } from "../../libs/config"
 /*图层分组*/
 type LayerListContainerProps = {

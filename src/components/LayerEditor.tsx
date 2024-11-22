@@ -19,7 +19,6 @@ import {MdMoreVert} from 'react-icons/md'
 
 import {changeType, changeProperty, getStyleLayerChnNameById} from '../libs/layer'
 import layout from '../config/layout.json'
-import {formatLayerId} from '../util/format';
 import {getLabelName} from '../libs/lang'
 
 

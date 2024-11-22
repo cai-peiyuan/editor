@@ -1,6 +1,5 @@
 import React from 'react'
 import IconLayer from './IconLayer'
-import {latest} from '@maplibre/maplibre-gl-style-spec'
 import {getStyleLayerChnNameById, getSourceLayerChnNameById} from '../libs/layer'
 import type {InspectFeature} from './MapMaplibreGlFeaturePropertyPopup';
 

@@ -8,7 +8,7 @@ import Modal from './Modal'
 import InputButton from './InputButton'
 import InputUrl from './InputUrl'
 
-import {getToken} from '../libs/auth.js'
+import {getToken} from '../libs/auth'
 import style from '../libs/style'
 import publicStyles from '../config/styles.json'
 import {getLabelName} from "../libs/lang";

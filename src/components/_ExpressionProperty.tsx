@@ -6,8 +6,6 @@ import Block from './Block'
 import InputButton from './InputButton'
 import labelFromFieldName from '../libs/label-from-field-name'
 import FieldJson from './FieldJson'
-import {getLabelName} from '../libs/lang'
-
 
 type ExpressionPropertyProps = {
   onDelete?(...args: unknown[]): unknown
