@@ -144,6 +144,9 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
   } else if (spriteUrl.startsWith("mapabc://")) {
     const spriteName = spriteUrl.replace("mapabc://sprites/", "");
     spriteUrl_Http = api_config.url + "/msp-api/sprite/v2/" + spriteName;
+  }  else if (spriteUrl.startsWith("amap://")) {
+    const spriteName = spriteUrl.replace("amap://sprites/", "");
+    spriteUrl_Http = api_config.url + "/msp-api/sprite/v2/" + spriteName;
   } else {
     spriteUrl_Http = api_config.url + "/api/mapSpriteData" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
@@ -161,7 +164,7 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
  * @param jsonStr
  */
 function saveStyleJsonToMsp(mspInfo, jsonStr) {
-  fetch(api_config.url + '/open/editor/mapStyle/updateStyleContent/' + mspInfo.id, {
+  fetch(api_config.url + '/open/editor/mapStyle/updateStyleContent/' + (mspInfo.id||mspInfo.styleId), {
     method: 'PUT',
     mode: 'cors',
     headers: {
@@ -185,7 +188,7 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
 
 
 async function saveStyleThumbnailToMsp(mspInfo, result) {
-  const res = await fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + mspInfo.id, {
+  const res = await fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + (mspInfo.id||mspInfo.styleId), {
     method: "PUT",
     mode: 'cors',
     headers: {

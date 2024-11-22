@@ -107,7 +107,7 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
          */
         const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body.data))
         const url = new URL(location.href);
-        url.searchParams.set("styleId", mapStyle.metadata.mspInfo.id);
+        url.searchParams.set("styleId", mapStyle.metadata.mspInfo.id||mapStyle.metadata.mspInfo.styleId);
         history.replaceState({}, "Maputnik", url.href);
         console.log('Loaded style ', mapStyle.id)
         console.log('Loaded style ', mapStyle)

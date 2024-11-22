@@ -246,7 +246,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
       title={getLabelName('Save Style')}
       className="maputnik-export-modal"
     >
-      <section className="maputnik-modal-section">
+      <section className="maputnik-modal-section" >
         <h1>{getLabelName("Style Thumbnail")}</h1>
 
         <div style={{"textAlign": "center"}}>
