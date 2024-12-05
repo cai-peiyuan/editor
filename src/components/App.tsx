@@ -46,7 +46,7 @@ import { SortEnd } from 'react-sortable-hoc';
 import { MapOptions } from 'maplibre-gl';
 
 import MapboxGl from 'maplibre-gl'
-import {getToken} from '../libs/auth'
+import {getToken ,setToken} from '../libs/auth'
 import {saveLangToMsp} from "../libs/lang.ts";
 import LayerListGroupList from "./layereditor/LayerListGroupList";
 
@@ -304,7 +304,9 @@ export default class App extends React.Component<any, AppState> {
         // TODO: Disabled for now, this should be opened on the Nth visit to the editor
         survey: false,
         debug: false,
+        isSaveStyle:false
       },
+      saveStyleeName:'',
       maplibreGlDebugOptions: {
         showTileBoundaries: false,
         showCollisionBoxes: false,
@@ -347,6 +349,11 @@ export default class App extends React.Component<any, AppState> {
     const initialUrl = new URL(window.location.href);
     const editorConfig = initialUrl.searchParams.get('editorConfig') || 'editor_dev';
     const styleId = initialUrl.searchParams.get('styleId') || '';
+    var token =  (initialUrl.searchParams.get("token")) || '';
+    if(token){
+    	setToken(token)
+    }
+
     /**
      * 获取网络资源配置参数
      */
@@ -386,15 +393,21 @@ export default class App extends React.Component<any, AppState> {
        * 设置全局配置参数 合并网络参数到默认参数
        */
       if (data.runConfig) {
-        // console.log(runConfig)
-        // console.log(data.runConfig.configValue)
-        // console.log(JSON.parse(data.runConfig.configValue))
-        var configValue = JSON.parse("\""+data.runConfig.configValue+"\"");
-        if(typeof configValue == "string"){
-          configValue = JSON.parse(configValue)
+        console.log(runConfig,"---runConfig-----")
+        console.log(data.runConfig.configValue,"--------configValue-------")
+       // console.log(JSON.parse(data.runConfig.configValue),'----JSON.parse-------')
+        try {
+          var configValue = JSON.parse("\""+data.runConfig.configValue+"\"");
+          // configValue = JSON.parse(data.runConfig.configValue);
+          
+          if(typeof configValue == "string"){
+            configValue = JSON.parse(configValue)
+          }
+          runConfig = Object.assign(runConfig, configValue)
+        } catch (error) {
+          
         }
-
-        runConfig = Object.assign(runConfig, configValue)
+        
       }
       /***
        * 加载url参数中的样式内容
