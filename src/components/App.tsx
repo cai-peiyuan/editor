@@ -27,6 +27,8 @@ import ModalOpen from './ModalOpen'
 import ModalShortcuts from './ModalShortcuts'
 import ModalSurvey from './ModalSurvey'
 import ModalDebug from './ModalDebug'
+import ModaSaveStyle from './saveStyle'
+
 
 import {downloadGlyphsMetadata, downloadSpriteMetadata} from '../libs/metadata'
 import style from '../libs/style'
@@ -145,7 +147,12 @@ type AppState = {
     export: boolean
     survey: boolean
     debug: boolean
-  }
+    isSaveStyle:false
+  },
+  saveStyleOpt:{
+    styleName:'',
+  },
+  saveStyleeName:''
 }
 
 export default class App extends React.Component<any, AppState> {
@@ -379,7 +386,15 @@ export default class App extends React.Component<any, AppState> {
        * 设置全局配置参数 合并网络参数到默认参数
        */
       if (data.runConfig) {
-        runConfig = Object.assign(runConfig, JSON.parse(data.runConfig.configValue))
+        // console.log(runConfig)
+        // console.log(data.runConfig.configValue)
+        // console.log(JSON.parse(data.runConfig.configValue))
+        var configValue = JSON.parse("\""+data.runConfig.configValue+"\"");
+        if(typeof configValue == "string"){
+          configValue = JSON.parse(configValue)
+        }
+
+        runConfig = Object.assign(runConfig, configValue)
       }
       /***
        * 加载url参数中的样式内容
@@ -935,7 +950,10 @@ export default class App extends React.Component<any, AppState> {
         options={this.state.maplibreGlDebugOptions}
         inspectModeEnabled={this.state.mapState === "inspect"}
         highlightedLayer={this.state.mapStyle.layers[this.state.selectedLayerIndex]}
-        onLayerSelect={this.onLayerSelect} />
+        onLayerSelect={this.onLayerSelect}
+        onOpenToggle={this.toggleModal.bind(this, 'isSaveStyle')}
+        onStyleOpen={this.openStyle}
+        />
     }
 
     let filterName;
@@ -1077,7 +1095,18 @@ export default class App extends React.Component<any, AppState> {
       }
     }, this.setStateInUrl)
   }
+  setStyleOpt(modalName: keyof AppState["isOpen"], value: boolean) {
+    if (modalName === 'survey' && value === false) {
+      localStorage.setItem('survey', '');
+    }
 
+    this.setState({
+      saveStyleOpt: {
+        ...this.state.saveStyleOpt,
+        [modalName]: value
+      }
+    }, this.setStateInUrl)
+  }
   toggleModal(modalName: keyof AppState["isOpen"]) {
     this.setModal(modalName, !this.state.isOpen[modalName]);
   }
@@ -1251,6 +1280,13 @@ export default class App extends React.Component<any, AppState> {
       <ModalSurvey
         isOpen={this.state.isOpen.survey}
         onOpenToggle={this.toggleModal.bind(this, 'survey')}
+      />
+      <ModaSaveStyle
+      	mapStyle={this.state.mapStyle}
+      	isOpen={this.state.isOpen.isSaveStyle}
+      	styleName={this.state.saveStyleeName}
+      	onStyleChanged={this.onStyleChanged}
+      	onOpenToggle={this.toggleModal.bind(this, 'isSaveStyle')}
       />
     </div>
 

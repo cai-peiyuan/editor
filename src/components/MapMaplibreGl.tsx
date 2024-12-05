@@ -16,6 +16,15 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 import { createRoot } from 'react-dom/client';
 
+import style from '../libs/style'
+import {format} from '@maplibre/maplibre-gl-style-spec'
+import Slugify from 'slugify'
+import {getToken} from '../libs/auth'
+
+import ExportControl from '../libs/exportcontrol/index'
+import PropTypes from 'prop-types'
+
+
 function renderPopup(popup: JSX.Element, mountNode: ReactDOM.Container): HTMLElement {
   //ReactDOM.render(popup, mountNode);
   const root = createRoot(mountNode!); // createRoot(container!) if you use TypeScript
@@ -67,6 +76,9 @@ type MapMaplibreGlProps = {
   }
   replaceAccessTokens(mapStyle: StyleSpecification): StyleSpecification
   onChange(value: {center: LngLat, zoom: number}): unknown
+  onStyleOpen(value: {center: LngLat, zoom: number}): unknown
+  onOpenToggle(value: {center: LngLat, zoom: number}): unknown
+  
 };
 
 type MapMaplibreGlState = {
@@ -92,7 +104,9 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
       inspect: null,
     }
   }
-
+  tokenizedStyle(){
+    return format(style.stripAccessTokens(style.replaceAccessTokens(this.props.mapStyle)));
+  }
 
   shouldComponentUpdate(nextProps: MapMaplibreGlProps, nextState: MapMaplibreGlState) {
     let should = false;
@@ -143,6 +157,11 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     } satisfies MapOptions;
 
     const map = new MapLibreGl.Map(mapOpts);
+    window.mapboxgl = MapLibreGl;
+    document.mapboxgl = MapLibreGl;
+    mapboxgl = MapLibreGl;
+    window.map = map;
+    document.map = map;
 
     const mapViewChange = () => {
       const center = map.getCenter();
@@ -162,6 +181,30 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
 
     const nav = new MapLibreGl.NavigationControl({visualizePitch:true});
     map.addControl(nav, 'top-right');
+
+    var _this = this;
+    window.exportControl = new ExportControl({
+      dpi: 300,
+      attribution: "© ",
+      textFont: [],
+      callBackFunc: this.downLoadMapSnapCallBackFunc,
+      downloadStyle:()=>{
+      	_this.downloadStyle();
+      },
+      callRecovery:()=>{
+      	_this.recoveryStyle()
+      },
+      resetStyle:()=>{
+      	_this.resetStyle()
+      },
+      publishStyle:()=>{
+      	_this.publishStyle();
+      }
+    });
+    console.log("添加地图组件",window.exportControl)
+    // 导出地图截图控件
+    map.addControl(window.exportControl);
+
 
     const tmpNode = document.createElement('div');
    // const tmpNodeRoot = createRoot(tmpNode!);
@@ -265,6 +308,151 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     const geocoder = new MaplibreGeocoder(geocoderConfig, {maplibregl: MapLibreGl});
     map.addControl(geocoder, 'top-left');
   }
+  exportName() {
+    if (this.props.mapStyle.name) {
+      return Slugify(this.props.mapStyle.name, {
+        replacement: '_', remove: /[*\-+~.()'"!:]/g, lower: true
+      });
+    } else {
+      return this.props.mapStyle.id
+    }
+  }
+  /**
+   * 下载地图截图回调函数
+   * @param blobData
+   */
+  downLoadMapSnapCallBackFunc(blobData) {
+    let thumbnailSrc = window.URL.createObjectURL(blobData);
+    let thumbnailBlob = blobData;
+    console.log(this)
+    console.log("custom call back function " + blobData)
+  }
+	downloadStyle(){
+		console.log("下载样式文件",this)
+		 const tokenStyle = this.tokenizedStyle();
+    const blob = new Blob([tokenStyle], {type: "application/json;charset=utf-8"});
+    const exportName = this.exportName();
+    saveAs(blob, exportName + ".json");
+    
+	}
+	
+	//恢复至已发布样式
+	recoveryStyle(){
+		 const metadata = this.props.mapStyle.metadata;
+		var mspInfo = metadata.mspInfo;
+		var url = api_config.url + "/tMapStyle/styleId/" + mspInfo.styleId;
+		this.styleSelect(url);
+	}
+	//发布样式
+	publishStyle(){
+		this.props.onOpenToggle();
+	}
+  styleSelect = (styleUrl,status) => {
+		console.log(status,"status")
+   // this.clearError();
+    let canceled;
+    const activeRequest = fetch(styleUrl, {
+      mode: 'cors', credentials: "same-origin", method: "GET", headers: {
+        'Content-Type': 'application/json', 'token': getToken(),
+      }, cache: "no-cache"
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then((body) => {
+      	//console.log(body,"---------在浏览器url中设置styleId为对应样式的styleId-------")
+        if (canceled) {
+          return;
+        }
+        this.setState({
+          activeRequest: null, activeRequestUrl: null
+        });
+        /**
+         * 打开指定的style后 在浏览器url中设置styleId为对应样式的styleId
+         */
+        
+        const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body))
+        const url = new URL(location.href);
+        console.log(status,"传值的")
+        if(status == "recoveryStyle"){
+        
+        }else{
+        	url.searchParams.set("styleId", mapStyle.metadata.mspInfo.styleId);
+        	console.log("修改i了url")
+        }
+        
+        history.replaceState({}, "Maputnik", url.href);
+        console.log('Loaded style ', mapStyle.id)
+        console.log('Loaded style ', mapStyle)
+        this.props.onStyleOpen(mapStyle)
+        //this.props.onStyleOpen(mapStyle);
+         
+        //this.props.onStyleOpen(mapStyle)
+       // this.onOpenToggle()
+      })
+      .catch((err) => {
+        this.setState({
+          error: `Failed to load: '${styleUrl}'`, activeRequest: null, activeRequestUrl: null
+        });
+        console.error(err);
+        console.warn('Could not open the style URL', styleUrl)
+      })
+
+    this.setState({
+      activeRequest: {
+        abort: function () {
+          canceled = true;
+        }
+      }, activeRequestUrl: styleUrl
+    })
+  }
+  resetStyle(){
+		
+		/*var id=  "2695883491";
+		var url = api_config.url + "/msp/resource/mapStyle/styleId/" + id;
+		
+		this.styleSelect(url);*/
+		/*var mapStyle = {
+			
+		}
+		 this.props.onStyleOpen(mapStyle)*/
+		
+		
+		var url  =  api_config.url+"/tMapStyle/queryAll";
+		var param = {
+				type:'0'
+		}
+		fetch(url,{
+			  method: 'POST',
+			  mode: 'cors',
+			  body:JSON.stringify(param),
+			  headers:{
+			  	'Content-Type': 'application/json', 
+			  	'token': getToken(),
+			  }
+		}) .then(function (response) {
+        return response.json();
+      })
+      .then((body) => {
+      	console.log(body)
+      	var list = body.data || [];
+      	var styleId = "";
+      	if(list.length > 0){
+      			var styleId = list[0].styleId;
+      			if(styleId){
+      				var url = api_config.url + "/tMapStyle/styleId/" + styleId;
+							this.styleSelect(url,"recoveryStyle");
+      			}
+      	}
+      }).catch((err) => {
+        this.setState({
+          error: `Failed to load: '${url}'`, activeRequest: null, activeRequestUrl: null
+        });
+        console.error(err);
+        console.warn('Could not open the style URL', url)
+      })
+		
+	}
 
   render() {
     return <div

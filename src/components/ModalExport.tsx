@@ -255,13 +255,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
           </InputButton>
         </div>
 
-        <div style={{"textAlign": "center"}}>
-          <InputButton
-            onClick={this.uploadThumbnail.bind(this)}>
-            <MdPhotoLibrary/>
-            {getLabelName("Upload Style Thumbnail")}
-          </InputButton>
-        </div>
+       
       </section>
 
       <section className="maputnik-modal-section">
@@ -278,7 +272,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
           </InputButton>
         </div>
       </section>
-
+       {/*
       <section className="maputnik-modal-section"
                style={{display: runConfig.mainLayout.toolBar.toolBarExportSaveToFile === false ? "none" : "block"}}
       >
@@ -300,7 +294,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
             value={(this.props.mapStyle.metadata || {} as any)['maputnik:thunderforest_access_token']}
             onChange={this.changeMetadataProperty.bind(this, "maputnik:thunderforest_access_token")}
           />
-        </div>*/}
+        </div>
 
         <div className="maputnik-modal-export-buttons"
              style={{"textAlign": "center"}}>
@@ -318,7 +312,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
             {getLabelName("Download Html File")}
           </InputButton>
         </div>
-      </section>
+      </section>*/}
 
     </Modal>
   }

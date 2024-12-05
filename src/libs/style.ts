@@ -156,6 +156,32 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
     glyphs: api_config.url + "/msp-api/glyphs/{fontstack}/{range}.pbf",
     sprite: spriteUrl_Http
   };
+  
+  // const glyphsUrl = mapStyle.glyphs || "";
+  // const spriteUrl = mapStyle.sprite || "";
+  // let spriteUrl_Http = "";
+  // if (spriteUrl.startsWith("http://")) {
+  //   if (spriteUrl.startsWith(api_config.url)) {
+  //   	if(spriteUrl.indexOf("msp-api/sprite/v2/") > -1){
+  //   		spriteUrl_Http=	spriteUrl.replace("msp-api/sprite/v2/", "tMapStyle");
+  //   	}else{
+  //   		spriteUrl_Http = spriteUrl
+  //   	}
+  //     spriteUrl_Http = spriteUrl_Http;
+  //   } else {
+  //     spriteUrl_Http = api_config.url + "/tMapStyle" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+  //   }
+  // } else if (spriteUrl.startsWith("amap://")) {
+  //   const spriteName = spriteUrl.replace("amap://sprites/", "");
+  //   spriteUrl_Http = api_config.url + "/tMapStyle" + spriteName;
+  // } else {
+  //   spriteUrl_Http = api_config.url + "/tMapStyle" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
+  // }
+  // return {
+  //   ...mapStyle,
+  //   glyphs: api_config.url + "/tMapStyle/glyphs/{fontstack}/{range}.pbf",
+  //   sprite: spriteUrl_Http
+  // };
 }
 
 /**
@@ -188,8 +214,8 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
 
 
 async function saveStyleThumbnailToMsp(mspInfo, result) {
-  const res = await fetch(api_config.url + '/open/editor/mapStyle/updateStyleThumbnail/' + (mspInfo.id||mspInfo.styleId), {
-    method: "PUT",
+  const res = await fetch(api_config.url + '/open/editor/updateThumbnail/' + (mspInfo.id||mspInfo.styleId), {
+    method: "POST",
     mode: 'cors',
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -200,6 +226,18 @@ async function saveStyleThumbnailToMsp(mspInfo, result) {
   const result11 = await res.json();
   alert('保存样式预览图成功' + result11.message)
   return result11;
+  // const res = await fetch(api_config.url + '/tMapStyle/updateThumbnail/' + mspInfo.styleId, {
+  //   method: "POST",
+  //   mode: 'cors',
+  //   headers: {
+  //     "Content-Type": "application/json; charset=utf-8",
+  //     'token': getToken(),
+  //   },
+  //   body: JSON.stringify({base64: result})
+  // });
+  // const result11 = await res.json();
+  // alert('保存样式预览图成功' + result11.message)
+  // return result11;
 //
 //
 // .then(function (response) {

@@ -199,19 +199,7 @@ export default class AppToolbar extends React.Component<AppToolbarProps> {
           >
             Map view
           </button>
-          <a
-            className="maputnik-toolbar-logo"
-            target="blank"
-            rel="noreferrer noopener"
-            href="https://www.mapabc.com"
-            style={{display: runConfig.mainLayout.toolBar.toolBarLogo === false? "none" : "block"}}
-          >
-            <img src={maputnikLogo} alt="Maputnik on GitHub" />
-            <h1>
-              <span className="maputnik-toolbar-name">{ runConfig.mainLayout.toolBar.toolBarTitle ? runConfig.mainLayout.toolBar.toolBarTitle : pkgJson.name}</span>
-              <span className="maputnik-toolbar-version">{ runConfig.mainLayout.toolBar.toolBarVersion ? runConfig.mainLayout.toolBar.toolBarVersion : pkgJson.version}</span>
-            </h1>
-          </a>
+          
         </div>
         <div
           className="maputnik-toolbar__actions"
@@ -231,7 +219,8 @@ export default class AppToolbar extends React.Component<AppToolbarProps> {
             wdKey="nav:export"
             onClick={this.props.onToggleModal.bind(this, 'export')}>
             <MdFileDownload />
-            <IconText>{getLabelName("Export")}</IconText>
+            {/*<IconText>{getLabelName("Export")}</IconText>*/}
+            <IconText>{'修改'}</IconText>
           </ToolbarAction>
           <ToolbarAction
             show={runConfig.mainLayout.toolBar.toolDataSource}

@@ -293,16 +293,9 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
           data-wd-key="modal:open"
           isOpen={this.props.isOpen}
           onOpenToggle={() => this.onOpenToggle()}
-          title={'Open Style'}
+          // title={'Open Style'}
+          title={'打开一个样式'}
         >
-          {errorElement}
-          <section className="maputnik-modal-section">
-            <h1>Upload Style</h1>
-            <p>Upload a JSON style from your computer.</p>
-            <FileReaderInput onChange={this.onUpload} tabIndex={-1} aria-label="Style file">
-              <InputButton className="maputnik-upload-button"><MdFileUpload /> Upload</InputButton>
-            </FileReaderInput>
-          </section>
         <section className="maputnik-modal-section maputnik-modal-section--shrink">
           <h1>我的所有可用样式</h1>
           <p>
@@ -321,34 +314,6 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
           <FileReaderInput onChange={this.onUpload} tabIndex="-1" aria-label="Style file">
             <InputButton className="maputnik-upload-button"><MdFileUpload/> 上传</InputButton>
           </FileReaderInput>
-        </section>
-
-        <section className="maputnik-modal-section">
-          <form onSubmit={this.onSubmitUrl}>
-            <h1>网络资源</h1>
-            <p>
-              从一个URL加载网络样式资源，资源需要支持<a href="https://enable-cors.org" target="_blank"
-                                                       rel="noopener noreferrer">CORS</a>请求。
-            </p>
-            <InputUrl
-              aria-label="样式 URL"
-              data-wd-key="modal:open.url.input"
-              type="text"
-              className="maputnik-input"
-              default="输入资源 URL..."
-              value={this.state.styleUrl}
-              onInput={this.onChangeUrl}
-              onChange={this.onChangeUrl}
-            />
-            <div>
-              <InputButton
-                data-wd-key="modal:open.url.button"
-                type="submit"
-                className="maputnik-big-button"
-                disabled={this.state.styleUrl.length < 1}
-              >加载资源</InputButton>
-            </div>
-          </form>
         </section>
 
       </Modal>
