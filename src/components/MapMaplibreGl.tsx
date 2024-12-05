@@ -78,7 +78,7 @@ type MapMaplibreGlProps = {
   onChange(value: {center: LngLat, zoom: number}): unknown
   onStyleOpen(value: {center: LngLat, zoom: number}): unknown
   onOpenToggle(value: {center: LngLat, zoom: number}): unknown
-  
+
 };
 
 type MapMaplibreGlState = {
@@ -153,7 +153,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
       maxZoom: 24,
       // setting to always load glyphs of CJK fonts from server
       // https://maplibre.org/maplibre-gl-js/docs/examples/local-ideographs/
-      localIdeographFontFamily: false
+      localIdeographFontFamily: '"Apple LiSung", serif'
     } satisfies MapOptions;
 
     const map = new MapLibreGl.Map(mapOpts);
@@ -333,9 +333,9 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     const blob = new Blob([tokenStyle], {type: "application/json;charset=utf-8"});
     const exportName = this.exportName();
     saveAs(blob, exportName + ".json");
-    
+
 	}
-	
+
 	//恢复至已发布样式
 	recoveryStyle(){
 		 const metadata = this.props.mapStyle.metadata;
@@ -370,23 +370,23 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
         /**
          * 打开指定的style后 在浏览器url中设置styleId为对应样式的styleId
          */
-        
+
         const mapStyle = style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(body))
         const url = new URL(location.href);
         console.log(status,"传值的")
         if(status == "recoveryStyle"){
-        
+
         }else{
         	url.searchParams.set("styleId", mapStyle.metadata.mspInfo.styleId);
         	console.log("修改i了url")
         }
-        
+
         history.replaceState({}, "Maputnik", url.href);
         console.log('Loaded style ', mapStyle.id)
         console.log('Loaded style ', mapStyle)
         this.props.onStyleOpen(mapStyle)
         //this.props.onStyleOpen(mapStyle);
-         
+
         //this.props.onStyleOpen(mapStyle)
        // this.onOpenToggle()
       })
@@ -407,17 +407,17 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     })
   }
   resetStyle(){
-		
+
 		/*var id=  "2695883491";
 		var url = api_config.url + "/msp/resource/mapStyle/styleId/" + id;
-		
+
 		this.styleSelect(url);*/
 		/*var mapStyle = {
-			
+
 		}
 		 this.props.onStyleOpen(mapStyle)*/
-		
-		
+
+
 		var url  =  api_config.url+"/tMapStyle/queryAll";
 		var param = {
 				type:'0'
@@ -427,7 +427,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
 			  mode: 'cors',
 			  body:JSON.stringify(param),
 			  headers:{
-			  	'Content-Type': 'application/json', 
+			  	'Content-Type': 'application/json',
 			  	'token': getToken(),
 			  }
 		}) .then(function (response) {
@@ -451,7 +451,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
         console.error(err);
         console.warn('Could not open the style URL', url)
       })
-		
+
 	}
 
   render() {
