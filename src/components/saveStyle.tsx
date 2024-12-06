@@ -259,9 +259,9 @@ export default class ModalExport extends React.Component {
 			styleCenter: center.lng+","+center.lat,
 			type: '2',
 			fbStatus:"0",
-			styleType: 'public'
+			styleType: 'private'
 		};
-		fetch(api_config.url + '/tMapStyle/add', {
+		fetch(api_config.url + '/msp-api/add', {
 				method: 'POST',
 				mode: 'cors',
 				headers: {

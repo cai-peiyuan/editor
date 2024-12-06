@@ -418,9 +418,10 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
 		 this.props.onStyleOpen(mapStyle)*/
 
 
-		var url  =  api_config.url+"/tMapStyle/queryAll";
+		var url  =  api_config.url+"/msp-api/queryAll";
 		var param = {
-				type:'0'
+				//type:'0'
+        styleType:'public'
 		}
 		fetch(url,{
 			  method: 'POST',
