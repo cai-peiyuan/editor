@@ -204,7 +204,7 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
     })
     .then((body) => {
       console.log(body)
-      alert('保存样式内容成功' + body.message)
+      //alert('保存样式内容成功' + body.message)
     })
     .catch(function (error) {
       alert('保存样式内容失败' + error)
@@ -224,7 +224,7 @@ async function saveStyleThumbnailToMsp(mspInfo, result) {
     body: JSON.stringify({base64: result})
   });
   const result11 = await res.json();
-  alert('保存样式预览图成功' + result11.message)
+  //alert('保存样式预览图成功' + result11.message)
   return result11;
   // const res = await fetch(api_config.url + '/tMapStyle/updateThumbnail/' + mspInfo.styleId, {
   //   method: "POST",
