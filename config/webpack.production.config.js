@@ -7,7 +7,7 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var artifacts = require("../test/artifacts");
 
-var OUTPATH = artifacts.pathSync("/build");
+var OUTPATH = artifacts.pathSync("./build");
 
 module.exports = {
   entry: {

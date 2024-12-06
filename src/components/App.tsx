@@ -398,14 +398,14 @@ export default class App extends React.Component<any, AppState> {
        // console.log(JSON.parse(data.runConfig.configValue),'----JSON.parse-------')
         try {
           var configValue = JSON.parse("\""+data.runConfig.configValue+"\"");
-          // configValue = JSON.parse(data.runConfig.configValue);
+        // var configValue = JSON.parse(data.runConfig.configValue);
           
           if(typeof configValue == "string"){
             configValue = JSON.parse(configValue)
           }
           runConfig = Object.assign(runConfig, configValue)
         } catch (error) {
-          
+          console.error("设置全局配置参数 合并网络参数到默认参数 错误")
         }
         
       }

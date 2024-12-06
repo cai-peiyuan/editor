@@ -151,7 +151,7 @@ function transMapAbcSpriteAndFontUrl(mapStyle) {
     spriteUrl_Http = api_config.url + "/api/mapSpriteData" + spriteUrl.substring(spriteUrl.lastIndexOf("/"));
   }
 
-  return {
+  return {  
     ...mapStyle,
     glyphs: api_config.url + "/msp-api/glyphs/{fontstack}/{range}.pbf",
     sprite: spriteUrl_Http

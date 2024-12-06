@@ -1,14 +1,16 @@
+
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('../fonts/Roboto-Regular.ttf?v=') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
+
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto-Medium.ttf') format('truetype');
+  src: url('../fonts/Roboto-Medium.ttf?') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -18,6 +20,7 @@ html {
   color: $color-white;
   font-size: $font-size-5;
   box-sizing: border-box;
+  font-family: "Roboto";
 }
 
 body {

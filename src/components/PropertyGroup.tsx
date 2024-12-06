@@ -15,7 +15,7 @@ function getFieldSpec(spec: any, layerType: LayerSpecification["type"], fieldNam
     return {
       ...fieldSpec,
       values: spec.$root.sprite.values
-    }
+    } 
   }
   if(fieldName === 'text-font') {
     return {
