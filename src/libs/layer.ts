@@ -124,6 +124,7 @@ export function addSourceLayerToMsp(layerSource, layerId) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     },
     body: JSON.stringify({
       "id": null,
@@ -160,6 +161,7 @@ export function addStyleLayerToMsp(layerGroup, layerId, layerName, layerComment)
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     },
     body: JSON.stringify({
       "id": null,

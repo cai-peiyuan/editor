@@ -10,6 +10,7 @@ export async function getAppConfig() {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     }
   });
   const result = await res.json();
@@ -35,6 +36,7 @@ export async function getAppConfig1() {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     }
   }).then(function (response) {
       return response.json();

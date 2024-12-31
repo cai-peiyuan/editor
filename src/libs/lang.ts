@@ -43,6 +43,7 @@ export function saveLangToMsp() {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           'Authorization': getToken(),
+          "token":getToken(),
         },
         body: JSON.stringify({"id": null, "langKey": k, "langEn": langDict[k]['en'], "langZh": langDict[k]['zh']})
       })

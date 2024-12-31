@@ -350,6 +350,7 @@ export default class App extends React.Component<any, AppState> {
     const editorConfig = initialUrl.searchParams.get('editorConfig') || 'editor_dev';
     const styleId = initialUrl.searchParams.get('styleId') || '';
     var token =  (initialUrl.searchParams.get("token")) || '';
+    console.log(token,"token")
     if(token){
     	setToken(token)
     }
@@ -375,6 +376,7 @@ export default class App extends React.Component<any, AppState> {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         'Authorization': getToken(),
+        "token":getToken(),
       }
     }).then(function (response) {
       if (response.status === 401) {

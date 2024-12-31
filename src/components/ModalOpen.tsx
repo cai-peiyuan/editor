@@ -89,7 +89,7 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
     let canceled;
     const activeRequest = fetch(styleUrl, {
       mode: 'cors', credentials: "same-origin", method: "GET", headers: {
-        'Content-Type': 'application/json', 'Authorization': getToken(),
+        'Content-Type': 'application/json', 'Authorization': getToken(),"token":getToken(),
       }, cache: "no-cache"
     })
       .then(function (response) {
@@ -228,7 +228,7 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
     let url = api_config.url + "/open/editor/mapStyleList?page=0&size=100";
     fetch(url, {
       method: "GET", mode: "cors", headers: {
-        'Content-Type': 'application/json', 'Authorization': getToken(),
+        'Content-Type': 'application/json', 'Authorization': getToken(),"token":getToken(),
       }, cache: "no-cache"
     }).then((response) => {
       return response.json();

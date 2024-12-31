@@ -196,6 +196,7 @@ function saveStyleJsonToMsp(mspInfo, jsonStr) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     },
     body: jsonStr
   })
@@ -220,6 +221,7 @@ async function saveStyleThumbnailToMsp(mspInfo, result) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       'Authorization': getToken(),
+      "token":getToken(),
     },
     body: JSON.stringify({base64: result})
   });

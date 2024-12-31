@@ -340,7 +340,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
 	recoveryStyle(){
 		 const metadata = this.props.mapStyle.metadata;
 		var mspInfo = metadata.mspInfo;
-		var url = api_config.url + "/tMapStyle/styleId/" + mspInfo.styleId;
+		var url = api_config.url + "/msp-api/styleId/" + mspInfo.styleId;
 		this.styleSelect(url);
 	}
 	//发布样式

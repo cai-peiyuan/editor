@@ -288,6 +288,7 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': getToken(),
+        "token":getToken(),
       },
       cache: "no-cache"
     }).then((response) => {
