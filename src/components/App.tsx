@@ -391,6 +391,9 @@ export default class App extends React.Component<any, AppState> {
       console.log(response);
     }).then((body) => {
       let data = body.data;
+
+      document.querySelector(".loading").style.display = "none";
+
       /***
        * 设置全局配置参数 合并网络参数到默认参数
        */
@@ -415,9 +418,15 @@ export default class App extends React.Component<any, AppState> {
        * 加载url参数中的样式内容
        */
       if (data.mapStyle) {
+        const mapStyle = style.ensureStyleValidity(
+          style.transMapAbcSpriteAndFontUrl(data.mapStyle)
+        );
         this.setState({
-          mapStyle: style.ensureStyleValidity(style.transMapAbcSpriteAndFontUrl(data.mapStyle))
+          mapStyle: mapStyle
         })
+        this.onStyleChanged(mapStyle)
+        
+
       }
       /***
        * 加载图层分组字典
@@ -461,6 +470,8 @@ export default class App extends React.Component<any, AppState> {
       this.setState({
         runConfigLoaded: true
       })
+     
+
     }).catch(function (error) {
       console.log(error)
     })

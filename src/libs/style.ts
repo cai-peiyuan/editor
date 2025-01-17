@@ -132,8 +132,8 @@ function stripAccessTokens(mapStyle: StyleSpecification) {
  * 将mapabc的地图url转换成http直接指向的url
  */
 function transMapAbcSpriteAndFontUrl(mapStyle) {
-  const glyphsUrl = mapStyle.glyphs;
-  const spriteUrl = mapStyle.sprite;
+  const glyphsUrl = mapStyle.glyphs || "";
+  const spriteUrl = mapStyle.sprite || "";
   let spriteUrl_Http = "";
   if (spriteUrl.startsWith("http://")) {
     if (spriteUrl.startsWith(api_config.url)) {

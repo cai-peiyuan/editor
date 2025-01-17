@@ -264,7 +264,8 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
       />
     })
     const styleOptions = this.state.publicStyles.map(style => {
-      let styleThumbnailUrl = style.styleThumbnailUrl.replace(/[\r\n]/g, "");
+      var styleThumbnailUrl = style.styleThumbnailUrl || "";
+      styleThumbnailUrl = styleThumbnailUrl.replace(/[\r\n]/g, "");
       let thumbnailUrl = styleThumbnailUrl.startsWith("http")?styleThumbnailUrl:(api_config.url + '/erupt-attachment' + styleThumbnailUrl)
       return <PublicStyle
         key={style.styleId}
