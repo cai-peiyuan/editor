@@ -10,7 +10,7 @@
 }
 
 .maputnik-filter-editor {
-  @extend .clearfix; /* stylelint-disable-line */
+  @extend .clearfix !optional; /* stylelint-disable-line */
   color: vars.$color-lowgray;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .maputnik-filter-editor-operator {
-  margin-left: 2%;
+  margin: 0 2%;
   display: inline-block;
   width: 17%;
 
@@ -32,7 +32,7 @@
 .maputnik-filter-editor-args {
   display: inline-block;
   width: 54%;
-  margin-left: 2%;
+  margin: 0 2%;
 
   .maputnik-string,
   .maputnik-number {
@@ -64,7 +64,7 @@
 }
 
 .maputnik-delete-filter {
-  @extend .maputnik-icon-button; /* stylelint-disable-line */
+  @extend .maputnik-icon-button !optional; /* stylelint-disable-line */
 }
 
 .maputnik-filter-editor-block-action {
@@ -81,7 +81,7 @@
 }
 
 .maputnik-radio-as-button {
-  @extend .maputnik-button; /* stylelint-disable-line */
+  @extend .maputnik-button !optional; /* stylelint-disable-line */
 
   border: solid 1px transparent;
 
