@@ -31,7 +31,7 @@
   /* Bug fix: <http://stackoverflow.com/questions/28636832/firefox-overflow-y-not-working-with-nested-flexbox> */
   min-height: 0;
 
-  @include flex-column;
+  @include mixins.flex-column;
 
   flex-shrink: 0;
 }
@@ -48,7 +48,7 @@
   background-color: vars.$color-gray;
   padding: vars.$margin-3;
 
-  @include flex-row;
+  @include mixins.flex-row;
 }
 
 .maputnik-modal-header-title {
@@ -71,7 +71,7 @@
 .maputnik-modal-content {
   padding: vars.$margin-3;
 
-  @include flex-column;
+  @include mixins.flex-column;
 }
 
 .maputnik-modal-header-space {
@@ -110,7 +110,7 @@
 }
 
 .maputnik-public-style-header {
-  @include flex-row;
+  @include mixins.flex-row;
 }
 
 .maputnik-public-style-thumbnail {
@@ -178,7 +178,7 @@
   background-color: transparent;
   width: 100%;
 
-  @include flex-row;
+  @include mixins.flex-row;
 }
 
 .maputnik-public-source-name {
@@ -199,7 +199,7 @@
   color: vars.$color-lowgray;
   padding: vars.$margin-2;
 
-  @include flex-row;
+  @include mixins.flex-row;
 }
 
 .maputnik-active-source-type-editor-header-id {

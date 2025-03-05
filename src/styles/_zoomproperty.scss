@@ -6,7 +6,7 @@
   vertical-align: middle;
   padding: 0 vars.$margin-2 0 0;
 
-  @extend .maputnik-icon-button; /* stylelint-disable-line */
+  @extend .maputnik-icon-button !optional; /* stylelint-disable-line */
 }
 
 // ZOOM PROPERTY

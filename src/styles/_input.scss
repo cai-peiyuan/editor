@@ -60,7 +60,7 @@
 .maputnik-color-wrapper {
   position: relative;
 
-  @include flex-row;
+  @include mixins.flex-row;
 }
 
 .maputnik-color-swatch {

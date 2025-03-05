@@ -9,7 +9,7 @@
   &-header {
     padding: $margin-2 $margin-2 $margin-3;
 
-    @include flex-row;
+    @include mixins.flex-row;
     flex: 0 0;
 
     > * {
@@ -71,7 +71,7 @@
       transition-duration: 0;
     }
 
-    @include flex-row;
+    @include mixins.flex-row;
   }
 
   &-icon-action {
@@ -169,7 +169,7 @@
       cursor: pointer;
     }
 
-    @include flex-row;
+    @include mixins.flex-row;
 
     svg {
       width: 14px;
@@ -229,7 +229,7 @@
   }
 
 
-  @include flex-row;
+  @include mixins.flex-row;
 
   &:hover {
     background-color: $color-gray;

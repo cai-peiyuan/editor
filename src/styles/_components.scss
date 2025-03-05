@@ -219,7 +219,7 @@
 
 // SPACE HELPER
 .maputnik-space {
-  @include vendor-prefix(flex-grow, 1);
+  @include mixins.vendor-prefix(flex-grow, 1);
 }
 
 // MESSAGE PANEL
