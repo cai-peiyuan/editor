@@ -14,6 +14,7 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+.nyc_output
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
@@ -32,4 +33,14 @@ node_modules
 public
 /errorShots
 /old
-/build
+/cypress/screenshots
+/dist/
+/desktop/version.go
+
+# IDE
+.vscode/
+.idea/
+
+# Window metadata files
+/desktop/winres/winres.json
+/desktop/*.syso

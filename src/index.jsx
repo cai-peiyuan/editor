@@ -1,16 +1,16 @@
 import { IconContext } from "react-icons";
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import './favicon.ico'
 import './styles/index.scss'
+import './i18n';
 import App from './components/App';
 
-ReactDOM.render(
+const root = createRoot(document.querySelector("#app"));
+root.render(
   <IconContext.Provider value={{className: 'react-icons'}}>
     <App/>
-  </IconContext.Provider>,
-  document.querySelector("#app")
+  </IconContext.Provider>
 );
 
 // Hide the loader.
