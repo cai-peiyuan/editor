@@ -10,7 +10,7 @@ import FieldJson from './FieldJson'
 import {getLabelName} from '../libs/lang.ts'
 import FieldCheckbox from './FieldCheckbox'
 
-export type EditorMode = "video" | "image" | "tilejson_vector" | "tilexyz_raster" | "tilejson_raster" | "tilexyz_raster-dem" | "tilejson_raster-dem" | "tilexyz_vector" | "geojson_url" | "geojson_json" | null;
+export type EditorMode = "video" | "image" | "tilejson_vector" | "tile_raster" | "tilejson_raster" | "tilexyz_raster-dem" | "tilejson_raster-dem" | "tile_vector" | "geojson_url" | "geojson_json" | null;
 
 type TileJSONSourceEditorProps = {
   source: {

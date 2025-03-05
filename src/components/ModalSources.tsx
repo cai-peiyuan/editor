@@ -45,7 +45,7 @@ class PublicSource extends React.Component<PublicSourceProps> {
 
 function editorMode(source: SourceSpecification) {
   if(source.type === 'raster') {
-    if(source.tiles) return 'tilexyz_raster'
+    if(source.tiles) return 'tile_raster'
     return 'tilejson_raster'
   }
   if(source.type === 'raster-dem') {
@@ -53,7 +53,7 @@ function editorMode(source: SourceSpecification) {
     return 'tilejson_raster-dem'
   }
   if(source.type === 'vector') {
-    if(source.tiles) return 'tilexyz_vector'
+    if(source.tiles) return 'tile_vector'
     return 'tilejson_vector'
   }
   if(source.type === 'geojson') {
@@ -144,21 +144,23 @@ class AddSource extends React.Component<AddSourceProps, AddSourceState> {
       type: 'vector',
       url: (source as VectorSourceSpecification).url || `${protocol}//localhost:3000/tilejson.json`
     }
-    case 'tilexyz_vector': return {
+    case 'tile_vector': return {
       type: 'vector',
       tiles: (source as VectorSourceSpecification).tiles || [`${protocol}//localhost:3000/{x}/{y}/{z}.pbf`],
       minzoom: (source as VectorSourceSpecification).minzoom || 0,
-      maxzoom: (source as VectorSourceSpecification).maxzoom || 14
+      maxzoom: (source as VectorSourceSpecification).maxzoom || 14,
+      scheme: (source as VectorSourceSpecification).scheme || 'xyz'
     }
     case 'tilejson_raster': return {
       type: 'raster',
       url: (source as RasterSourceSpecification).url || `${protocol}//localhost:3000/tilejson.json`
     }
-    case 'tilexyz_raster': return {
+    case 'tile_raster': return {
       type: 'raster',
       tiles: (source as RasterSourceSpecification).tiles || [`${protocol}//localhost:3000/{x}/{y}/{z}.pbf`],
       minzoom: (source as RasterSourceSpecification).minzoom || 0,
-      maxzoom: (source as RasterSourceSpecification).maxzoom || 14
+      maxzoom: (source as RasterSourceSpecification).maxzoom || 14,
+      scheme: (source as RasterSourceSpecification).scheme || 'xyz'
     }
     case 'tilejson_raster-dem': return {
       type: 'raster-dem',
@@ -223,6 +225,7 @@ class AddSource extends React.Component<AddSourceProps, AddSourceState> {
         fieldSpec={{doc: getLabelName("Unique ID that identifies the source and is used in the layer to reference the source.") }}
         value={this.state.sourceId}
         onChange={(v: string) => this.setState({ sourceId: v})}
+        data-wd-key="modal:sources.add.source_id"
       />
       <FieldSelect
         label={getLabelName("Source Type")}
@@ -231,9 +234,9 @@ class AddSource extends React.Component<AddSourceProps, AddSourceState> {
           ['geojson_json', 'GeoJSON (JSON)'],
           ['geojson_url', 'GeoJSON (URL)'],
           ['tilejson_vector', 'Vector (TileJSON URL)'],
-          ['tilexyz_vector', 'Vector (XYZ URLs)'],
+          ['tile_vector', 'Vector (XYZ URLs)'],
           ['tilejson_raster', 'Raster (TileJSON URL)'],
-          ['tilexyz_raster', 'Raster (XYZ URL)'],
+          ['tile_raster', 'Raster (XYZ URL)'],
           ['tilejson_raster-dem', 'Raster DEM (TileJSON URL)'],
           ['tilexyz_raster-dem', 'Raster DEM (XYZ URLs)'],
           ['image', 'Image'],
@@ -241,6 +244,7 @@ class AddSource extends React.Component<AddSourceProps, AddSourceState> {
         ]}
         onChange={mode => this.setState({mode: mode as EditorMode, source: this.defaultSource(mode as EditorMode)})}
         value={this.state.mode as string}
+        data-wd-key="modal:sources.add.source_type"
       />
       <ModalSourcesTypeEditor
         onChange={this.onChangeSource}
@@ -250,6 +254,7 @@ class AddSource extends React.Component<AddSourceProps, AddSourceState> {
       <InputButton
         className="maputnik-add-source-button"
         onClick={this.onAdd}
+        data-wd-key="modal:sources.add.add_source"
       >
         {getLabelName("Add Source")}
       </InputButton>
@@ -312,9 +317,9 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
       'geojson_json': 'geojson',
       'geojson_url': 'geojson',
       'tilejson_vector': 'vector',
-      'tilexyz_vector': 'vector',
+      'tile_vector': 'vector',
       'tilejson_raster': 'raster',
-      'tilexyz_raster': 'raster',
+      'tile_raster': 'raster',
       'tilejson_raster-dem': 'raster-dem',
       'tilexyz_raster-dem': 'raster-dem',
       'image': 'image',
