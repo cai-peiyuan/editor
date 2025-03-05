@@ -10,7 +10,7 @@ import FieldJson from './FieldJson'
 import {getLabelName} from '../libs/lang.ts'
 import FieldCheckbox from './FieldCheckbox'
 
-export type EditorMode = "video" | "image" | "tilejson_vector" | "tile_raster" | "tilejson_raster" | "tilexyz_raster-dem" | "tilejson_raster-dem" | "tile_vector" | "geojson_url" | "geojson_json" | null;
+export type EditorMode = "video" | "image" | "tilejson_vector" | "tile_raster" | "tilejson_raster" | "tilexyz_raster-dem" | "tilejson_raster-dem" | "pmtiles_vector" | "tile_vector" | "geojson_url" | "geojson_json" | null;
 
 type TileJSONSourceEditorProps = {
   source: {
@@ -261,6 +261,33 @@ class GeoJSONSourceFieldJsonEditor extends React.Component<GeoJSONSourceFieldJso
   }
 }
 
+type PMTilesSourceEditorProps = {
+  source: {
+    url: string
+  }
+  onChange(...args: unknown[]): unknown
+  children?: React.ReactNode
+} & WithTranslation;
+
+class PMTilesSourceEditor extends React.Component<PMTilesSourceEditorProps> {
+  render() {
+    const t = this.props.t;
+    return <div>
+      <FieldUrl
+          label={t("PMTiles URL")}
+          fieldSpec={latest.source_vector.url}
+          value={this.props.source.url}
+          data-wd-key="modal:sources.add.source_url"
+          onChange={(url: string) => this.props.onChange({
+            ...this.props.source,
+            url: url.startsWith("pmtiles://") ? url : `pmtiles://${url}`
+          })}
+      />
+      {this.props.children}
+    </div>
+  }
+}
+
 type ModalSourcesTypeEditorProps = {
   mode: EditorMode
   source: any
@@ -314,6 +341,7 @@ export default class ModalSourcesTypeEditor extends React.Component<ModalSources
         value={this.props.source.encoding || latest.source_raster_dem.encoding.default}
       />
     </TileURLSourceEditor>
+    case 'pmtiles_vector': return <PMTilesSourceEditor {...commonProps} />
     case 'image': return <ImageSourceEditor {...commonProps} />
     case 'video': return <VideoSourceEditor {...commonProps} />
     default: return null

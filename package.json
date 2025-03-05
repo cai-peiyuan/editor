@@ -1,6 +1,6 @@
 {
   "name": "MapEditor",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "A MapLibre GL visual style editor",
   "type": "module",
   "main": "''",
@@ -9,7 +9,7 @@
     "build": "tsc && vite build --base=/",
     "build-desktop": "tsc && vite build --base=/ && cd desktop && make",
     "i18n:refresh": "i18next 'src/**/*.{ts,tsx,js,jsx}'",
-    "lint": "eslint ./src ./cypress --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint",
     "test": "cypress run",
     "cy:open": "cypress open",
     "lint-css": "stylelint \"src/styles/*.scss\"",

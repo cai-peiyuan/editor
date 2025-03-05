@@ -23,6 +23,7 @@ import {getToken} from '../libs/auth'
 
 import ExportControl from '../libs/exportcontrol/index'
 import PropTypes from 'prop-types'
+import { Protocol } from "pmtiles";
 
 
 function renderPopup(popup: JSX.Element, mountNode: ReactDOM.Container): HTMLElement {
@@ -155,6 +156,9 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
       // https://maplibre.org/maplibre-gl-js/docs/examples/local-ideographs/
       localIdeographFontFamily: '"Apple LiSung", serif'
     } satisfies MapOptions;
+
+    const protocol = new Protocol({metadata: true});
+    MapLibreGl.addProtocol("pmtiles",protocol.tile);
 
     const map = new MapLibreGl.Map(mapOpts);
     window.mapboxgl = MapLibreGl;
