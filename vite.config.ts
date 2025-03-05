@@ -52,7 +52,7 @@ export default defineConfig({
       values: {
         "_token_stack:": "",
       },
-    }) as any,
+    }),
     react(),
     istanbul({
       cypress: true,

@@ -14,7 +14,7 @@ function validate(url: string) {
       const urlObj = new URL(url);
       return urlObj.protocol;
     }
-    catch (err) {
+    catch (_err) {
       return undefined;
     }
   };

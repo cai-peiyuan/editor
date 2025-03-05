@@ -112,7 +112,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     let should = false;
     try {
       should = JSON.stringify(this.props) !== JSON.stringify(nextProps) || JSON.stringify(this.state) !== JSON.stringify(nextState);
-    } catch(e) {
+    } catch(_e) {
       // no biggie, carry on
     }
     return should;
@@ -174,7 +174,8 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     map.showCollisionBoxes = mapOpts.showCollisionBoxes!;
     map.showOverdrawInspector = mapOpts.showOverdrawInspector!;
 
-    this.initGeocoder(map);
+    /// this.initGeocoder(map);
+    const geocoder = this.initGeocoder(map);
 
     const zoomControl = new ZoomControl;
     map.addControl(zoomControl, 'top-right');
