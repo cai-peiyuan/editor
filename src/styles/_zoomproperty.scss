@@ -1,4 +1,5 @@
 @use "vars";
+
 // ZOOM FUNC
 .maputnik-make-zoom-function {
   background-color: transparent;
@@ -11,7 +12,7 @@
 
 // ZOOM PROPERTY
 .maputnik-zoom-spec-property {
-  @extend .clearfix; /* stylelint-disable-line */
+  @extend .clearfix !optional; /* stylelint-disable-line */
 }
 
 .maputnik-zoom-spec-property-label {
@@ -50,11 +51,10 @@
   padding-top: 0;
   vertical-align: middle;
 
-  @extend .maputnik-icon-button; /* stylelint-disable-line */
+  @extend .maputnik-icon-button !optional; /* stylelint-disable-line */
 }
 
 .maputnik-add-stop {
-  display: inline-block;
   float: right;
   margin-right: vars.$margin-3;
 }
@@ -66,7 +66,7 @@
   vertical-align: middle;
   padding: 0 vars.$margin-2 0 0;
 
-  @extend .maputnik-icon-button; /* stylelint-disable-line */
+  @extend .maputnik-icon-button !optional; /* stylelint-disable-line */
 }
 
 .maputnik-data-spec-property {
