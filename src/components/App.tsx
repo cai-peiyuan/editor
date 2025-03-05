@@ -547,6 +547,22 @@ export default class App extends React.Component<any, AppState> {
       initialLoad: false,
       ...opts,
     };
+    // For the style object, find the urls that has "{key}" and insert the correct API keys
+    // Without this, going from e.g. MapTiler to OpenLayers and back will lose the maptlier key.
+
+    if (newStyle.glyphs && typeof newStyle.glyphs === 'string') {
+      newStyle.glyphs = setFetchAccessToken(newStyle.glyphs, newStyle);
+    }
+
+    if (newStyle.sprite && typeof newStyle.sprite === 'string') {
+      newStyle.sprite = setFetchAccessToken(newStyle.sprite, newStyle);
+    }
+
+    for (const [_sourceId, source] of Object.entries(newStyle.sources)) {
+      if (source && 'url' in source && typeof source.url === 'string') {
+        source.url = setFetchAccessToken(source.url, newStyle);
+      }
+    }
 
     if (opts.initialLoad) {
       this.getInitialStateFromUrl(newStyle);
