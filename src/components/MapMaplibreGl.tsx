@@ -12,7 +12,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import '../maplibregl.css'
 import '../libs/maplibre-rtl'
 //@ts-ignore
-import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
+import MaplibreGeocoder, { MaplibreGeocoderApi, MaplibreGeocoderApiConfig } from '@maplibre/maplibre-gl-geocoder';
 import '@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css';
 import { createRoot } from 'react-dom/client';
 
@@ -270,7 +270,7 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
 
   initGeocoder(map: Map) {
     const geocoderConfig = {
-      forwardGeocode: async (config:{query: string, limit: number, language: string[]}) => {
+      forwardGeocode: async (config: MaplibreGeocoderApiConfig) => {
         const features = [];
         try {
           const request = `https://nominatim.openstreetmap.org/search?q=${config.query}&format=geojson&polygon_geojson=1&addressdetails=1`;
@@ -303,8 +303,8 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
         return {
           features
         };
-      }
-    };
+      },
+    } as unknown as MaplibreGeocoderApi;
     const geocoder = new MaplibreGeocoder(geocoderConfig, {maplibregl: MapLibreGl});
     map.addControl(geocoder, 'top-left');
   }
