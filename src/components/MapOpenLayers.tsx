@@ -84,10 +84,11 @@ export default class MapOpenLayers extends React.Component<MapOpenLayersProps, M
   componentDidMount() {
     this.overlay = new Overlay({
       element: this.popupContainer!,
-      autoPan: true,
-      autoPanAnimation: {
-        duration: 250
-      }
+      autoPan: {
+        animation: {
+          duration: 250
+        }
+      },
     });
 
     const map = new Map({
