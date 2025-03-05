@@ -9,7 +9,7 @@ import type {StyleSpecification} from 'maplibre-gl'
 
 import InputButton from './InputButton'
 import Modal from './Modal'
-import {MdFileDownload, MdCloudUpload, MdPhotoLibrary} from 'react-icons/md'
+import {MdFileDownload, MdCloudUpload, MdPhotoLibrary, MdMap, MdSave} from 'react-icons/md'
 import style from '../libs/style'
 import 'canvas-toBlob'
 import icons from "../libs/exportcontrol/icons";
@@ -38,6 +38,8 @@ type ModalExportProps = {
   onStyleChanged(...args: unknown[]): unknown
   isOpen: boolean
   onOpenToggle(...args: unknown[]): unknown
+  onSetFileHandle(fileHandle: FileSystemFileHandle | null): unknown
+  fileHandle: FileSystemFileHandle | null
 };
 
 
@@ -66,7 +68,7 @@ export default class ModalExport extends React.Component<ModalExportProps> {
     }
   }
 
-  downloadHtml() {
+  createHtml() {
     const tokenStyle = this.tokenizedStyle();
     const htmlTitle = this.props.mapStyle.name || "Map";
     const html = `<!DOCTYPE html>
@@ -100,11 +102,49 @@ export default class ModalExport extends React.Component<ModalExportProps> {
     saveAs(blob, exportName + ".html");
   }
 
-  downloadStyle() {
+  async saveStyle() {
     const tokenStyle = this.tokenizedStyle();
-    const blob = new Blob([tokenStyle], {type: "application/json;charset=utf-8"});
-    const exportName = this.exportName();
-    saveAs(blob, exportName + ".json");
+
+    let fileHandle = this.props.fileHandle;
+    if (fileHandle == null) {
+      fileHandle = await this.createFileHandle();
+      this.props.onSetFileHandle(fileHandle)
+      if (fileHandle == null) return;
+    }
+
+    const writable = await fileHandle.createWritable();
+    await writable.write(tokenStyle);
+    await writable.close();
+    this.props.onOpenToggle();
+  }
+
+  async saveStyleAs() {
+    const tokenStyle = this.tokenizedStyle();
+
+    const fileHandle = await this.createFileHandle();
+    this.props.onSetFileHandle(fileHandle)
+    if (fileHandle == null) return;
+
+    const writable = await fileHandle.createWritable();
+    await writable.write(tokenStyle);
+    await writable.close();
+    this.props.onOpenToggle();
+  }
+
+  async createFileHandle() : Promise<FileSystemFileHandle | null> {
+    const pickerOpts: SaveFilePickerOptions = {
+      types: [
+        {
+          description: "json",
+          accept: { "application/json": [".json"] },
+        },
+      ],
+      suggestedName: this.exportName(),
+    };
+
+    const fileHandle = await window.showSaveFilePicker(pickerOpts) as FileSystemFileHandle;
+    this.props.onSetFileHandle(fileHandle)
+    return fileHandle;
   }
 
   /**
@@ -305,17 +345,23 @@ export default class ModalExport extends React.Component<ModalExportProps> {
         <div className="maputnik-modal-export-buttons"
              style={{"textAlign": "center"}}>
           <InputButton
-            onClick={this.downloadStyle.bind(this)}
+            onClick={this.saveStyle.bind(this)}
           >
-            <MdFileDownload/>
+            <MdSave />
+            {t("Save")}
+          </InputButton>
+          <InputButton
+            onClick={this.saveStyleAs.bind(this)}
+          >
+            <MdSave />
             {getLabelName("Download Json File")}
           </InputButton>
 
           <InputButton
-            onClick={this.downloadHtml.bind(this)}
+            onClick={this.createHtml.bind(this)}
           >
-            <MdFileDownload/>
-            {getLabelName("Download Html File")}
+            <MdMap />
+            {getLabelName("Create HTML")}
           </InputButton>
         </div>
       </section>*/}

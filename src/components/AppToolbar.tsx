@@ -2,7 +2,16 @@ import React from 'react'
 import classnames from 'classnames'
 import {detect} from 'detect-browser';
 
-import {MdFileDownload, MdOpenInBrowser, MdSettings, MdLayers} from 'react-icons/md'
+import {
+  MdOpenInBrowser,
+  MdSettings,
+  MdLayers,
+  MdHelpOutline,
+  MdFindInPage,
+  MdLanguage,
+  MdSave
+} from 'react-icons/md'
+
 import pkgJson from '../../package.json'
 import {getLabelName} from '../libs/lang'
 
@@ -218,7 +227,7 @@ export default class AppToolbar extends React.Component<AppToolbarProps> {
             show={runConfig.mainLayout.toolBar.toolBarExport}
             wdKey="nav:export"
             onClick={this.props.onToggleModal.bind(this, 'export')}>
-            <MdFileDownload />
+            <MdSave />
             {/*<IconText>{getLabelName("Export")}</IconText>*/}
             <IconText>{'修改'}</IconText>
           </ToolbarAction>

@@ -153,6 +153,7 @@ type AppState = {
     styleName:'',
   },
   saveStyleeName:''
+  fileHandle: FileSystemFileHandle | null
 }
 
 export default class App extends React.Component<any, AppState> {
@@ -315,6 +316,7 @@ export default class App extends React.Component<any, AppState> {
       openlayersDebugOptions: {
         debugToolbox: false,
       },
+      fileHandle: null,
     }
 
     this.layerWatcher = new LayerWatcher({
@@ -850,7 +852,8 @@ export default class App extends React.Component<any, AppState> {
    * 打开一个style样式文件回调函数
    * @param styleObj
    */
-  openStyle = (styleObj: StyleSpecification & {id: string}) => {
+  openStyle = (styleObj: StyleSpecification & {id: string}, fileHandle: FileSystemFileHandle | null) => {
+    this.setState({fileHandle: fileHandle});
     styleObj = this.setDefaultValues(styleObj)
     getLayerChnNameDicByStyleFile(styleObj)
     this.onStyleChanged(styleObj)
@@ -1137,6 +1140,10 @@ export default class App extends React.Component<any, AppState> {
     this.setModal(modalName, !this.state.isOpen[modalName]);
   }
 
+  onSetFileHandle(fileHandle: FileSystemFileHandle | null) {
+    this.setState({fileHandle: fileHandle});
+  }
+
   onChangeOpenlayersDebug = (key: keyof AppState["openlayersDebugOptions"], value: boolean) => {
     this.setState({
       openlayersDebugOptions: {
@@ -1291,11 +1298,14 @@ export default class App extends React.Component<any, AppState> {
         onStyleChanged={this.onStyleChanged}
         isOpen={this.state.isOpen.export}
         onOpenToggle={this.toggleModal.bind(this, 'export')}
+        fileHandle={this.state.fileHandle}
+        onSetFileHandle={this.onSetFileHandle}
       />
       <ModalOpen
         isOpen={this.state.isOpen.open}
         onStyleOpen={this.openStyle}
         onOpenToggle={this.toggleModal.bind(this, 'open')}
+        fileHandle={this.state.fileHandle}
       />
       <ModalSources
         mapStyle={this.state.mapStyle}

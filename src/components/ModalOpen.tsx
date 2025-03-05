@@ -1,7 +1,6 @@
 import React, { FormEvent } from 'react'
 import {MdFileUpload} from 'react-icons/md'
 import {MdAddCircleOutline} from 'react-icons/md'
-import FileReaderInput, { Result } from 'react-file-reader-input'
 
 import ModalLoading from './ModalLoading'
 import Modal from './Modal'
@@ -49,6 +48,7 @@ type ModalOpenProps = {
   isOpen: boolean
   onOpenToggle(...args: unknown[]): unknown
   onStyleOpen(...args: unknown[]): unknown
+  fileHandle: FileSystemFileHandle | null
 };
 
 type ModalOpenState = {
@@ -183,28 +183,37 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
     this.onStyleSelect(this.state.styleUrl);
   }
 
-  onUpload = (_: any, files: Result[]) => {
-    const [, file] = files[0];
-    const reader = new FileReader();
-
+  onOpenFile = async () => {
     this.clearError();
 
-    reader.readAsText(file, "UTF-8");
-    reader.onload = e => {
-      let mapStyle;
-      try {
-        mapStyle = JSON.parse(e.target.result)
-      } catch (err) {
-        this.setState({
-          error: (err as Error).toString()
-        });
-        return;
-      }
-      mapStyle = style.ensureStyleValidity(mapStyle)
-      this.props.onStyleOpen(mapStyle);
-      this.onOpenToggle();
+    const pickerOpts: OpenFilePickerOptions = {
+      types: [
+        {
+          description: "json",
+          accept: { "application/json": [".json"] },
+        },
+      ],
+      multiple: false,
+    };
+
+    const [fileHandle] = await window.showOpenFilePicker(pickerOpts) as Array<FileSystemFileHandle>;
+    const file = await fileHandle.getFile();
+    const content = await file.text();
+
+    let mapStyle;
+    try {
+      mapStyle = JSON.parse(content)
+    } catch (err) {
+      this.setState({
+        error: (err as Error).toString()
+      });
+      return;
     }
-    reader.onerror = e => console.log(e.target);
+    mapStyle = style.ensureStyleValidity(mapStyle)
+
+    this.props.onStyleOpen(mapStyle, fileHandle);
+    this.onOpenToggle();
+    return file;
   }
 
   onOpenToggle() {
