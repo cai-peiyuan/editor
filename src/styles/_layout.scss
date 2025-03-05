@@ -1,3 +1,5 @@
+@use "vars";
+
 //SCROLLING
 .maputnik-scroll-container {
   overflow-x: hidden;
@@ -11,55 +13,55 @@
 
 //APP LAYOUT
 .maputnik-layout {
-  font-family: $font-family;
-  color: $color-white;
+  font-family: vars.$font-family;
+  color: vars.$color-white;
 
   //图层列表
   &-list {
     position: fixed;
     bottom: 0;
-    height: calc(100% - #{$toolbar-height + $toolbar-offset});
-    top: $toolbar-height + $toolbar-offset;
+    height: calc(100% - #{vars.$toolbar-height + vars.$toolbar-offset});
+    top: vars.$toolbar-height + vars.$toolbar-offset;
     left: 5px;
     z-index: 3;
     width: 245px;
-    background-color: $color-black;
+    background-color: vars.$color-black;
   }
 
   //图层配置
   &-drawer {
     position: fixed;
     bottom: 0;
-    height: calc(100% - #{$toolbar-height + $toolbar-offset});
-    top: $toolbar-height + $toolbar-offset;
+    height: calc(100% - #{vars.$toolbar-height + vars.$toolbar-offset});
+    top: vars.$toolbar-height + vars.$toolbar-offset;
     left: 250px;
     z-index: 1;
     width: 370px;
-    background-color: $color-black;
+    background-color: vars.$color-black;
   }
 
   //图层列表
   &-list-mini {
     position: fixed;
     bottom: 0;
-    height: calc(100% - #{$toolbar-height + $toolbar-offset});
-    top: $toolbar-height + $toolbar-offset;
+    height: calc(100% - #{vars.$toolbar-height + vars.$toolbar-offset});
+    top: vars.$toolbar-height + vars.$toolbar-offset;
     left: 5px;
     z-index: 1;
     width: 245px;
-    background-color: $color-black;
+    background-color: vars.$color-black;
   }
 
   //图层配置
   &-drawer-mini {
     position: fixed;
     bottom: 0;
-    height: calc(100% - #{$toolbar-height + $toolbar-offset});
-    top: $toolbar-height + $toolbar-offset;
+    height: calc(100% - #{vars.$toolbar-height + vars.$toolbar-offset});
+    top: vars.$toolbar-height + vars.$toolbar-offset;
     left: 250px;
     z-index: 1;
     width: 370px;
-    background-color: $color-black;
+    background-color: vars.$color-black;
   }
 
   &-bottom {
@@ -67,7 +69,7 @@
     bottom: 0;
     right: 0;
     z-index: 1;
-    width: $layout-map-width;
-    background-color: $color-black;
+    width: vars.$layout-map-width;
+    background-color: vars.$color-black;
   }
 }
